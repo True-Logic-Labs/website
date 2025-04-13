@@ -13,4 +13,5 @@ export const SOCIAL_LINKS_FACEBOOK  = 'https://www.facebook.com/people/Manasvi-M
 export const SOCIAL_LINKS_X         = 'https://x.com/manasvimsharma';
 export const SOCIAL_LINKS_INSTAGRAM = 'NA';
 export const SOCIAL_LINKS_WHATSAPP  = 'NA';
-export const SOCIAL_LINKS_TELEGRAM  = 'NA';
+export const SOCIAL_LINKS_TELEGRAM = 'NA';
+export const LAUNCHSTATUS = "FALSE"

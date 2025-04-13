@@ -7,7 +7,7 @@ import {makeBundles} from "../coreglobal/datatransformer.js";
 const bundles = makeBundles(configs);
 const inlineScript = `<script>window.productBank = ${JSON.stringify(bundles.categories, null, 2)};</script>`;
 import BaseHead from "../components/BaseHead.astro";
-import {SITE_TITLE, SITE_DESCRIPTION} from "../consts";
+import {SITE_TITLE, SITE_DESCRIPTION, LAUNCHSTATUS} from "../consts";
 import Footer from "../components/Footer.astro";
 ---
 
@@ -164,8 +164,17 @@ import Footer from "../components/Footer.astro";
           </p>
         </div>
         <div id="explore">
-          <a href="/tools">Explore Tools Now</a>
-          <a href="#core-values">Core Values</a>
+          {
+            LAUNCHSTATUS === "Launched" && (
+              <a href="/tools">Explore Tools Now</a>
+              <a href="#core-values">Core Values</a>
+            )
+          }
+          {
+            LAUNCHSTATUS !== "Launched" && (
+              <a href="#core-values">Launching Soon</a>
+            )
+          }
         </div>
       </section>
 
