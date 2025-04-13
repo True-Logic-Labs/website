@@ -4,9 +4,9 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import alpinejs from '@astrojs/alpinejs';
 
-import node from '@astrojs/node';
+// import node from '@astrojs/node';
 import tailwindcss from '@tailwindcss/vite';
-// import netlify from "@astrojs/netlify";
+import netlify from "@astrojs/netlify";
 
 // https://astro.build/config
 export default defineConfig( {devToolbar: {
@@ -15,12 +15,12 @@ export default defineConfig( {devToolbar: {
   site: 'https://truelogiclabs.com',
   integrations: [ mdx(), sitemap(), alpinejs() ],
 
-  // adapter: netlify(),
+  adapter: netlify(),
   output: 'server',
 
-  adapter: node({
-    mode: 'standalone',
-  }),
+  // adapter: node({
+  //   mode: 'standalone',
+  // }),
 
   vite: {
     plugins: [tailwindcss()],
