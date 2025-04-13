@@ -1,0 +1,152 @@
+---
+import CompanyLogo from "./elements/Logo.astro";
+import Social from "./elements/Social.astro";
+import BaseHead from "./BaseHead.astro";
+import {SITE_TITLE, SITE_DESCRIPTION, SITE_NAME} from "../consts";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <style>
+      /* Login Container */
+      body {
+        height: 70vh;
+      }
+      .login-container {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        width: 50vw;
+        min-width: 400px;
+      }
+
+      /* Form Title */
+      .login-title {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        text-align: center;
+        color: #333;
+      }
+
+      /* Input Fields */
+      .input-group {
+        margin-bottom: 1.5rem;
+      }
+
+      .input-group label {
+        font-size: 1rem;
+        color: #555;
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+
+      .input-group input {
+        width: 100%;
+        padding: 0.8rem;
+        font-size: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        outline: none;
+      }
+
+      .input-group input:focus {
+        border-color: #007bff;
+      }
+
+      /* Submit Button */
+      .login-button {
+        width: 100%;
+        padding: 1rem;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        font-size: 1rem;
+        cursor: pointer;
+        text-align: center;
+        background-color: yellowgreen;
+        margin-bottom: 1em;
+      }
+
+      /* Signup Link */
+      .signup-link {
+        text-align: center;
+        font-size: 0.9rem;
+        color: #555;
+      }
+
+      .signup-link a {
+        color: #007bff;
+        text-decoration: none;
+      }
+
+      .signup-link a:hover {
+        text-decoration: underline;
+      }
+    </style></head
+  >
+
+  <body>
+    <!-- <div id="headerButton" class="show">Menu</div> -->
+    <CompanyLogo companyName={SITE_NAME} logoSrc="/truelogiclabs/1.png" />
+    <Social companyName={SITE_NAME} logoSrc="/blog-placeholder-3.jpg" />
+    <div class="login-container">
+      <form id="login-form" class="login-form" method="POST">
+        <h1 class="login-title">Login</h1>
+
+        <!-- Email input -->
+        <div class="input-group">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Enter your email"
+            required
+          />
+        </div>
+
+        <!-- Password input -->
+        <div class="input-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+            required
+          />
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="login-button button">Login</button>
+
+        <!-- Link to register page -->
+        <p id="signup-link" class="signup-link">
+          Don't have an account? <a href="/signup">Sign up here</a>
+        </p>
+      </form>
+    </div>
+
+    <script>
+      import {AuthManagement} from "../coreglobal/supabase";
+      const authManager = new AuthManagement();
+      document.addEventListener("DOMContentLoaded", () => {
+        document
+          .getElementById("login-form")
+          .addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            // // console.log("Email:", email);
+            // // console.log("Password:", password);
+            await authManager.loginUser(email, password);
+            window.location.href = "/dashboard/";
+          });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,229 @@
+---
+const {image, caption} = Astro.props;
+---
+
+<style>
+  :root {
+    --color: black;
+  }
+  .phone {
+    perspective: 800px;
+    width: 350px;
+    height: 690px;
+    margin: 5em;
+    background: grey;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 40px;
+    padding: 0;
+    position: relative;
+    box-shadow:
+      0px 0px 1.5em rgba(255, 255, 255, 0.829),
+      0px 0px 2em rgba(255, 65, 160, 0.705),
+      0px 0px 5em rgba(48, 0, 88, 0.466);
+    scale: 0.7;
+  }
+
+  .notch {
+    width: 7em;
+    height: 1.5em;
+    background: var(--color);
+    position: sticky; /* Keeps it fixed while scrolling */
+    top: 1em; /* Ensures it stays at the top */
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 15px;
+    z-index: 100; /* Ensures it's above scrolling content */
+    transition: 1.7s;
+  }
+
+  .instagram-header {
+    perspective: 900px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    font-family: sans-serif;
+    transition: 2s;
+  }
+
+  .instagram-header img {
+    height: 30px;
+  }
+
+  .story-section {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    padding: 0 10px;
+    width: 100%;
+    overflow-x: scroll; /* Enables horizontal scrolling */
+    white-space: nowrap; /* Ensures items stay in one row */
+    flex-wrap: nowrap; /* Prevents wrapping */
+    scrollbar-width: none; /* Hides scrollbar (Firefox) */
+  }
+
+  .story-section::-webkit-scrollbar {
+    display: none; /* Hides scrollbar for Chrome & Safari */
+  }
+
+  .story {
+    flex: 0 0 auto; /* Prevents shrinking */
+    min-width: 60px; /* Ensures each story has a fixed size */
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(to bottom, #ff9a3e, #ff3e3e, #ab2ebf);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+  }
+
+  .story img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid white;
+  }
+
+  .post {
+    text-align: center;
+    transition: 1s;
+  }
+
+  .post img {
+    width: 100%;
+    /* border: 2px solid green; */
+    height: 20em;
+  }
+
+  .icons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+  }
+
+  .icons > div {
+    font-size: 1.5em;
+  }
+
+  .screen {
+    perspective: 800px;
+    border: 5px solid var(--color);
+    width: 100%;
+    height: 100%;
+    background: white;
+    border-radius: 35px;
+    overflow-y: auto; /* Enables scrolling */
+    max-height: 100%;
+    position: relative;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling for mobile */
+    scrollbar-width: none; /* Hides scrollbar (Firefox) */
+    transition: 1s;
+  }
+
+  .caption {
+    padding: 1em;
+    font-family: sans-serif;
+    font-size: 1.2em; /* Increases text size */
+    line-height: 1.5; /* Improves readability */
+    white-space: normal; /* Ensures text wraps */
+    word-wrap: break-word; /* Prevents overflow */
+  }
+
+  .foot {
+    font-size: 1.5em;
+    position: sticky; /* Keeps it visible at the bottom */
+    bottom: 0;
+    background: #ffffff;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0.2em 0;
+    border-top: 1px solid #ddd; /* Subtle separator */
+  }
+  /* Hide scrollbar for Chrome, Safari, and Edge */
+  .screen::-webkit-scrollbar {
+    display: none;
+  }
+
+  .screen:hover {
+    transform: rotateZ(-10deg) rotateY(15deg);
+    scale: 1.3;
+    box-shadow:
+      0px 0px 4em rgba(255, 255, 255, 0.829),
+      0px 0px 7em rgba(255, 65, 160, 0.705),
+      0px 0px 15em rgba(48, 0, 88, 0.466);
+  }
+  .screen:hover > .notch {
+    width: 1.5em;
+  }
+
+  /* .screen:hover > .post{
+    transform: translateZ(100px) translateX(100px);
+    position: relative;
+  } */
+</style>
+
+<div class="phone">
+  <div class="screen">
+    <div class="notch"></div>
+    <div class="instagram-header">
+      <img
+        src="/src/assets/480px-Instagram_logo_2022.svg.webp"
+        alt="Instagram"
+      />
+    </div>
+
+    <div class="story-section">
+      <div class="story" style="margin-top: 0;">
+        <img src="https://picsum.photos/20/20" />
+      </div>
+      <div class="story" style="margin-top: 0;">
+        <img src="https://picsum.photos/20/20" />
+      </div>
+      <div class="story" style="margin-top: 0;">
+        <img src="https://picsum.photos/20/20" />
+      </div>
+      <div class="story" style="margin-top: 0;">
+        <img src="https://picsum.photos/20/20" />
+      </div>
+      <div class="story" style="margin-top: 0;">
+        <img src="https://picsum.photos/20/20" />
+      </div>
+      <div class="story" style="margin-top: 0;">
+        <img src="https://picsum.photos/20/20" />
+      </div>
+      <div class="story" style="margin-top: 0;">
+        <img src="https://picsum.photos/20/20" />
+      </div>
+      <div class="story" style="margin-top: 0;">
+        <img src="https://picsum.photos/20/20" />
+      </div>
+    </div>
+
+    <div class="post">
+      <img src={image} alt="Post" />
+    </div>
+    <div class="icons">
+      <div>👍</div>
+      <div>👍</div>
+      <div>👍</div>
+    </div>
+    <div class="caption">
+      <strong>THIS IS SO COOL</strong>
+      <div>{caption}</div>
+    </div>
+
+    <div class="foot">
+      <div>Home</div>
+      <div>Account</div>
+      <div>Profile</div>
+      <div>👍</div>
+    </div>
+  </div>
+</div>

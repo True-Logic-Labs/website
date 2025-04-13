@@ -1,0 +1,461 @@
+# PRICING INFO COMMON
+
+schema: {
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": "Ad Copy Generator Tool",
+  "description": "A tool to generate engaging social media ad copies.",
+  "offers": [
+    {
+      "@type": "Offer",
+      "name": "Tool Only",
+      "price": "1",
+      "priceCurrency": "USD",
+      "availability": "InStock",
+      "description": "Buy this tool individually for $1.",
+      "priceSpecification": {
+        "@type": "UnitPriceSpecification",
+        "price": "1",
+        "priceCurrency": "USD",
+        "billingDuration": "P1M"
+      }
+    },
+    {
+      "@type": "Offer",
+      "name": "Marketing Bundle",
+      "price": "10",
+      "priceCurrency": "USD",
+      "availability": "InStock",
+      "description": "Get this tool as part of the Marketing Bundle for $10.",
+      "priceSpecification": {
+        "@type": "UnitPriceSpecification",
+        "price": "10",
+        "priceCurrency": "USD",
+        "billingDuration": "P1M"
+      }
+    },
+    {
+      "@type": "Offer",
+      "name": "Ultimate Marketing Suite",
+      "price": "100",
+      "priceCurrency": "USD",
+      "availability": "InStock",
+      "description": "Access this tool and all bundles in the Ultimate Suite for $100.",
+      "priceSpecification": {
+        "@type": "UnitPriceSpecification",
+        "price": "100",
+        "priceCurrency": "USD",
+        "billingDuration": "P1M"
+      }
+    },
+    {
+      "@type": "Offer",
+      "name": "All Suites Subscription",
+      "price": "500",
+      "priceCurrency": "USD",
+      "availability": "InStock",
+      "description": "Access all suites and bundles with this subscription for $500.",
+      "priceSpecification": {
+        "@type": "UnitPriceSpecification",
+        "price": "500",
+        "priceCurrency": "USD",
+        "billingDuration": "P1M"
+      }
+    }
+  ]
+}
+
+
+
+# OVERALL
+
+{
+  "categories": [
+    {
+      "name": "📣 Digital Marketing & Content Creation Hub",
+      "description": "A one-stop destination for creating powerful marketing content, including blogs, social media captions, and email campaigns designed to boost brand visibility and engagement.",
+      "subcategories": [
+        {"name": "📝 Content Domination"},
+        {"name": "📱 Social Media Wizardry"},
+        {"name": "📬 Email Marketing Vault"},
+        {"name": "🔍 SEO Supercharged"}
+      ]
+    },
+    {
+      "name": "🚀 Entrepreneur & Startup Founder Suite",
+      "description": "Essential text-generation tools designed to help startup founders communicate their value proposition, craft launch strategies, and engage stakeholders.",
+      "subcategories": [
+        {"name": "💼 Pitch Deck & Investor Kit"},
+        {"name": "📢 Go-to-Market Toolkit"},
+        {"name": "📑 Product Update & Communication Engine"}
+      ]
+    },
+    {
+      "name": "🛍️ E-Commerce Growth Engine",
+      "description": "A suite of tools designed to help e-commerce businesses create product listings, advertising content, and engagement campaigns that drive sales and customer loyalty.",
+      "subcategories": [
+        {"name": "🛒 Product Listing Perfection"},
+        {"name": "🎯 Conversion-Boosting Ad Suite"},
+        {"name": "❤️ Customer Engagement Hub"}
+      ]
+    },
+    {
+      "name": "💻 Tech Developer's Toolkit",
+      "description": "Helps developers and technical teams create high-quality documentation, release notes, and content for open-source projects.",
+      "subcategories": [
+        {"name": "📂 Open Source Contribution Pack"},
+        {"name": "📖 Documentation Master Suite"},
+        {"name": "🔔 Release Notes & Updates Assistant"}
+      ]
+    },
+    {
+      "name": "🏆 Career & Professional Growth Vault",
+      "description": "Tools to help job seekers and professionals generate standout resumes, cover letters, and prepare for interviews with confidence.",
+      "subcategories": [
+        {"name": "📄 Resume Mastery Bundle"},
+        {"name": "✍️ Cover Letter & Personal Branding Kit"},
+        {"name": "🤖 Interview Prep Suite"}
+      ]
+    },
+    {
+      "name": "🧠 Thought Leadership Content Generator",
+      "description": "Empowers professionals to establish themselves as industry leaders by creating insightful content for blogs, white papers, and LinkedIn articles.",
+      "subcategories": [
+        {"name": "📰 Insightful Blogging Hub"},
+        {"name": "📑 White Papers & Reports Generator"},
+        {"name": "📇 LinkedIn Article Creator"}
+      ]
+    }
+  ]
+}
+
+
+# Tools in subcateogry example
+{
+  "name": "🔔 Release Notes & Updates Assistant",
+  "description": "Keeping your users and stakeholders informed about the latest updates, improvements, and bug fixes is essential for product transparency and user satisfaction. This category provides powerful tools to craft compelling release notes, changelogs, feature highlights, and upgrade instructions, helping you communicate changes clearly and effectively across various channels. Streamline your communication strategy and ensure everyone stays in the loop with professional, well-structured content.",
+  "tools": [
+    {
+      "name": "Version Release Note Generator",
+      "description": "Generate professional and concise release notes highlighting new features, bug fixes, and improvements for each product version.",
+      "input_needed": ["Version number", "List of new features", "Bug fixes", "Improvements"]
+    },
+    {
+      "name": "Feature Highlight Writer",
+      "description": "Create engaging summaries of key new features that emphasize user benefits and usage instructions.",
+      "input_needed": ["Feature description", "User benefits", "Usage instructions"]
+    },
+    {
+      "name": "Bug Fix Summary Generator",
+      "description": "Craft detailed but user-friendly explanations of resolved issues and performance improvements.",
+      "input_needed": ["Bug details", "Impact of bugs", "Resolution details"]
+    },
+    {
+      "name": "Changelog Entry Writer",
+      "description": "Automatically generate structured changelog entries that are clear and easy to scan for users and stakeholders.",
+      "input_needed": ["Version number", "Change types (new, fix, improvement)", "Descriptions of changes"]
+    },
+    {
+      "name": "Upgrade Instructions Content Generator",
+      "description": "Provide step-by-step upgrade guides for users, detailing migration requirements and version compatibility.",
+      "input_needed": ["Current version", "Target version", "Steps for upgrade", "Migration requirements"]
+    },
+    {
+      "name": "Internal Stakeholder Announcement Template",
+      "description": "Generate tailored content to inform internal teams, such as sales or support, about the latest product updates.",
+      "input_needed": ["Audience type", "Summary of updates", "Key impact points"]
+    },
+    {
+      "name": "Social Media Update Snippet Generator",
+      "description": "Create concise, engaging text snippets for social media announcements related to product updates.",
+      "input_needed": ["Platform (Twitter, LinkedIn, etc.)", "Key message", "Tone of voice"]
+    }
+  ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{
+  "categories": [
+    {
+  "name": "🚀 Marketing Power Pack",
+  "description": "In the fast-paced world of digital marketing, staying ahead of the curve is non-negotiable. The Marketing Power Pack equips you with everything you need to dominate your marketing channels and outperform competitors. From social media to email marketing and SEO, these tools will help you craft viral content, generate leads, and boost conversions. Don't just participate in the marketing race—win it.",
+  "subcategories": [
+    {
+      "name": "📈 Social Media Domination",
+      "description": "Social media is the ultimate battlefield for attention in today’s digital world. With billions of active users, it’s crucial to stand out with compelling, timely, and creative content. These tools allow you to create posts, ads, and strategies that will make your brand viral and help you engage with your audience on a whole new level. Be at the forefront of social media trends and dominate your niche.",
+      "tools": [
+        {
+          "name": "Social Media Post Generator",
+          "market_demand_rank": 1,
+          "type": "text generation",
+          "description": "Create viral social media posts that captivate your audience and increase engagement. This tool provides eye-catching, shareable content in seconds, helping you maintain a consistent and exciting presence on all platforms. Attract followers, generate conversations, and become a trendsetter."
+        },
+        {
+          "name": "Ad Copy Generator for Social Media Ads",
+          "market_demand_rank": 2,
+          "type": "text generation",
+          "description": "Write ad copy that grabs attention and converts. This tool generates social media ad copy designed to hook your audience instantly, leading to higher click-through rates and conversions. Stay ahead of competitors by delivering powerful, persuasive ads that drive results."
+        },
+        {
+          "name": "Caption Writing & Hashtag Suggestions",
+          "market_demand_rank": 3,
+          "type": "text generation",
+          "description": "Craft the perfect caption and find trending hashtags with this tool. Optimized captions and hashtags are key to making your posts discoverable and shareable. This tool ensures your content gets seen by the right people, helping you expand your reach and grow your online community."
+        },
+        {
+          "name": "Analytics-Based Content Optimizer",
+          "market_demand_rank": 4,
+          "type": "data analysis & text generation",
+          "description": "Boost your social media performance with data-driven content optimizations. This tool analyzes engagement metrics and adjusts your content strategy to match what’s working best for your audience. By optimizing your posts based on analytics, you can consistently deliver what your followers want and stay ahead of the competition."
+        },
+        {
+          "name": "Trend Identification & Content Ideas Tool",
+          "market_demand_rank": 5,
+          "type": "data analysis & text generation",
+          "description": "Stay ahead of the curve with insights on the latest trends. This tool identifies viral topics and suggests creative content ideas that will keep your brand relevant and top-of-mind. By acting on trends before they peak, you'll maintain your position as a thought leader in your industry."
+        }
+      ]
+    },
+    {
+      "name": "📚 Content That Converts",
+      "description": "Great content isn’t just informative; it’s compelling and optimized to convert. These tools help you generate high-quality content that not only resonates with your audience but also drives action. From SEO-friendly blog posts to repurposed content that reaches new audiences, these tools are essential for building long-lasting customer relationships and generating high ROI.",
+      "tools": [
+        {
+          "name": "Blog Post Generator with SEO Optimization",
+          "market_demand_rank": 1,
+          "type": "text generation",
+          "description": "Generate blog posts that are both informative and SEO-optimized. This tool ensures your content is discoverable and ranks higher in search engines, driving traffic and conversions. Whether you're looking to educate, entertain, or inform, this tool will help you create content that performs."
+        },
+        {
+          "name": "Keyword Research & Topic Generator",
+          "market_demand_rank": 2,
+          "type": "data analysis & text generation",
+          "description": "Discover the most relevant and trending keywords and topics for your niche with this powerful tool. It helps you create content around the topics that your audience is actively searching for, ensuring you drive targeted traffic and boost organic search rankings."
+        },
+        {
+          "name": "Content Calendar Creator",
+          "market_demand_rank": 3,
+          "type": "planning tool",
+          "description": "Plan your content strategy ahead of time with this calendar tool. Consistency is key to building a strong online presence, and with this tool, you can schedule blog posts, social media content, and other marketing materials. Stay organized and execute your content plan without missing a beat."
+        },
+        {
+          "name": "White Paper & Long-Form Content Creator",
+          "market_demand_rank": 4,
+          "type": "text generation",
+          "description": "Establish authority and build trust with your audience by creating long-form, in-depth white papers and content. This tool generates comprehensive reports and articles that position your brand as an expert in your field and drive customer trust."
+        },
+        {
+          "name": "Content Repurposing Tool",
+          "market_demand_rank": 5,
+          "type": "text generation",
+          "description": "Maximize your content's potential by repurposing it into multiple formats. This tool transforms existing content into blog posts, social media captions, videos, and more, ensuring that your best ideas reach every corner of your audience. Content repurposing increases visibility and saves you time, giving you more value from your content."
+        }
+      ]
+    },
+    {
+      "name": "📬 Email Goldmine",
+      "description": "Email marketing is one of the most powerful tools for generating leads, building relationships, and driving conversions. With these tools, you can create email campaigns that cut through the noise and grab your audience's attention. Get the most out of your email marketing efforts by crafting high-performing subject lines, body content, and email sequences that nurture leads into loyal customers.",
+      "tools": [
+        {
+          "name": "Email Subject Line Generator",
+          "market_demand_rank": 1,
+          "type": "text generation",
+          "description": "The subject line is the first thing your audience sees—make it count. This tool generates compelling and curiosity-driven subject lines that boost open rates and increase engagement. Your emails will stand out in crowded inboxes, driving more clicks and conversions."
+        },
+        {
+          "name": "Drip Campaign Content Creator",
+          "market_demand_rank": 2,
+          "type": "text generation",
+          "description": "Create personalized drip campaigns that nurture leads over time. This tool helps you write a series of email sequences that build relationships, engage prospects, and ultimately convert them into customers. Automate your lead nurturing process and watch your conversion rates soar."
+        },
+        {
+          "name": "Email Body Content Generator",
+          "market_demand_rank": 3,
+          "type": "text generation",
+          "description": "Craft persuasive and engaging email body content in seconds. This tool generates emails that speak directly to your audience’s pain points and desires, increasing your chances of driving action. Stay ahead of competitors by delivering emails that are too valuable to ignore."
+        },
+        {
+          "name": "A/B Testing Subject Line Suggestions",
+          "market_demand_rank": 4,
+          "type": "text generation",
+          "description": "Optimize your subject lines with A/B testing suggestions. This tool helps you test different variations to find the most effective one, ensuring that every email you send gets the best possible response rate. Fine-tune your strategy and stay ahead in the email marketing game."
+        },
+        {
+          "name": "Newsletter Design & Copy Creator",
+          "market_demand_rank": 5,
+          "type": "text & layout design",
+          "description": "Combine stunning design with persuasive copy to create newsletters that captivate your subscribers. This tool allows you to create visually appealing, high-converting newsletters that not only look great but also deliver value to your audience, driving higher engagement and loyalty."
+        }
+      ]
+    },
+    {
+      "name": "🔍 SEO Supremacy",
+      "description": "SEO is an ever-changing landscape, but mastering it is crucial for digital dominance. These tools ensure your content ranks high in search engines, attracts targeted traffic, and keeps you ahead of your competition. From meta descriptions to backlink strategies, these tools are designed to help you outsmart search algorithms and boost your online visibility.",
+      "tools": [
+        {
+          "name": "Meta Description Generator",
+          "market_demand_rank": 1,
+          "type": "text generation",
+          "description": "Generate highly optimized meta descriptions that not only improve SEO rankings but also entice clicks. A well-crafted meta description is essential for standing out in search engine results, and this tool ensures that your website pages are compelling and discoverable."
+        },
+        {
+          "name": "Keyword-Enriched Content Creator",
+          "market_demand_rank": 2,
+          "type": "text generation",
+          "description": "Create keyword-optimized content that ranks higher in search engines. This tool generates SEO-friendly text that incorporates the most relevant keywords for your industry, ensuring your content is visible to the right audience and brings in targeted traffic."
+        },
+        {
+          "name": "Backlink Outreach Email Templates",
+          "market_demand_rank": 3,
+          "type": "text generation",
+          "description": "Build a high-quality backlink profile with outreach email templates that help you request backlinks from authoritative websites. This tool ensures your outreach efforts are professional, persuasive, and effective, helping you improve your site's domain authority and SEO ranking."
+        },
+        {
+          "name": "On-Page SEO Audit Content Suggestions",
+          "market_demand_rank": 4,
+          "type": "data analysis & text generation",
+          "description": "Optimize your website's on-page SEO with actionable suggestions for content improvement. This tool analyzes your pages and recommends adjustments to boost rankings, increase engagement, and keep your site optimized for search engines."
+        },
+        {
+          "name": "Content Gap Analysis Tool",
+          "market_demand_rank": 5,
+          "type": "data analysis",
+          "description": "Find content gaps and opportunities that your competitors may be missing with this analysis tool. This ensures that you create content that fills in the gaps, targets underserved topics, and gives you the competitive edge in SEO."
+        }
+      ]
+    }
+  ]
+},
+    {
+      "name": "💻 Tech Creator’s Toolkit",
+      "subcategories": [
+        {
+          "name": "📂 Open Source Wizardry",
+          "tools": [
+            { "name": "README File Generator", "market_demand_rank": 1, "type": "text generation" },
+            { "name": "Code Documentation Tool", "market_demand_rank": 2, "type": "text generation" },
+            { "name": "GitHub Project Page Generator", "market_demand_rank": 3, "type": "text generation" },
+            { "name": "Open Source Project Description Templates", "market_demand_rank": 4, "type": "text generation" },
+            { "name": "Technical FAQs Generator", "market_demand_rank": 5, "type": "text generation" }
+          ]
+        },
+        {
+          "name": "🌐 SaaS Success Suite",
+          "tools": [
+            { "name": "API Documentation Generator", "market_demand_rank": 1, "type": "text generation" },
+            { "name": "SaaS Landing Page Generator", "market_demand_rank": 2, "type": "text generation" },
+            { "name": "Feature Explanation Content Generator", "market_demand_rank": 3, "type": "text generation" },
+            { "name": "Product Update & Release Notes Writer", "market_demand_rank": 4, "type": "text generation" },
+            { "name": "FAQ Page Generator", "market_demand_rank": 5, "type": "text generation" }
+          ]
+        },
+        {
+          "name": "🧠 Thought Leadership Engine",
+          "tools": [
+            { "name": "Technical Blog Post Generator", "market_demand_rank": 1, "type": "text generation" },
+            { "name": "Case Study & White Paper Writer", "market_demand_rank": 2, "type": "text generation" },
+            { "name": "Industry Trend Content Generator", "market_demand_rank": 3, "type": "text generation" },
+            { "name": "Product Comparison Content Writer", "market_demand_rank": 4, "type": "text generation" },
+            { "name": "LinkedIn Article Generator for Tech Leaders", "market_demand_rank": 5, "type": "text generation" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "🛒 E-Commerce Turbocharge",
+      "subcategories": [
+        {
+          "name": "🛍️ Irresistible Product Listings",
+          "tools": [
+            { "name": "Product Description Generator", "market_demand_rank": 1, "type": "text generation" },
+            { "name": "Comparison Chart Creator", "market_demand_rank": 2, "type": "visual content generation" },
+            { "name": "Feature/Benefit Highlight Writer", "market_demand_rank": 3, "type": "text generation" },
+            { "name": "FAQ Generator for Products", "market_demand_rank": 4, "type": "text generation" },
+            { "name": "Category Page Content Generator", "market_demand_rank": 5, "type": "text generation" }
+          ]
+        },
+        {
+          "name": "🎯 Ad Campaign Mastery",
+          "tools": [
+            { "name": "Facebook Ad Copy Generator", "market_demand_rank": 1, "type": "text generation" },
+            { "name": "Google Ads Text Creator", "market_demand_rank": 2, "type": "text generation" },
+            { "name": "Video Ad Script Generator", "market_demand_rank": 3, "type": "text generation" },
+            { "name": "Email Campaign Copy Generator", "market_demand_rank": 4, "type": "text generation" },
+            { "name": "Retargeting Ad Suggestions", "market_demand_rank": 5, "type": "text generation" }
+          ]
+        },
+        {
+          "name": "❤️ Customer Love Machine",
+          "tools": [
+            { "name": "Loyalty Program Email Campaigns", "market_demand_rank": 1, "type": "text generation" },
+            { "name": "Review Request Templates", "market_demand_rank": 2, "type": "text generation" },
+            { "name": "User-Generated Content Ideas", "market_demand_rank": 3, "type": "idea generation" },
+            { "name": "Personalized Recommendation Email Writer", "market_demand_rank": 4, "type": "text generation" },
+            { "name": "Post-Purchase Survey Content Creator", "market_demand_rank": 5, "type": "text generation" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "🏆 Career & Business Builder",
+      "subcategories": [
+        {
+          "name": "📄 Resume & Profile Perfection",
+          "tools": [
+            { "name": "Resume Optimization Tool", "market_demand_rank": 1, "type": "text generation" },
+            { "name": "LinkedIn Profile Optimization Tool", "market_demand_rank": 2, "type": "text generation" },
+            { "name": "Cover Letter Generator", "market_demand_rank": 3, "type": "text generation" },
+            { "name": "Portfolio Content Creator", "market_demand_rank": 4, "type": "text generation" },
+            { "name": "Interview Prep Questions & Answers Generator", "market_demand_rank": 5, "type": "text generation" }
+          ]
+        },
+        {
+          "name": "⚖️ Legal & Consulting Edge",
+          "tools": [
+            { "name": "Contract & Agreement Drafting Tool", "market_demand_rank": 1, "type": "text generation" },
+            { "name": "Client Proposal Templates", "market_demand_rank": 2, "type": "text generation" },
+            { "name": "Case Study Generator", "market_demand_rank": 3, "type": "text generation" },
+            { "name": "FAQs for Clients", "market_demand_rank": 4, "type": "text generation" },
+            { "name": "Thought Leadership Articles", "market_demand_rank": 5, "type": "text generation" }
+          ]
+        },
+        {
+          "name": "💰 Financial Growth Hub",
+          "tools": [
+            { "name": "Financial Blog Post Generator", "market_demand_rank": 1, "type": "text generation" },
+            { "name": "Investment Strategy White Paper Writer", "market_demand_rank": 2, "type": "text generation" },
+            { "name": "Budget Analysis Report Generator", "market_demand_rank": 3, "type": "text generation" },
+            { "name": "Newsletter Campaign Content Writer", "market_demand_rank": 4, "type": "text generation" },
+            { "name": "Client Education Content Templates", "market_demand_rank": 5, "type": "text generation" }
+          ]
+        }
+      ]
+    }
+  ]
+}

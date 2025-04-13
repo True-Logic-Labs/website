@@ -1,0 +1,42 @@
+{
+  "toolDetails": {
+    "productID": "6",
+    "unitToolTokenUsage": 500,
+    "freeUsageAllowance": 1,
+    "freeUsageAllowancePostLogin": 3,
+    "usageAllowanceSubscription": 400,
+    "totalPossibleGenerationsPerDollar": 1200,
+    "toolCost": "$1"
+  },
+  "genCode": {
+    "questions": [
+      { "q": "What is your full name?", "type": "textbox", "typeoptions": "none" },
+      { "q": "What is your date of birth?", "type": "textbox", "typeoptions": "none" },
+      { "q": "What aspect of life are you seeking insights on?", "type": "checkbox", "typeoptions": ["Personality", "Career", "Love Life", "Life Challenges", "All of the above"] },
+      { "q": "Would you like a brief or detailed report?", "type": "radio", "typeoptions": ["Brief", "Detailed"] }
+    ],
+    "prompt": "Generate a personalized numerology report for a person named <<A1>> with a birth date of <<A2>>. Focus on these aspects: <<A3>>. Provide a <<A4>> report. Include insights into their Life Path Number, Destiny Number, and other significant numerological factors. Deliver meaningful and actionable guidance in markdown text only, no code blocks."
+  },
+  "toolMeta": {
+    "title": "Numerology Report Generator",
+    "productID": "6",
+    "description": "Discover your life's hidden meaning with a personalized numerology report. Gain insights into personality, challenges, and destiny.",
+    "bundle": "🔮 Mystical Insights Pack",
+    "subCat": "🔢 Life Path & Destiny",
+    "membershipLevels": ["free", "bundleLevel", "allPremium"],
+    "SEO": {
+      "keywords": "numerology report, AI numerology, life path number, destiny insights, name numerology",
+      "metaTitle": "Numerology Report Generator | Discover Your Life Path",
+      "metaDescription": "Unlock the power of numbers with a personalized numerology report. Get insights into your personality, challenges, and destiny with AI-powered numerology."
+    }
+  }
+}
+
+Above is the format in which I generate tools for my application. In the prompt you see <<A1>> <<A2>> .... which maps to the questions.
+
+I want you to generate a tool which is as following: 
+<<<TOOL_REQUESTED>>>
+
+The prompt that is created for the tool should be very good and detailed.
+You can add as many questions or as less, depending upon the tool request above, and keep in mid user experience, they should feel engaged and exited to answer the questions.
+Give output purely in json like above, nothing before or after. Not in code block, only json.

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OOP Floating Dots</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background-color: white;
+        overflow: hidden;
+        position: relative;
+        height: 100vh;
+        width: 100vw;
+      }
+      .dot {
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+        filter: blur(10px);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>HELLLdlkajsdlkajsdlkjas</h1>
+    <script>
+      class Dot {
+        constructor() {
+          this.element = document.createElement("div");
+          this.element.classList.add("dot");
+
+          // Randomize properties
+          this.size = Math.random() * 300 + 20; // 80px to 200px
+          this.speed = Math.random() * 0.5 + 0.2; // 0.2 to 0.7 speed
+          this.angle = Math.random() * Math.PI * 2; // Random starting angle
+          this.xRange = Math.random() * 100 + 150; // Horizontal movement range
+          this.yRange = Math.random() * 100 + 150; // Vertical movement range
+
+          this.element.style.width = `${this.size}px`;
+          this.element.style.height = `${this.size}px`;
+          this.element.style.backgroundColor = `rgba(${Math.random() * 255}, ${
+            Math.random() * 255
+          }, ${Math.random() * 255}, ${Math.random() * 0.5 + 0.3})`;
+
+          // Set initial position
+          this.x = (Math.random() * window.innerWidth) / 2;
+          this.y = (Math.random() * window.innerHeight) / 1.5;
+          this.element.style.left = `${this.x}px`;
+          this.element.style.top = `${this.y}px`;
+
+          document.body.appendChild(this.element);
+        }
+
+        updatePosition() {
+          this.x += Math.cos(this.angle) * this.speed;
+          this.y += Math.sin(this.angle) * this.speed;
+          this.angle += 0.001; // Slow change for smooth movement
+
+          // Bounce back at edges
+          if (this.x < 0 || this.x > window.innerWidth - this.size)
+            this.angle = Math.PI - this.angle;
+          if (this.y < 0 || this.y > window.innerHeight - this.size)
+            this.angle = -this.angle;
+
+          this.element.style.transform = `translate(${this.x}px, ${this.y}px)`;
+        }
+      }
+
+      class DotAnimation {
+        constructor(numDots) {
+          this.dots = [];
+          for (let i = 0; i < numDots; i++) {
+            this.dots.push(new Dot());
+          }
+          this.animate();
+          window.addEventListener("resize", this.handleResize.bind(this));
+        }
+
+        animate() {
+          this.dots.forEach((dot) => dot.updatePosition());
+          requestAnimationFrame(this.animate.bind(this));
+        }
+
+        handleResize() {
+          this.dots.forEach((dot) => {
+            dot.x = Math.random() * window.innerWidth;
+            dot.y = Math.random() * window.innerHeight;
+          });
+        }
+      }
+
+      // Initialize animation
+      new DotAnimation(10);
+    </script>
+  </body>
+</html>

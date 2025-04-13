@@ -1,0 +1,89 @@
+{
+  "toolMeta": {
+    "title": "",
+    "productID": "",
+    "description": "",
+    "bundle": "",
+    "subCat": "",
+    "membershipLevels": [],
+    "SEO": {
+      "keywords": "",
+      "metaTitle": "",
+      "metaDescription": "",
+      "schema": {
+        "type": "",
+        "name": "",
+        "description": "",
+        "applicationCategory": "",
+      },
+      "og": {
+        "title": "",
+        "description": "",
+        "image": "",
+        "url": ""
+      },
+      "twitterCard": {
+        "title": "",
+        "description": "",
+        "image": ""
+      }
+    },
+    "pageDetails": {
+      "usecase": "",
+      "keywords": "",
+      "hero": {
+        "title": "",
+        "subtitle": "",
+        "cta": {
+          "text": "",
+          "link": ""
+        }
+      },
+      "features": [],
+      "testimonials": [
+        {
+          "user": "",
+          "feedback": ""
+        }
+      ],
+      "faq": [
+        {
+          "question": "",
+          "answer": ""
+        }
+      ],
+      "socialProof": {
+        "stats": [
+          {
+            "label": "",
+            "value": ""
+          }
+        ],
+        "badges": []
+      }
+    },
+    "localization": {
+      "supportedLanguages": [],
+      "defaultLanguage": ""
+    },
+    "ctaAnalytics": {
+      "trackEvent": "",
+      "eventCategory": "",
+      "eventLabel": ""
+    }
+  }
+}
+
+
+For my tools, I have this toolMeta.
+
+Presently I have this:
+<<<TOOL_GEN_DICT>>>
+
+Please update my given json above, to include the details missing as per the give config on top, the keys and all.
+
+Please add good performing seo data and other details, which SEO likes.
+Since testimonials would be fabricated, dont put in any big claims which is hard to deliver.
+Output only SEO key and pageDetails Key, no need to repeat everything. 
+Do not leave any key empty; put in SEO friendly good information.
+Output only in pure json, no code block, only json... nothing before nothing after.

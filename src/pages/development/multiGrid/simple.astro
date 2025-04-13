@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Perfectly Filling Grid with Calculated Spans</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: sans-serif;
+        background: #f0f0f0;
+        padding: 20px;
+      }
+      .controls {
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      input,
+      button {
+        padding: 8px 12px;
+        margin-right: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      button {
+        background: #3498db;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #2980b9;
+      }
+      #container {
+        display: grid;
+        gap: 10px;
+        background: #fff;
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      .box {
+        background-color: #3498db;
+        border-radius: 5px;
+        cursor: pointer;
+        color: white;
+        font-size: 1em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        transition: all 0.3s;
+      }
+      .box:hover {
+        opacity: 0.9;
+        transform: scale(1.02);
+      }
+      .nested {
+        display: grid;
+        gap: 5px;
+        width: 100%;
+        height: 100%;
+        padding: 5px;
+      }
+      .nested-box {
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 3px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        text-align: center;
+        font-size: 0.8em;
+      }
+      #zoomed-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 1000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+      }
+      .zoomed-content {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 90vw;
+        max-height: 90vh;
+        overflow: auto;
+        position: relative;
+      }
+      .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 24px;
+        cursor: pointer;
+        color: #333;
+      }
+      .stats {
+        margin-top: 10px;
+        font-size: 0.9em;
+        color: #666;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="controls">
+      <h2>Perfectly Filling Grid</h2>
+      <input type="number" id="boxCount" value="12" min="2" max="50" />
+      <button onclick="generatePerfectGrid()">Generate Grid</button>
+      <div class="stats" id="stats"></div>
+    </div>
+
+    <div id="container"></div>
+
+    <div id="zoomed-container">
+      <div class="zoomed-content" id="zoomed-content"></div>
+    </div>
+
+    <script client:load>
+      function generatePerfectGrid() {
+        const boxCount = parseInt(
+          document.getElementById("boxCount").value,
+          10
+        );
+        const container = document.getElementById("container");
+        container.innerHTML = "";
+
+        // Calculate optimal grid layout
+        const layout = calculatePerfectLayout(boxCount);
+
+        // Apply the calculated grid template
+        container.style.gridTemplateColumns = `repeat(${layout.columns}, 1fr)`;
+        container.style.gridAutoRows = `${layout.rowHeight}px`;
+
+        // Create boxes with calculated spans
+        layout.boxes.forEach((box, index) => {
+          createBox(container, box, index, layout.columns);
+        });
+
+        // Update stats
+        document.getElementById("stats").textContent =
+          `Grid: ${layout.columns} columns × ${layout.rows} rows | ` +
+          `Box sizes: ${layout.boxes.map((b) => `${b.colSpan}×${b.rowSpan}`).join(", ")}`;
+      }
+
+      function calculatePerfectLayout(boxCount) {
+        // Determine the best grid configuration
+        const columns = Math.ceil(Math.sqrt(boxCount * 1.5)); // Adjust aspect ratio
+        const rows = Math.ceil(boxCount / columns);
+        const rowHeight = 80; // Base row height
+
+        // Calculate spans for each box to perfectly fill the grid
+        const boxes = [];
+        let remainingCells = columns * rows;
+
+        // Distribute spans to fill the grid perfectly
+        for (let i = 0; i < boxCount; i++) {
+          if (i === boxCount - 1) {
+            // Last box takes all remaining space
+            const colSpan = Math.min(columns, remainingCells);
+            const rowSpan = Math.ceil(remainingCells / columns);
+            boxes.push({colSpan, rowSpan});
+            remainingCells -= colSpan * rowSpan;
+          } else {
+            // Calculate random but reasonable spans
+            const maxColSpan = Math.min(columns, Math.ceil(remainingCells / 2));
+            const colSpan = Math.max(
+              1,
+              Math.floor(Math.random() * maxColSpan) + 1
+            );
+
+            const maxRowSpan = Math.min(
+              rows,
+              Math.ceil(remainingCells / colSpan)
+            );
+            const rowSpan = Math.max(
+              1,
+              Math.floor(Math.random() * maxRowSpan) + 1
+            );
+
+            // Adjust if this would leave too few cells for remaining boxes
+            if (remainingCells - colSpan * rowSpan < boxCount - i - 1) {
+              boxes.push({colSpan: 1, rowSpan: 1});
+              remainingCells -= 1;
+            } else {
+              boxes.push({colSpan, rowSpan});
+              remainingCells -= colSpan * rowSpan;
+            }
+          }
+        }
+
+        return {
+          columns,
+          rows,
+          rowHeight,
+          boxes,
+        };
+      }
+
+      function createBox(container, box, index, totalColumns) {
+        const boxElement = document.createElement("div");
+        boxElement.className = "box";
+        boxElement.id = `box-${index}`;
+
+        // Set spans
+        boxElement.style.gridColumn = `span ${box.colSpan}`;
+        boxElement.style.gridRow = `span ${box.rowSpan}`;
+
+        // Random color
+        boxElement.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 60%)`;
+        boxElement.textContent = `${box.colSpan}×${box.rowSpan}`;
+
+        // Create nested grid
+        createNestedGrid(
+          boxElement,
+          box.colSpan * box.rowSpan * 2,
+          box.colSpan
+        );
+
+        container.appendChild(boxElement);
+
+        // Add click event for zooming
+        boxElement.addEventListener("click", (e) => {
+          if (e.target === boxElement) {
+            showZoomedBox(boxElement);
+          }
+        });
+      }
+
+      function createNestedGrid(parentBox, itemCount, parentColSpan) {
+        parentBox.textContent = "";
+
+        const nested = document.createElement("div");
+        nested.className = "nested";
+
+        // Calculate nested columns based on parent size
+        const nestedColumns = Math.max(2, Math.min(5, parentColSpan));
+        nested.style.gridTemplateColumns = `repeat(${nestedColumns}, 1fr)`;
+
+        // Create nested items
+        for (let i = 0; i < itemCount; i++) {
+          const nestedBox = document.createElement("div");
+          nestedBox.className = "nested-box";
+          nestedBox.textContent = `${i + 1}`;
+          nestedBox.style.backgroundColor = `hsla(${Math.random() * 360}, 80%, 85%, 0.7)`;
+          nested.appendChild(nestedBox);
+
+          // Add click event for nested items
+          nestedBox.addEventListener("click", (e) => {
+            e.stopPropagation();
+            showZoomedBox(nestedBox);
+          });
+        }
+
+        parentBox.appendChild(nested);
+      }
+
+      function showZoomedBox(element) {
+        const zoomedContent = document.getElementById("zoomed-content");
+        zoomedContent.innerHTML = "";
+
+        const clone = element.cloneNode(true);
+        clone.style.width = "auto";
+        clone.style.height = "auto";
+        clone.style.maxWidth = "80vw";
+        clone.style.maxHeight = "80vh";
+        clone.style.padding = "20px";
+        clone.style.fontSize = "2em";
+
+        const closeBtn = document.createElement("span");
+        closeBtn.className = "close-btn";
+        closeBtn.innerHTML = "&times;";
+        closeBtn.onclick = () => {
+          document.getElementById("zoomed-container").style.display = "none";
+        };
+
+        zoomedContent.appendChild(clone);
+        clone.appendChild(closeBtn);
+
+        document.getElementById("zoomed-container").style.display = "flex";
+      }
+
+      // Initial generation
+      generatePerfectGrid();
+    </script>
+  </body>
+</html>

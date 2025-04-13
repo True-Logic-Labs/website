@@ -1,0 +1,166 @@
+{
+    "toolDetails": {
+        "productID": "377d13a1-e322-4381-a905-3e49041d8f25",
+        "unitToolTokenUsage": 300,
+        "freeUsageAllowance": 2,
+        "freeUsageAllowancePostLogin": 5,
+        "usageAllowanceSubscription": 250,
+        "totalPossibleGenerationsPerDollar": 1000,
+        "toolCost": "$1"
+    },
+    "genCode": {
+        "questions": [
+            {
+                "q": "What is the name of your product or service?",
+                "type": "textbox",
+                "typeoptions": "none"
+            },
+            {
+                "q": "What is the primary goal of your email campaign? (e.g., sales, awareness, engagement)",
+                "type": "textbox",
+                "typeoptions": "none"
+            },
+            {
+                "q": "Who is your target audience? (e.g., age, profession, interests)",
+                "type": "textbox",
+                "typeoptions": "none"
+            },
+            {
+                "q": "What is the tone of your brand? (e.g., professional, casual, humorous)",
+                "type": "textbox",
+                "typeoptions": "none"
+            },
+            {
+                "q": "What key features or benefits do you want to highlight in the email?",
+                "type": "textbox",
+                "typeoptions": "none"
+            },
+            {
+                "q": "What is the desired call to action? (e.g., buy now, subscribe, learn more)",
+                "type": "textbox",
+                "typeoptions": "none"
+            },
+            {
+                "q": "Do you have any specific promotions or offers to include?",
+                "type": "checkbox",
+                "typeoptions": [
+                    "Discounts",
+                    "Free trials",
+                    "Limited-time offers",
+                    "None"
+                ]
+            },
+            {
+                "q": "Would you like the email to include customer testimonials or reviews?",
+                "type": "radio",
+                "typeoptions": [
+                    "Yes",
+                    "No"
+                ]
+            }
+        ],
+        "prompt": "Create a compelling email campaign copy for a product or service named <<A1>>. The main goal of this campaign is <<A2>>, targeting an audience of <<A3>>. Ensure the tone reflects our brand's voice, which is <<A4>>. Highlight key features such as <<A5>>, and make sure to include a strong call to action of <<A6>>. If applicable, incorporate any promotions like <<A7>>, and include customer testimonials? <<A8>>. Deliver the email copy in a structured format suitable for immediate use."
+    },
+    "toolMeta": {
+        "title": "Email Campaign Copy Generator",
+        "productID": "377d13a1-e322-4381-a905-3e49041d8f25",
+        "description": "Craft engaging email campaigns tailored to your product, service, or newsletter needs. Achieve your campaign goals with expertly generated copy.",
+        "bundle": "\ud83d\udce7 Marketing Mastery Kit",
+        "subCat": "\u2709\ufe0f Email Marketing Solutions",
+        "membershipLevels": [
+            "free",
+            "bundleLevel",
+            "allPremium"
+        ],
+        "SEO": {
+            "keywords": "email copy generator, email campaign, marketing copy, engagement emails, promotional emails, email marketing tool, generate email copy",
+            "metaTitle": "Email Campaign Copy Generator | Craft Engaging Emails",
+            "metaDescription": "Create tailored email campaigns with our Email Campaign Copy Generator. Easily generate engaging email copy for any product or service to boost your marketing efforts and drive conversions.",
+            "schema": {
+                "type": "Product",
+                "name": "Email Campaign Copy Generator",
+                "description": "A tool to generate tailored email campaign copy that engages users and drives action.",
+                "applicationCategory": "Marketing",
+                "offers": [
+                    {
+                        "@type": "Offer",
+                        "name": "Email Campaign Copy Generator Subscription",
+                        "description": "Subscribe to the Email Campaign Copy Generator for unlimited access to create engaging email campaigns.",
+                        "price": "1.00",
+                        "priceCurrency": "USD",
+                        "availability": "InStock",
+                        "eligibleCustomerType": "All",
+                        "duration": "P1M"
+                    }
+                ]
+            },
+            "og": {
+                "title": "Email Campaign Copy Generator",
+                "description": "Craft engaging email campaigns tailored to your product or service needs. Get started today!",
+                "image": "https://example.com/image-email-campaign-generator.png",
+                "url": "https://example.com/email-campaign-copy-generator"
+            },
+            "twitterCard": {
+                "title": "Email Campaign Copy Generator",
+                "description": "Generate compelling email copy that drives action and engagement.",
+                "image": "https://example.com/image-email-campaign-generator.png"
+            }
+        },
+        "pageDetails": {
+            "usecase": "Ideal for marketers and businesses looking to create impactful email campaigns quickly and effectively.",
+            "keywords": "email marketing, email campaigns, engagement, marketing tools, copywriting",
+            "hero": {
+                "title": "Transform Your Email Marketing",
+                "subtitle": "Generate Engaging Email Copy in Seconds",
+                "cta": {
+                    "text": "Start My Free Trial",
+                    "link": "https://example.com/start-free-trial"
+                }
+            },
+            "features": [
+                "Create tailored email campaigns",
+                "User-friendly interface",
+                "Customizable copy based on brand voice",
+                "Includes promotional features",
+                "Instant results for immediate use"
+            ],
+            "testimonials": [
+                {
+                    "user": "Marketer 1",
+                    "feedback": "This tool has transformed how I create email content\u2014fast and effective!"
+                },
+                {
+                    "user": "Business Owner",
+                    "feedback": "I love how easy it is to use this copy generator for my marketing needs."
+                }
+            ],
+            "faq": [
+                {
+                    "question": "How does the email copy generator work?",
+                    "answer": "Simply fill out the form with details about your product, audience, and goals, and the generator will create customized email copy for you."
+                },
+                {
+                    "question": "Can I use this tool for multiple campaigns?",
+                    "answer": "Yes! You can create multiple email campaigns using the generator as needed."
+                }
+            ],
+            "socialProof": {
+                "stats": [
+                    {
+                        "label": "Users Served",
+                        "value": "10,000+"
+                    },
+                    {
+                        "label": "Emails Generated",
+                        "value": "100,000+"
+                    }
+                ],
+                "badges": [
+                    "Easy to Use",
+                    "No Credit Card Required",
+                    "Trusted by Marketers"
+                ]
+            }
+        }
+    }
+}

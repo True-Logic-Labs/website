@@ -1,0 +1,40 @@
+Following is one of my bundle
+
+<<<BUNDLE>>>
+
+for <<<SUB_CATEGORY_NAME>>> sub cateogry give me tools in below format
+
+{
+  "name": "🔔 Release Notes & Updates Assistant",
+  "tools": [
+    {
+      "name": "Version Release Note Generator",
+      "description": "Generate professional and concise release notes highlighting new features, bug fixes, and improvements for each product version.",
+      "input_needed": ["Version number", "List of new features", "Bug fixes", "Improvements"]
+    },
+    {
+      "name": "Feature Highlight Writer",
+      "description": "Create engaging summaries of key new features that emphasize user benefits and usage instructions.",
+      "input_needed": ["Feature description", "User benefits", "Usage instructions"]
+    },
+    {
+      "name": "Upgrade Instructions Content Generator",
+      "description": "Provide step-by-step upgrade guides for users, detailing migration requirements and version compatibility.",
+      "input_needed": ["Current version", "Target version", "Steps for upgrade", "Migration requirements"]
+    },
+    {
+      "name": "Internal Stakeholder Announcement Template",
+      "description": "Generate tailored content to inform internal teams, such as sales or support, about the latest product updates.",
+      "input_needed": ["Audience type", "Summary of updates", "Key impact points"]
+    },
+    {
+      "name": "Social Media Update Snippet Generator",
+      "description": "Create concise, engaging text snippets for social media announcements related to product updates.",
+      "input_needed": ["Platform (Twitter, LinkedIn, etc.)", "Key message", "Tone of voice"]
+    } ....... etc
+  ]
+}
+
+
+NOTE: All my tools ask questions, text inputs only and give text result only, so include only such tools. Include only tools which are high in demand, solves real problems, and does not need to much information from user.
+Rsult only in json, no codeblocks, only pure json

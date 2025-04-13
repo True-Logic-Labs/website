@@ -1,0 +1,83 @@
+---
+export interface Props {
+  title: string;
+  description: string;
+  icon: string;
+  footer: string;
+  colorBG?: string;
+}
+
+const {icon, title, description, footer, colorBG = "grey"} = Astro.props;
+---
+
+<style>
+  .card {
+    all: unset;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1em;
+    margin: 1em;
+    border-radius: 12px;
+    width: 15em;
+    height: 15em;
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow-y: auto;
+    border: 2px solid black;
+  }
+
+  .card .title {
+    line-height: 1em;
+    font-size: 1.4em;
+    font-weight: bold;
+    color: #333;
+    padding: 0.3em 0 0.3em 0;
+  }
+
+  .card .text {
+    font-size: 1em;
+    color: #242424;
+    line-height: 1.3em;
+  }
+
+  .card .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1em;
+    font-style: italic;
+    color: #555;
+  }
+
+  .card .icon {
+    font-size: 1.5em;
+  }
+
+  .arrow-link {
+    text-decoration: none;
+    font-size: 1.5em;
+    color: #000;
+    font-weight: bold;
+    transition: transform 0.2s ease-in-out;
+  }
+
+  .arrow-link:hover {
+    transform: translateX(5px);
+  }
+  .wrapper {
+    font-size: 1rem;
+  }
+</style>
+<div class="wrapper">
+  <div class="card" style={`background: ${colorBG};`}>
+    <div>
+      <div class="icon">{icon}</div>
+      <div class="title">{title}</div>
+      <div class="text">{description}</div>
+    </div>
+    <div class="footer">
+      <div>{footer}</div>
+    </div>
+  </div>
+</div>

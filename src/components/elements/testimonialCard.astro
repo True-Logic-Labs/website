@@ -1,0 +1,133 @@
+---
+export interface Props {
+  backgroundImage: string;
+  profileImage: string;
+  comment: string;
+  rating: number;
+  username: string;
+}
+
+// Destructure props correctly
+const {backgroundImage, profileImage, comment, rating, username} = Astro.props;
+const stars = "⭐".repeat(rating);
+
+const symbols = ["❤️", "👍", "⭐"];
+const generateRandomStyle = () => {
+  const left = (Math.random() * 25 - 3).toFixed(1);
+  const top = (Math.random() * 30 - 5).toFixed(1);
+  const scale = (Math.random() * 1.5 + 1).toFixed(0);
+  const delay = (Math.random() * 0.6 + 0.1).toFixed(0);
+  const emoji = symbols[Math.floor(Math.random() * symbols.length)]; // Random emoji
+  // // console.log(`left: ${left}em; top: ${top}em; scale:${scale}`);
+  return {
+    style: `left: ${left}em; top: ${top}em; scale:${scale}; animation-delay: ${delay}s`,
+    emoji: emoji,
+  };
+};
+
+// Create multiple heart elements with random positions
+const hearts = Array.from({length: 5}, () => generateRandomStyle());
+---
+
+<style>
+  .parent {
+    position: relative;
+    /* background-color: red; */
+    padding: 1rem;
+    perspective: 800px;
+  }
+  .review-card {
+    background-color: green;
+    /* position: relative; */
+    width: 20em;
+    height: 20em;
+    border-radius: 2em;
+    overflow: hidden;
+    box-shadow: 0 1em 2em rgba(0, 0, 0, 0.3);
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.2s;
+  }
+
+  .comment-box {
+    position: absolute;
+    font-size: 1em;
+    width: 15em;
+    bottom: 25%;
+    left: 0em;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 1.5em 1em 2em rgba(0, 0, 0, 0.5);
+    transform: rotateZ(-5deg);
+    transition: 0.5s;
+  }
+
+  .profile {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+  }
+
+  .profile img {
+    width: 3em;
+    height: 3em;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  /* Floating and Rotating Hearts */
+  .heart {
+    position: absolute;
+    font-size: 1.5em;
+    animation: float 3s infinite alternate ease-in-out;
+    /* z-index: 100; */
+    transition: 0.5s;
+  }
+  /* .review-card:hover {
+    transform: scale(0.97);
+  } */
+
+  .review-card:hover > .comment-box {
+    transform: scale(1.5);
+    z-index: 100;
+    /* width: 40em; */
+  }
+  @keyframes float {
+    from {
+      transform: translateX(0) translateY(0);
+    }
+    to {
+      transform: translateX(0) translateY(-1em);
+    }
+  }
+</style>
+
+<div class="parent">
+  <div class="review-card" style={`background-image: url(${backgroundImage})`}>
+    {
+      hearts.map((item) => (
+        <div class="heart" style={item.style}>
+          {item.emoji}
+        </div>
+      ))
+    }
+    <div class="comment-box">
+      <div class="profile">
+        <img
+          src={profileImage}
+          alt={username}
+          title=`testimonial_${username}`
+        />
+        <div>
+          <strong>{username}</strong>
+          <div>{stars}</div>
+        </div>
+      </div>
+      <p>{comment}</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Responsive HTML/CSS/JS Playground</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        height: 100vh;
+        width: 100vw;
+      }
+
+      #masterContainer {
+        height: 100%;
+        width: 100%;
+        display: grid;
+        font-family: sans-serif;
+        overflow: hidden;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr;
+        gap: 1rem;
+        padding: 1rem;
+      }
+      #masterContainer > * {
+        border-radius: 0.5rem;
+      }
+
+      /* Portrait mode - top and bottom */
+      @media (orientation: portrait) {
+        #masterContainer {
+          grid-template-columns: 1fr;
+          grid-template-rows: 1fr 1fr;
+        }
+      }
+
+      textarea {
+        width: 100%;
+        height: 100%;
+        padding: 10px;
+        font-family: monospace;
+        font-size: 14px;
+        border: 3px solid green;
+        resize: none;
+        outline: none;
+      }
+
+      .iframe-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+
+      /* Fullscreen iframe */
+      .iframe-container.fullscreen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 999;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      }
+
+      /* Controls inside iframe */
+      .controls {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 1000;
+        display: flex;
+        gap: 10px;
+      }
+
+      .controls button {
+        padding: 12px 16px;
+        border: none;
+        border-radius: 6px;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        font-weight: bold;
+        backdrop-filter: blur(4px);
+      }
+
+      .controls button:hover {
+        background: rgba(0, 0, 0, 0.9);
+      }
+
+      .controls button:active {
+        transform: scale(0.95);
+      }
+      .inline-editor {
+        box-sizing: border-box;
+        overflow: auto;
+        width: 20vw;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Hello World</h1>
+    <p>This is a paragraph. Right-click me to edit!</p>
+    <button>Click me</button>
+    <div>Some <strong>bold</strong> text here.</div>
+    <div id="masterContainer">
+      <!-- Left / Top -->
+      <textarea id="code" placeholder="Write your HTML, CSS, JS here..."
+      ></textarea>
+
+      <!-- Right / Bottom -->
+      <div class="iframe-container" id="iframeContainer">
+        <iframe id="preview"></iframe>
+        <div class="controls">
+          <button id="zoomBtn">🔍 Fullscreen</button>
+          <button id="closeBtn" style="display: none;">❌ Close</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const textarea = document.getElementById("code");
+      const iframe = document.getElementById("preview");
+      const zoomBtn = document.getElementById("zoomBtn");
+      const closeBtn = document.getElementById("closeBtn");
+      const iframeContainer = document.getElementById("iframeContainer");
+
+      function updatePreview() {
+        const content = textarea.value;
+        iframe.srcdoc = content;
+      }
+
+      textarea.addEventListener("input", updatePreview);
+
+      // Initial content
+      textarea.value = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body { 
+                        background: #222; 
+                        color: #eee; 
+                        font-family: Arial; 
+                        text-align: center; 
+                        padding-top: 50px; 
+                    }
+                    button {
+                        padding: 10px 20px;
+                        font-size: 16px;
+                    }
+                </style>
+            </head>
+            <body>
+                <h1>Hello, Live World!</h1>
+                <p>Click the button to see JS in action:</p>
+                <button onclick="alert('Button clicked!')">Click me</button>
+            </body>
+            </html>
+            `.trim();
+
+      updatePreview(); // Load initial content
+
+      // Zoom in function
+      zoomBtn.addEventListener("click", () => {
+        iframeContainer.classList.add("fullscreen");
+        zoomBtn.style.display = "none";
+        closeBtn.style.display = "inline-block";
+      });
+
+      // Zoom out function
+      closeBtn.addEventListener("click", () => {
+        iframeContainer.classList.remove("fullscreen");
+        zoomBtn.style.display = "inline-block";
+        closeBtn.style.display = "none";
+      });
+    </script>
+  </body>
+</html>
+
+<script>
+  let textarea = null;
+  let targetElement = null;
+
+  // Function to remove the textarea editor
+  function removeEditor() {
+    if (textarea) {
+      textarea.remove();
+      textarea = null;
+      targetElement = null;
+    }
+  }
+
+  // Main listener for right-click
+  document.addEventListener("contextmenu", function (e) {
+    e.preventDefault(); // Stop default context menu
+
+    removeEditor(); // Remove existing editor if any
+
+    targetElement = e.target;
+
+    // Create a real textarea
+    textarea = document.createElement("textarea");
+    textarea.value = targetElement.innerText.trim();
+    textarea.className = "inline-editor";
+    textarea.style.position = "absolute";
+
+    const rect = targetElement.getBoundingClientRect();
+
+    // Match dimensions and font styles
+    textarea.style.left = `${rect.left + window.scrollX}px`;
+    textarea.style.top = `${rect.top + window.scrollY}px`;
+    textarea.style.width = `${rect.width}px`;
+    textarea.style.height = `${rect.height}px`;
+
+    // Get computed styles for font matching
+    const computedStyle = window.getComputedStyle(targetElement);
+    textarea.style.fontSize = computedStyle.fontSize;
+    textarea.style.fontFamily = computedStyle.fontFamily;
+    textarea.style.lineHeight = computedStyle.lineHeight;
+    textarea.style.fontWeight = computedStyle.fontWeight;
+    textarea.style.color = computedStyle.color;
+    textarea.style.textAlign = computedStyle.textAlign;
+
+    // Optional: More nice UI adjustments
+    textarea.style.padding = computedStyle.padding || "4px";
+    textarea.style.margin = "0";
+    textarea.style.border = "2px solid #333";
+    textarea.style.borderRadius = "6px";
+    textarea.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.3)";
+    textarea.style.background = "#fff";
+    textarea.style.zIndex = 9999;
+    textarea.style.resize = "both"; // Optional: allow resizing if you want
+
+    // Insert and focus
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select(); // Auto-select content
+
+    // Save on Ctrl + Enter
+    textarea.addEventListener("keydown", function (event) {
+      if (event.key === "Enter" && event.ctrlKey) {
+        targetElement.innerText = textarea.value;
+        removeEditor();
+      } else if (event.key === "Escape") {
+        removeEditor(); // Cancel on Esc
+      }
+    });
+
+    // Click outside to remove editor
+    setTimeout(() => {
+      document.addEventListener("click", function handler(ev) {
+        if (ev.target !== textarea) {
+          removeEditor();
+          document.removeEventListener("click", handler);
+        }
+      });
+    }, 0);
+  });
+</script>

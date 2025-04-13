@@ -1,0 +1,162 @@
+---
+interface Props {
+  title: string;
+  views: string;
+  uploadDate: string;
+  channelName: string;
+  subscribers: string;
+  description: string;
+}
+
+const {title, views, uploadDate, channelName, subscribers, description} =
+  Astro.props;
+---
+
+<style>
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    color: white;
+    background: #181818;
+    padding: 10px;
+  }
+
+  .video-placeholder {
+    width: 100%;
+    height: 400px;
+    background: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: #888;
+  }
+
+  .title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+
+  .metadata {
+    color: #aaa;
+    font-size: 14px;
+    margin: 5px 0;
+  }
+
+  .channel-info {
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+  }
+
+  .channel-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: gray;
+    margin-right: 10px;
+  }
+
+  .channel-details {
+    flex: 1;
+  }
+
+  .channel-name {
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  .subscribe-btn {
+    background: white;
+    color: black;
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    border: none;
+    margin-left: auto;
+  }
+
+  .actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .action-btn {
+    background: #333;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 20px;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .description {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #ccc;
+    line-height: 1.4;
+    background: #222;
+    padding: 10px;
+    border-radius: 8px;
+  }
+
+  .transcript-section {
+    margin-top: 15px;
+    background: #222;
+    padding: 10px;
+    border-radius: 8px;
+  }
+
+  .transcript-title {
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  .transcript-btn {
+    margin-top: 10px;
+    background: #333;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 20px;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+  }
+</style>
+
+<div class="container">
+  <div class="video-placeholder">[ Video Placeholder ]</div>
+  <div class="title">{title}</div>
+  <div class="metadata" style="margin-top:0;">{views} • {uploadDate}</div>
+
+  <div class="channel-info" style="margin-top:0;">
+    <div class="channel-logo"></div>
+    <div class="channel-details">
+      <div class="channel-name">{channelName}</div>
+      <div class="subscribers" style="margin-top:0;">
+        {subscribers} subscribers
+      </div>
+    </div>
+    <button class="subscribe-btn">Subscribe</button>
+  </div>
+
+  <div class="actions">
+    <button class="action-btn" style="margin:0;">👍 Like</button>
+    <button class="action-btn" style="margin:0;">👎 Dislike</button>
+    <button class="action-btn" style="margin:0;">🔗 Share</button>
+    <button class="action-btn" style="margin:0;">⬇️ Download</button>
+  </div>
+
+  <div class="description">{description}</div>
+
+  <div class="transcript-section">
+    <div class="transcript-title">Transcript</div>
+    <p>Follow along using the transcript.</p>
+    <button class="transcript-btn">Show transcript</button>
+  </div>
+</div>

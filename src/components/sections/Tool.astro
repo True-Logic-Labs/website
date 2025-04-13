@@ -1,0 +1,40 @@
+---
+const {toolConfig} = Astro.props;
+const inlineScript = `<script>window.config = ${JSON.stringify(toolConfig, null, 2)};</script>`;
+---
+
+<div set:html={inlineScript} />
+<link rel="stylesheet" href="/css/simpleMDE.css" />
+<link rel="stylesheet" href="/css/tool.css" />
+
+<h1 id="typewriter"></h1>
+
+<div id="dashboard-container">
+  <div id="dashboard-left">
+    <div id="tool-title-page"></div>
+  </div>
+  <div id="dashboard-center">
+    <div class="main-container">
+      <div id="app" class="form-container"></div>
+      <div id="output-container-id" class="output-container">
+        <textarea
+          id="output"
+          readonly
+          placeholder="Your generated prompt will appear here..."></textarea>
+      </div>
+    </div>
+  </div>
+  <div id="dashboard-right">
+    <div></div>
+  </div>
+</div>
+<script>
+  window.simplemde = new SimpleMDE({
+    element: document.getElementById("output"),
+  });
+</script>
+<script>
+  import {generate, dynamicLoad} from "../../coreglobal/toolsscript.js";
+  // await dynamicLoad();
+  await generate(window.config);
+</script>

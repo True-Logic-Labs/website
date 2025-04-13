@@ -1,0 +1,48 @@
+Create a fully responsive, modern HTML5 infographic using HTML, CSS, and JavaScript. Follow these instructions precisely to ensure professional, creative, and clean output suitable for web, print (PDF), and export (e.g., GIF):
+
+1. Title and subtitle at the top of the infographic:
+
+Title: Rewrite [TOPIC] in a catchy, professional, audience-appealing way.
+Subtitle: Smart, engaging subtitle that connects [TOPIC] to [AUDIENCE], adding a call to action or context.
+Both should be center-aligned, large, and stylish (good fonts, spacing).
+2. Modern, clean, and consistent layout (NO difficult shapes like circles/flow unless text fits perfectly):
+
+Use rectangular or soft-rounded cards only to keep content fully contained (no overflow, no awkward wrapping).
+Cards should be arranged in a flexible grid or timeline/flowchart style, based on content flow.
+Add connecting arrows/lines where logical, to show relationships and flow — keep them subtle and clean.
+3. High-quality, actionable content inside each card:
+
+Include relevant tools, platforms, AI products, strategies related to [TOPIC].
+Each card should have:
+A large emoji icon (top-right or background), semi-transparent (opacity ~0.1-0.2), visually pleasing.
+Tool/Product/Idea name (bold).
+Brief description (what it is).
+Use case (how [AUDIENCE] can use it).
+Keep content short, powerful, and directly valuable to [AUDIENCE].
+4. Animations and Visual Effects:
+
+Subtle infinite loop animations (e.g., slow floating, pulsing, scaling) on emoji icons or background elements, with very soft motion (suitable for professional use, not distracting).
+On hover, cards should have a slight lift and shadow effect (modern elevation).
+On click, cards should toggle highlight color (e.g., soft blue background with white text).
+5. Print button ("Download as PDF"):
+
+Fixed on top-left corner, labeled "Download as PDF".
+Clicking triggers window.print() for browser's print dialog.
+6. Print and Export Optimization (CSS media query for print):
+
+All content, including emoji, icons, and shadows must be preserved in printed/PDF form.
+Two-column layout for compact PDF output.
+Add clean margins and padding for high-quality printable space.
+Hide print button when printing/exporting.
+Prevent overflow/bleed — ensure content stays inside boxes.
+7. Footer:
+
+Small, professional footer: "Made for [AUDIENCE]".
+8. Final Output Format:
+
+Single block of HTML with embedded CSS and JS (fully self-contained).
+Modern, professional, and minimalistic design — no external files or explanations.
+Ready for web display, PDF export, and GIF capture.
+
+TOPIC: Top LLM tools by category, and usecase
+AUDIENCE: Marketing people

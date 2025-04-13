@@ -1,0 +1,63 @@
+---
+
+---
+
+<html>
+  <head>
+    <title>YouTube Transcript Fetcher</title>
+  </head>
+  <body>
+    <h1>Fetch YouTube Transcript</h1>
+
+    <input
+      type="text"
+      id="videoUrlInput"
+      placeholder="Enter YouTube Video URL"
+      style="width: 400px;"
+    />
+    <button id="fetchBtn">Get Transcript</button>
+
+    <h2>Transcript:</h2>
+    <textarea id="transcriptArea" rows="15" cols="80" readonly></textarea>
+
+    <script>
+      document
+        .getElementById("fetchBtn")
+        .addEventListener("click", async () => {
+          const videoUrl = document
+            .getElementById("videoUrlInput")
+            .value.trim();
+
+          if (!videoUrl) {
+            alert("Please enter a YouTube video URL.");
+            return;
+          }
+
+          try {
+            const response = await fetch("/api/youtube", {
+              method: "POST",
+              headers: {"Content-Type": "application/json"},
+              body: JSON.stringify({videoUrl}),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+              // Convert array of text objects to plain text
+              const transcriptText = data.transcript
+                .map((item) => item.text)
+                .join(" ");
+              document.getElementById("transcriptArea").value = transcriptText;
+            } else {
+              document.getElementById("transcriptArea").value =
+                "Error: " + data.error;
+            }
+          } catch (error) {
+            console.error(error);
+            document.getElementById("transcriptArea").value =
+              "Fetch failed: " + error.message;
+          }
+        });
+    </script>
+  </body>
+</html>

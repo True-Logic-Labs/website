@@ -1,0 +1,103 @@
+---
+const {tokensUsedPerCall, buyLink = "/buy-tokens"} = Astro.props;
+const inlineScript = `<script>window.tokensUsedPerCall = ${tokensUsedPerCall};</script>`;
+---
+
+<div set:html={inlineScript} />
+<div class="token-bar">
+  <div id="title">Usage Details</div>
+  <div id="tokenUsedByTool"></div>
+  <div id="tokenBalance"></div>
+  <div id="totalGenerationsRemaining"></div>
+  <div>
+    <a href={buyLink} class="buy-btn">Buy Tokens</a>
+    <a href={buyLink} class="buy-btn">Refresh</a>
+  </div>
+</div>
+
+<style>
+  .token-bar #title {
+    font-size: 2em;
+  }
+  .token-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    padding: 8px 16px;
+    background: #e1ebb8;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    margin: 16px auto;
+    width: 30vw;
+    font-size: 0.95rem;
+    color: #374151;
+  }
+
+  .token-bar div {
+    display: flex;
+    align-items: center;
+    gap: 0.2em;
+  }
+
+  .buy-btn {
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: white;
+    padding: 6px 14px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    text-decoration: none;
+    white-space: nowrap;
+    margin: 0.4em 0;
+  }
+
+  .buy-btn:hover {
+    background: linear-gradient(135deg, #4f46e5, #4338ca);
+  }
+
+  @media (max-width: 600px) {
+    .token-bar {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px;
+      width: auto;
+    }
+
+    .buy-btn {
+      width: 100%;
+      text-align: center;
+    }
+  }
+  :global(.highlight) {
+    font-size: 1.3em;
+    color: #ee3a3a;
+  }
+</style>
+<script>
+  import {AuthManagement} from "../../coreglobal/supabase";
+  window.onload = async () => {
+    const authManager = new AuthManagement();
+    const result = await authManager.manageTokens("getTokenCount");
+    console.log("TT>>>>>>>>>>>", result);
+    const tokensLeft = result.amount;
+
+    if (result.isExpired === true) {
+      alert("Your Tokens have expired! Please buy to renew");
+    }
+
+    if (tokensLeft <= 20) {
+      alert("Soon your tokens will finish, buy more!");
+    }
+
+    document.getElementById("tokenUsedByTool").innerHTML =
+      `Tool uses <span class="highlight">${window.tokensUsedPerCall.toFixed(2)}</span> tokens/generation`;
+    document.getElementById("tokenBalance").innerHTML =
+      `You have <span class="highlight">${tokensLeft}</span> tokens left. `;
+    document.getElementById("totalGenerationsRemaining").innerHTML =
+      `You can generate <span class="highlight">${(tokensLeft / window.tokensUsedPerCall).toFixed(0)}</span> more awesome results!`;
+  };
+</script>

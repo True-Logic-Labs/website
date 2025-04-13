@@ -1,0 +1,98 @@
+---
+
+---
+
+<html>
+  <head>
+    <title>Astro API Fetch</title>
+  </head>
+  <style>
+    #output {
+      width: 100%;
+    }
+  </style>
+  <body>
+    <h1>Astro API Fetch Example</h1>
+    <button id="fetchData">Fetch API Data</button>
+    <button id="fetchData2">Make OpenAI Call</button>
+    <button id="fetchData3">PDF Check</button>
+    <div id="output">Click the button to fetch data...</div>
+
+    <script>
+      document
+        .getElementById("fetchData")
+        .addEventListener("click", async () => {
+          const response = await fetch("/api/getcase");
+          const data = await response.json();
+          document.getElementById("output").innerText = data.message;
+        });
+    </script>
+
+    <script>
+      async function makeCall() {
+        try {
+          const response = await fetch("/api/makeOpenAICall", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              url: "https://www.themarginalian.org/2015/04/09/find-your-bliss-joseph-campbell-power-of-myth",
+              question: "who is joseph campbell",
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          // console.log(data.result);
+          document.getElementById("output").innerText = data.result;
+          return data.result;
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+
+      document
+        .getElementById("fetchData2")
+        .addEventListener("click", async () => {
+          makeCall();
+        });
+    </script>
+
+    <script>
+      async function pdfParse() {
+        try {
+          const response = await fetch("/api/parsePDF", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              url: "https://www.themarginalian.org/2015/04/09/find-your-bliss-joseph-campbell-power-of-myth",
+              question: "who is joseph campbell",
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          // console.log(data.docs[0]);
+          // return data.result;
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+
+      document
+        .getElementById("fetchData3")
+        .addEventListener("click", async () => {
+          pdfParse();
+        });
+    </script>
+  </body>
+</html>

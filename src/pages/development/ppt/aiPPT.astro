@@ -1,0 +1,756 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Impress.js Slideshow</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <!-- <link rel="stylesheet" href="/css/global.css" /> -->
+
+    <script
+      src="https://cdn.jsdelivr.net/gh/impress/impress.js@2.0.0/js/impress.js"
+      defer></script>
+    <style>
+      .dark-icon {
+        display: none;
+      }
+      [data-theme="dark"] .light-icon {
+        display: none;
+      }
+      [data-theme="dark"] .dark-icon {
+        display: inline;
+      }
+    </style>
+    <style is:inline>
+      .about ul {
+        margin-top: 1em;
+        font-size: 0.7em;
+        line-height: 1em;
+      }
+      .about ul li {
+        text-align: left;
+      }
+      iframe {
+        width: 100%;
+        height: 100%;
+        border: 1px solid #ccc;
+      }
+      :root {
+        /* Colors */
+        --color-primary: #007bff;
+        --color-primary-dark: #0056b3;
+        --color-secondary: #6c757d;
+        --color-secondary-dark: #5a6268;
+        --color-accent: #ff5722;
+        --color-white: #fff;
+        --color-black: #333;
+        --color-gray: #474747;
+        --color-light-gray: #f5f7fa;
+        --color-shadow: rgba(0, 0, 0, 0.2);
+        --global-bg: #333;
+
+        /* Gradients */
+        --gradient-modern-bg: radial-gradient(
+            at 88% 40%,
+            hsla(240, 15%, 9%, 1) 0px,
+            transparent 85%
+          ),
+          radial-gradient(
+            at 49% 30%,
+            hsla(240, 15%, 9%, 1) 0px,
+            transparent 85%
+          ),
+          radial-gradient(
+            at 14% 26%,
+            hsla(240, 15%, 9%, 1) 0px,
+            transparent 85%
+          ),
+          radial-gradient(
+            at 0% 64%,
+            hsla(263, 93%, 56%, 1) 0px,
+            transparent 85%
+          ),
+          radial-gradient(
+            at 41% 94%,
+            hsla(284, 100%, 84%, 1) 0px,
+            transparent 85%
+          ),
+          radial-gradient(
+            at 100% 99%,
+            hsla(306, 100%, 57%, 1) 0px,
+            transparent 85%
+          );
+
+        /* Sizes */
+        --size-step-w: 100vh;
+        --size-step-h: 100vh;
+        --size-slide-radius: 20px;
+        --size-button-radius: 5px;
+        --size-tag-radius: 15px;
+
+        /* Shadows */
+        --shadow-slide: -24px 4px 1em rgba(0, 0, 0, 0.4),
+          24px 4px 1em rgba(0, 0, 0, 0.4);
+        --shadow-button: 0 4px 8px var(--color-shadow);
+        --shadow-tag: 2px 2px 5px var(--color-shadow);
+        --shadow-modern-inset: 0px -16px 24px 0px rgba(255, 255, 255, 0.25) inset;
+
+        /* Transitions */
+        --transition-fast: 0.3s;
+        --transition-normal: 0.5s;
+        --transition-slow: 0.7s;
+        --transition-button: background var(--transition-slow) ease, scale 0.4s;
+      }
+
+      /* Base Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        transition: 0.5s;
+      }
+
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        background-color: var(--global-bg);
+        font-size: 1.5vh;
+      }
+
+      /* Impress Container */
+      #impress {
+        width: 100vw;
+        height: 100vh;
+      }
+
+      /* Steps */
+      .step {
+        position: absolute;
+        width: var(--size-step-w);
+        height: var(--size-step-h);
+        padding: 1em;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5em;
+        border-radius: 0.8em;
+        transition: var(--transition-slow);
+        cursor: pointer;
+      }
+
+      /* Navigation */
+      .nav-buttons {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        display: flex;
+        gap: 10px;
+        transition: 2s;
+        flex-direction: column;
+        background-color: var(--color-white);
+        padding: 1em;
+        border-radius: 1em;
+        box-shadow: var(--shadow-button);
+        font-size: 0.6em;
+      }
+
+      .nav-buttons textarea {
+        all: unset;
+        border: 2px solid var(--color-primary);
+        height: 2rem;
+        border-radius: 0.5em;
+        padding: 1em;
+        font-size: 1.4em;
+      }
+
+      .nav-button {
+        background: var(--color-primary);
+        color: var(--color-white);
+        border: none;
+        padding: 10px 20px;
+        font-size: 1.4em;
+        cursor: pointer;
+        border-radius: var(--size-button-radius);
+        box-shadow: var(--shadow-button);
+        transition: var(--transition-button);
+        height: 100%;
+      }
+
+      .nav-button:hover {
+        background: var(--color-primary-dark);
+        scale: 1.1;
+      }
+
+      /* #resetBtn {
+        background: var(--color-secondary);
+      }
+      #resetBtn:hover {
+        background: var(--color-secondary-dark);
+      } */
+
+      /* Slides */
+      .slide {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        border-radius: var(--size-slide-radius);
+        background: linear-gradient(135deg, var(--color-light-gray), #c3cfe2);
+        box-shadow: var(--shadow-slide);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        transition: var(--transition-normal);
+      }
+
+      .slide:hover {
+        transform: scale(1.05);
+      }
+
+      /* Typography */
+      .title {
+        font-size: 4em;
+        font-weight: bold;
+        color: var(--color-black);
+        line-height: 0.8em;
+        width: 50%;
+      }
+
+      .subTitle {
+        font-size: 2.5em;
+        color: var(--color-black);
+        margin-top: 1em;
+      }
+
+      .about {
+        font-size: 1.8em;
+        color: var(--color-gray);
+        margin-top: 1em;
+        max-width: 80%;
+        line-height: 1.3em;
+      }
+
+      /* Elements */
+      .tag {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        padding: 1em;
+        background: var(--color-accent);
+        color: var(--color-white);
+        font-size: 1em;
+        font-weight: bold;
+        border-radius: var(--size-tag-radius);
+        text-transform: uppercase;
+        box-shadow: var(--shadow-tag);
+        transition: var(--transition-slow);
+      }
+
+      .ctaButton {
+        margin-top: 2em;
+        padding: 1em;
+        background: var(--color-primary);
+        border-radius: 10px;
+        cursor: pointer;
+        transition: var(--transition-normal);
+        font-size: 1.4em;
+      }
+
+      .ctaButton a {
+        color: var(--color-white);
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      .ctaButton:hover {
+        background: var(--color-primary-dark);
+      }
+
+      .slide:hover .ctaButton {
+        scale: 1.5;
+      }
+
+      /* Special Classes */
+      .modernBackground {
+        background-color: hsla(240, 15%, 9%, 1);
+        background-image: var(--gradient-modern-bg);
+        box-shadow: var(--shadow-modern-inset);
+      }
+
+      /* Animations */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateX(-50px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes zoomIn {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(0.95);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      @keyframes slowRotateZoom {
+        0% {
+          transform: scale(1) rotateZ(0deg);
+        }
+        50% {
+          transform: scale(1.1) rotateZ(3deg);
+        }
+        100% {
+          transform: scale(1) rotateZ(0deg);
+        }
+      }
+      @keyframes upDown {
+        0% {
+          transform: translateY(1px);
+        }
+        50% {
+          transform: translateY(-1px);
+        }
+        100% {
+          transform: translateY(1px);
+        }
+      }
+      span {
+        background-color: yellow;
+        padding: 0.2em;
+        border-radius: 0.4em;
+        color: #333;
+        font-weight: 700;
+        animation: zoomIn 1s infinite ease-in-out;
+        display: inline-block;
+      }
+      /* Print Styles */
+      @media print {
+        @page {
+          size: 8in 8in;
+          margin: 0;
+        }
+        body,
+        html {
+          width: 8in;
+          height: 8in;
+        }
+        #impress {
+          display: block;
+        }
+        .step {
+          page-break-before: always;
+          width: 8in;
+          height: 8in;
+          position: relative;
+          transform: none !important;
+        }
+      }
+      .slowAnimate .slide {
+        animation: slowRotateZoom 10s infinite ease-in-out;
+      }
+      .nav-buttons-wrapper {
+        height: 2.5rem;
+      }
+
+      .zoomAnimation {
+        animation: zoomIn 1s infinite ease-in-out;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="impress">
+      <!-- <div
+        id="overview"
+        class="step nothing"
+        data-x="1100"
+        data-y="500"
+        data-scale="2"
+      > -->
+    </div>
+    <div class="nav-buttons">
+      <textarea
+        name="Topic"
+        id="iTopic"
+        placeholder="Give a Topic or content here."></textarea>
+
+      <textarea
+        name="Instructions"
+        id="instructions"
+        placeholder="Anything specific you want to do?"></textarea>
+      <div class="nav-buttons-wrapper">
+        <button class="nav-button" id="createIt">Create</button>
+        <button class="nav-button" id="resetBtn">Reset</button>
+        <button class="nav-button" id="leftBtn">Previous</button>
+        <button class="nav-button" id="rightBtn">Next</button>
+        <button class="nav-button" id="themeToggle">
+          <span class="light-icon">🌞</span>
+          <span class="dark-icon">🌙</span>
+        </button>
+      </div>
+    </div>
+  </body>
+
+  <script>
+    import {
+      slideContents,
+      slideProperties,
+      ImpressSlides,
+      saveArrayToLocalStorage,
+      getArrayFromLocalStorage,
+    } from "./impress.js";
+    async function extractJS(text) {
+      const match = text.match(/```json([\s\S]*?)```/);
+      return match ? match[1].trim() : "No JSON code found.";
+    }
+    async function callOpenAI(query) {
+      try {
+        const response = await fetch("/api/makeOpenAICall", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({question: query}),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data.result.kwargs.content;
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+
+    document.getElementById("createIt").addEventListener("click", async () => {
+      let topic = document.getElementById("iTopic").value;
+      let instruction = document.getElementById("instructions").value;
+      let responseStructure = JSON.stringify(slideContents);
+      let prompt =
+        "I use the following format to render data: \n" +
+        responseStructure +
+        `\nNote: the about class div can have li uls also, and feel free to put them in. Also add span to important parts, to highlight them. Now in same format, give me array in json code block for this > "${topic}" \n ${instruction}`;
+      document.getElementById("createIt").innerText = "Loading";
+      document.getElementById("createIt").style.background = "red";
+      document.getElementById("createIt").classList.add("zoomAnimation");
+      const result = await callOpenAI(prompt);
+      let final = await extractJS(result);
+      saveArrayToLocalStorage("lastInformation", JSON.parse(final));
+      createSlideShow();
+      document.getElementById("createIt").innerText = "Create";
+      document.getElementById("createIt").style.background =
+        "var(--color-primary)";
+      document.getElementById("createIt").classList.remove("zoomAnimation");
+    });
+
+    function getNonOverlappingPosition(index, totalSlides) {
+      // Constants for positioning logic
+      const VIEWPORT_WIDTH = 1000;
+      const VIEWPORT_HEIGHT = 1000;
+      const MIN_DISTANCE = 1200; // Minimum distance between slides
+      const SPHERE_RADIUS = 3000; // Radius for spherical distribution
+      const LAYERS = 3; // Number of depth layers
+
+      // Calculate angle increments for spherical distribution
+      const goldenAngle = Math.PI * (3 - Math.sqrt(5)); // Golden angle for even distribution
+      const layerHeight = (2 * SPHERE_RADIUS) / LAYERS;
+
+      // Calculate position using Fibonacci sphere algorithm
+      const layer = index % LAYERS;
+      const offset = 2 * (layer / LAYERS) - 1 + 1 / LAYERS;
+      const radius = Math.sqrt(1 - offset * offset) * SPHERE_RADIUS;
+      const theta = index * goldenAngle;
+
+      // Convert spherical to cartesian coordinates
+      const x = Math.cos(theta) * radius;
+      const y = offset * SPHERE_RADIUS;
+      const z = Math.sin(theta) * radius;
+
+      // Calculate rotation - face towards center (0,0,0)
+      const rotX = Math.atan2(y, Math.sqrt(x * x + z * z)) * (180 / Math.PI);
+      const rotY = Math.atan2(x, z) * (180 / Math.PI);
+
+      // Calculate scale - larger when closer to center
+      const distanceFromCenter = Math.sqrt(x * x + y * y + z * z);
+      const scale = 1 + (1 - distanceFromCenter / SPHERE_RADIUS) * 0.5;
+
+      return {
+        x: x,
+        y: y,
+        z: z,
+        scale: Math.max(0.8, Math.min(scale, 1.5)), // Keep scale reasonable
+        rotateX: rotX,
+        rotateY: rotY,
+        rotateZ: Math.random() * 10 - 5, // Small random Z rotation
+      };
+    }
+
+    function getRandom(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function shuffleSlides() {
+      impress().tear(); // Destroy current instance
+
+      document.querySelectorAll(".step").forEach((slide, index) => {
+        const pos = getNonOverlappingPosition(
+          index,
+          document.querySelectorAll(".step").length
+        );
+
+        slide.setAttribute("data-x", pos.x);
+        slide.setAttribute("data-y", pos.y);
+        slide.setAttribute("data-z", pos.z);
+        slide.setAttribute("data-scale", pos.scale);
+        slide.setAttribute("data-rotate-x", pos.rotateX);
+        slide.setAttribute("data-rotate-y", pos.rotateY);
+        slide.setAttribute("data-rotate-z", pos.rotateZ);
+      });
+
+      impress().init(); // Reinitialize Impress.js with new positions
+      // impress().goto("overview");
+    }
+
+    function shuffleSlidesRandom() {
+      impress().tear(); // Destroy current instance
+      document.querySelectorAll(".step").forEach((slide) => {
+        slide.setAttribute("data-x", getRandom(-4000, 4000));
+        slide.setAttribute("data-y", getRandom(-4000, 4000));
+        slide.setAttribute("data-z", getRandom(-4000, 4000));
+        slide.setAttribute("data-scale", getRandom(2, 5));
+        slide.setAttribute("data-rotate-x", getRandom(-90, 90));
+        slide.setAttribute("data-rotate-y", getRandom(-90, 90));
+      });
+      impress().init(); // Reinitialize Impress.js with new positions
+      // impress().goto("overview");
+    }
+
+    function createSlideShow() {
+      const retrievedArray = getArrayFromLocalStorage("lastInformation");
+
+      if (retrievedArray !== null) {
+        var theContent = retrievedArray;
+      } else {
+        theContent = slideContents;
+        saveArrayToLocalStorage("lastInformation", slideContents);
+      }
+
+      try {
+        impress().tear(); // Destroy current instance
+      } catch (e) {
+        console.error(e);
+      }
+      const slidesData = theContent.map((contentItem) => {
+        const props = slideProperties.find(
+          (propItem) => propItem.uid === contentItem.uid
+        );
+        return {...contentItem, ...props};
+      });
+
+      const slideshow = new ImpressSlides("impress");
+      slidesData.forEach((slide) => slideshow.addSlide(slide));
+      slideshow.init();
+      shuffleSlidesRandom();
+    }
+    window.onload = () => {
+      createSlideShow();
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "c" || event.key === "C") {
+          shuffleSlides();
+        }
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "v" || event.key === "V") {
+          shuffleSlidesRandom();
+        }
+      });
+
+      document.getElementById("leftBtn").addEventListener("click", () => {
+        impress().prev(); // Move to previous slide
+      });
+
+      document.getElementById("rightBtn").addEventListener("click", () => {
+        impress().next(); // Move to next slide
+      });
+
+      // setInterval(() => {
+      //   impress().next(); // Move to the next slide
+      // }, 3000); // Change slide every 5 seconds
+
+      document.addEventListener("impress:stepenter", function (event) {
+        const activeSlide = event.target;
+
+        document.querySelectorAll(".step").forEach((slide) => {
+          if (slide === activeSlide) {
+            slide.style.opacity = "1"; // Fully visible
+            slide.style.filter = "none"; // Remove blur
+          } else {
+            slide.style.opacity = "0.15"; // Dim non-active slides
+            slide.style.filter = "blur(5px)"; // Slight blur effect
+          }
+
+          slide.classList.remove("slowAnimate");
+        });
+        event.target.classList.add("slowAnimate");
+      });
+
+      function resetSlides() {
+        impress().tear(); // Destroy current instance
+
+        // Get all slides
+        const slides = document.querySelectorAll(".step");
+
+        // Reset each slide to its original position
+        slides.forEach((slide) => {
+          const uid = slide.id;
+          const originalProps = slideProperties.find(
+            (prop) => prop.uid === uid
+          );
+          console.log(originalProps);
+
+          if (originalProps) {
+            // Reset to original properties
+            slide.setAttribute("data-x", originalProps.x || 0);
+            slide.setAttribute("data-y", originalProps.y || 0);
+            slide.setAttribute("data-z", originalProps.z || 0);
+            slide.setAttribute("data-scale", originalProps.scale || 1);
+            slide.setAttribute("data-rotate-x", originalProps.rotateX || 0);
+            slide.setAttribute("data-rotate-y", originalProps.rotateY || 0);
+            slide.setAttribute("data-rotate-z", originalProps.rotateZ || 0);
+          }
+        });
+
+        impress().init(); // Reinitialize Impress.js
+        impress().goto("overview");
+      }
+      document
+        .getElementById("resetBtn")
+        .addEventListener("click", resetSlides);
+
+      document.querySelectorAll("span").forEach((span, index) => {
+        span.style.animationDelay = `${index * 0.1}s`;
+      });
+    };
+  </script>
+</html>
+
+<script>
+  import {editAll} from "../../../coreglobal/domcontroller.js";
+  editAll();
+  const themes = {
+    light: {
+      "--color-primary": "#007bff",
+      "--color-primary-dark": "#0056b3",
+      "--color-secondary": "#6c757d",
+      "--color-secondary-dark": "#5a6268",
+      "--color-accent": "#ff5722",
+      "--color-white": "#fff",
+      "--color-black": "#333",
+      "--color-gray": "#666",
+      "--color-light-gray": "#f5f7fa",
+      "--color-shadow": "rgba(0, 0, 0, 0.2)",
+      "--global-bg": "white",
+      "--gradient-modern-bg": `
+      radial-gradient(at 88% 40%, #f5f7fa 0px, transparent 85%),
+      radial-gradient(at 49% 30%, #f5f7fa 0px, transparent 85%),
+      radial-gradient(at 14% 26%, #f5f7fa 0px, transparent 85%),
+      radial-gradient(at 0% 64%, #b388ff 0px, transparent 85%),
+      radial-gradient(at 41% 94%, #82b1ff 0px, transparent 85%),
+      radial-gradient(at 100% 99%, #ea80fc 0px, transparent 85%)
+    `,
+      "--shadow-modern-inset": "0px -16px 24px 0px rgba(0, 0, 0, 0.1) inset",
+    },
+    dark: {
+      "--color-primary": "#6c5ce7",
+      "--color-primary-dark": "#5649c0",
+      "--color-secondary": "#a4b0be",
+      "--color-secondary-dark": "#7f8c8d",
+      "--color-accent": "#ff7675",
+      "--color-white": "#f0f0f0",
+      "--color-black": "#1a1a1a",
+      "--color-gray": "#474747",
+      "--color-light-gray": "#2d3436",
+      "--color-shadow": "rgba(0, 0, 0, 0.5)",
+      "--global-bg": "#333",
+      "--gradient-modern-bg": `
+      radial-gradient(at 88% 40%, hsla(240, 15%, 9%, 1) 0px, transparent 85%),
+      radial-gradient(at 49% 30%, hsla(240, 15%, 9%, 1) 0px, transparent 85%),
+      radial-gradient(at 14% 26%, hsla(240, 15%, 9%, 1) 0px, transparent 85%),
+      radial-gradient(at 0% 64%, hsla(263, 93%, 56%, 1) 0px, transparent 85%),
+      radial-gradient(at 41% 94%, hsla(284, 100%, 84%, 1) 0px, transparent 85%),
+      radial-gradient(at 100% 99%, hsla(306, 100%, 57%, 1) 0px, transparent 85%)
+    `,
+      "--shadow-modern-inset":
+        "0px -16px 24px 0px rgba(255, 255, 255, 0.1) inset",
+    },
+  };
+
+  // Apply theme
+  function setTheme(themeName) {
+    const theme = themes[themeName];
+    Object.keys(theme).forEach((key) => {
+      document.documentElement.style.setProperty(key, theme[key]);
+    });
+    localStorage.setItem("theme", themeName); // Save preference
+  }
+
+  // Toggle between light/dark
+  function toggleTheme() {
+    const currentTheme = localStorage.getItem("theme") || "light";
+    const newTheme = currentTheme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+  }
+
+  // Initialize theme (check saved preference or OS preference)
+  function initTheme() {
+    const savedTheme = localStorage.getItem("theme");
+    const osPrefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+
+    setTheme(savedTheme || (osPrefersDark ? "dark" : "light"));
+  }
+
+  // Listen for OS theme changes
+  window.matchMedia("(prefers-color-scheme: dark)").addListener((e) => {
+    if (!localStorage.getItem("theme")) {
+      // Only auto-change if no manual preference
+      setTheme(e.matches ? "dark" : "light");
+    }
+  });
+
+  // Initialize on load
+  document.addEventListener("DOMContentLoaded", initTheme);
+  document.getElementById("themeToggle").addEventListener("click", async () => {
+    toggleTheme();
+  });
+</script>

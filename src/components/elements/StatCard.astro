@@ -1,0 +1,75 @@
+---
+export interface Props {
+  number: string;
+  text: string;
+  logo: string;
+  link: string;
+  colorBG?: string;
+}
+
+const {number, text, logo, link, colorBG = "grey"} = Astro.props;
+---
+
+<style>
+  .card {
+    all: unset;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1em;
+    margin: 1em;
+    border-radius: 12px;
+    width: 12rem;
+    height: 12rem;
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+  }
+
+  .card .number {
+    line-height: 0;
+    font-size: 4rem;
+    font-weight: bold;
+    color: #333;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .card .text {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1rem;
+  }
+
+  .card .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .card img {
+    max-height: 30px;
+  }
+
+  .arrow-link {
+    text-decoration: none;
+    font-size: 1.5rem;
+    color: #000;
+    font-weight: bold;
+    transition: transform 0.2s ease-in-out;
+  }
+
+  .arrow-link:hover {
+    transform: translateX(5px);
+  }
+</style>
+
+<div class="card" style={`background: ${colorBG};`}>
+  <div>
+    <div class="number">{number}</div>
+    <div class="text">{text}</div>
+  </div>
+  <div class="footer">
+    <img src={logo} alt="Company Logo" />
+    <a href={link} class="arrow-link">→</a>
+  </div>
+</div>

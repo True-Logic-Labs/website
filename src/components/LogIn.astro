@@ -1,0 +1,75 @@
+---
+// // Inside your Astro component
+// import {supabase} from "../lib/supabase";
+
+// let user = null;
+
+// async function fetchUser() {
+//   const {data, error} = await supabase.auth.getSession();
+//   if (error) {
+//     console.error("Error getting session:", error.message);
+//   } else {
+//     // console.log("Current session:", data);
+//     user = data?.user || null;
+//   }
+// }
+
+// fetchUser();
+---
+
+<html>
+  <style>
+    .butts {
+      border: 2px solid black;
+      padding: 1rem;
+      margin: 1rem;
+      border-radius: 1rem;
+    }
+  </style>
+  <body>
+    <h1>Login</h1>
+    <div id="content">
+      <p id="user-info">HELLLOOOO</p>
+      <div class="butts" id="loginButton2">Login</div>
+      <div class="butts" id="logoutButton2">LogOut</div>
+      <div class="butts" id="sessionButton2">Session</div>
+      <div class="butts" id="addSubscription2">Add Subscription</div>
+      <div class="butts" id="showAllUsers2">Show All Users</div>
+    </div>
+    <script>
+      import {AuthManagement} from "../coreglobal/supabase";
+      const authManager = new AuthManagement();
+
+      // Adding event listeners to the buttons
+      document.getElementById("loginButton2").addEventListener("click", () => {
+        authManager.loginUser("manasvimsharma@gmail.com", "example-password");
+      });
+
+      document.getElementById("logoutButton2").addEventListener("click", () => {
+        authManager.logoutUser();
+      });
+
+      document
+        .getElementById("sessionButton2")
+        .addEventListener("click", () => {
+          authManager.getSession();
+        });
+
+      // document.getElementById("showAllUsers2").addEventListener("click", () => {
+      //   authManager.getAllUsers(); // GET FROM ENV FILE
+      // });
+      const subscriptionData = {
+        productID: "5",
+        subscriptionID: "sub-456",
+        subscription_start_date: "2025-01-01",
+        subscription_end_date: "2025-12-31",
+      };
+
+      document
+        .getElementById("addSubscription2")
+        .addEventListener("click", () => {
+          authManager.addSubscription(subscriptionData);
+        });
+    </script>
+  </body>
+</html>

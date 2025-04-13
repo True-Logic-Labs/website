@@ -1,0 +1,279 @@
+---
+export const partial = true;
+export interface Props {
+  categories: object;
+}
+
+const {categories} = Astro.props;
+const inlineScript = `<script>window.categories = ${JSON.stringify(categories, null, 2)};</script>`;
+---
+
+<div set:html={inlineScript} />
+<div class="top-level-columns">
+  <!-- Top-Level Category Selectors -->
+  <div id="cat-select" class="category-selector-row">
+    <!-- Buttons will be injected by JS -->
+  </div>
+
+  <!-- Tool Tables for Each Category -->
+  <div id="category-contents">
+    {
+      Object.entries(categories).map(([groupTitle, groupItems], groupIndex) => (
+        <div
+          class="top-level-column"
+          id={`category-${groupIndex}`}
+          style={{display: groupIndex === 0 ? "block" : "none"}}
+        >
+          <div class="second-level-columns">
+            {Object.entries(groupItems).map(([subCategory, tools]) => (
+              <div class="second-level-column">
+                <div class="title_level2">{subCategory}</div>
+
+                <div class="tool-table">
+                  {tools.map((tool) => (
+                    <div
+                      class="tool-row clickable-row"
+                      role="button"
+                      tabindex="0"
+                      data-href={tool.productLocation}
+                    >
+                      <div class="tool-cell title" data-label="Tool Name">
+                        {tool.title}
+                      </div>
+                      <div
+                        class="tool-cell description"
+                        data-label="Description"
+                        set:html={tool.description}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style is:inline>
+  .tool-table span {
+    background-color: yellowgreen;
+    background: yellowgreen;
+    padding: 0 0.3em;
+    font-weight: 500;
+    border-radius: 0.2em;
+    color: black;
+  }
+
+  #category-contents {
+    width: 100%;
+  }
+  a {
+    all: unset;
+  }
+
+  #cat-select {
+    display: flex;
+    gap: 1em;
+    padding-top: 1.5em;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .cat_selector {
+    text-align: center;
+    width: 20%;
+    font-size: 1.1em;
+    cursor: pointer;
+    padding: 0.6em 1.2em;
+    border-radius: 0.4em;
+    /* background-color: #0070f3; */
+    border: 2px solid yellowgreen;
+    color: black;
+    transition:
+      background-color 0.3s ease,
+      width 0.4s ease;
+  }
+
+  .cat_selector:hover {
+    background-color: yellowgreen;
+    color: black;
+  }
+
+  .active-local {
+    background-color: yellowgreen !important;
+    color: black;
+    width: 40%;
+    font-weight: 900;
+  }
+
+  .top-level-columns {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1em;
+  }
+
+  .top-level-column {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+
+  .title_top {
+    font-size: 1.5em;
+    font-weight: bold;
+    /* margin-bottom: 1em; */
+  }
+
+  .second-level-columns {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .second-level-column {
+    /* border: 0.05em solid #ddd; */
+    border-radius: 0.5em;
+  }
+
+  .title_level2 {
+    font-size: 1.2em;
+    font-weight: 600;
+    margin-bottom: 0.2em;
+    background-color: #222;
+    color: #fff;
+    padding: 0.6em 1em;
+    border-radius: 0.4em;
+  }
+
+  .tool-table {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+  }
+
+  .tool-row.header {
+    font-weight: bold;
+    border-bottom: 0.05em solid #ccc;
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  .tool-row {
+    display: grid;
+    grid-template-columns: 2fr 7fr;
+    gap: 1em;
+    margin-bottom: 0.8em;
+    /* background-color: rgba(0, 0, 0, 0.06); */
+    /* border-radius: 0.4em; */
+    min-height: 6em;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.308);
+  }
+
+  .tool-row .title {
+    display: flex;
+    align-items: center;
+    padding: 1em 0;
+  }
+  .tool-row .description {
+    /* display: flex; */
+    /* align-items: center; */
+    padding: 1em 0;
+    padding-right: 0.5em;
+  }
+
+  .tool-row .title {
+    font-size: 1.2em;
+    font-weight: 500;
+    padding-left: 1em;
+  }
+
+  .tool-cell {
+    flex: 1;
+  }
+
+  .tool-cell.link a {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* padding: 0.4em 0.9em; */
+    background-color: #0070f3;
+    color: #fff;
+    border-radius: 0.4em;
+    font-size: 1em;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+    text-decoration: none;
+    height: 90%;
+    transition:
+      scale 0.6s,
+      font-size 0.2s;
+  }
+
+  .tool-cell.link a:hover {
+    background-color: #0059c1;
+    scale: 1.1;
+    font-size: 1.2em;
+  }
+
+  .tool-cell.link a:visited {
+    color: white;
+  }
+  .clickable-row {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  .clickable-row:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+</style>
+
+<script>
+  // Get references
+  const categories = window.categories;
+  const selectorRow = document.getElementById("cat-select");
+  const contentContainer = document.getElementById("category-contents");
+
+  // Create selector buttons
+  Object.keys(categories).forEach((groupTitle, index) => {
+    const btn = document.createElement("div");
+    btn.innerText = groupTitle;
+    btn.className = "cat_selector";
+    if (index === 0) btn.classList.add("active-local");
+
+    btn.addEventListener("click", () => {
+      // Hide all content divs
+      Array.from(contentContainer.children).forEach(
+        (div) => (div.style.display = "none")
+      );
+      // Show selected
+      document.getElementById(`category-${index}`).style.display = "block";
+
+      // Update active button
+      Array.from(selectorRow.children).forEach((b) =>
+        b.classList.remove("active-local")
+      );
+      btn.classList.add("active-local");
+    });
+
+    selectorRow.appendChild(btn);
+  });
+
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".clickable-row").forEach((row) => {
+      row.addEventListener("click", () => {
+        const href = row.getAttribute("data-href");
+        if (href) window.location.href = href;
+      });
+
+      row.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          const href = row.getAttribute("data-href");
+          if (href) window.location.href = href;
+        }
+      });
+    });
+  });
+</script>

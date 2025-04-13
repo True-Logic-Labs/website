@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Full-Page Print Sections</title>
+    <style is:inline>
+      html,
+      body,
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      .section {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        font-size: 24px;
+        font-family: Arial, sans-serif;
+        border: 2px solid black;
+        box-sizing: border-box;
+      }
+
+      @page {
+        size: 20cm 20cm;
+        margin: 0;
+        padding: 0;
+      }
+      /* Ensure each section prints on a new page */
+      @media print {
+        .section {
+          page-break-before: always; /* Force new page */
+        }
+
+        /* Hide print button */
+        .no-print {
+          display: none;
+        }
+      }
+      .card {
+        font-size: 8px;
+        width: 95%;
+        height: 95%;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        font-family: Arial, sans-serif;
+        background: white;
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .card-image {
+        width: 100%;
+        height: auto;
+      }
+
+      .card-content {
+        font-size: 2em;
+        padding: 1em;
+        height: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        gap: 1em;
+        grid-template-areas:
+          "title title side"
+          "desc desc desc"
+          "tags tags tags";
+      }
+
+      .card-content * {
+        border: 2px solid black;
+        padding: 1em;
+      }
+      .card-title {
+        font-size: 1em;
+        grid-area: title; /* Spans 2 columns in the first row */
+        font-weight: bold;
+      }
+
+      .card-subtitle {
+        grid-area: side;
+        font-size: 1em;
+        color: #666;
+      }
+
+      .card-description {
+        grid-area: desc;
+        font-size: 1.2em;
+        color: #333;
+      }
+
+      .card-tags {
+        font-size: 1.2em;
+        grid-area: tags;
+        margin-top: 0;
+      }
+
+      .tag {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+        margin-right: 6px;
+      }
+
+      .hot {
+        background: #ff5722;
+        color: white;
+      }
+
+      .loved {
+        background: #e91e63;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <button class="no-print" onclick="window.print()">Print</button>
+    <div id="myDoc"></div>
+    <!-- <div id="myDoc">
+      <div class="section" style="background-color: lightblue;">
+        <div class="card">
+          <div class="card-content">
+            <h2 class="card-title">Awesome Product</h2>
+            <p class="card-subtitle">The best choice for you</p>
+            <p class="card-description">
+              This is a high-quality product designed for those who love
+              innovation and style.
+            </p>
+            <div class="card-tags">
+              <span class="tag hot">🔥 Hot</span>
+              <span class="tag loved">❤️ Loved</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section" style="background-color: lightcoral;">
+        <h1>Page 2</h1>
+      </div>
+
+      <div class="section" style="background-color: lightgreen;">
+        <h1>Page 3</h1>
+      </div>
+    </div> -->
+  </body>
+</html>
+<script>
+  window.onload = () => {
+    const sectionsData = [
+      {
+        title: "Product 1",
+        subtitle: "The best choice for you",
+        description:
+          "This is a high-quality product designed for those who love innovation and style.",
+        bgColor: "lightblue",
+      },
+      {
+        title: "Product 2",
+        subtitle: "An amazing product",
+        description: "Experience next-level performance with this product.",
+        bgColor: "lightcoral",
+      },
+      {
+        title: "Product 3",
+        subtitle: "Best in class",
+        description: "Designed for those who demand excellence.",
+        bgColor: "lightgreen",
+      },
+    ];
+
+    function generateSections() {
+      const container = document.getElementById("myDoc");
+      container.innerHTML = ""; // Clear existing content
+
+      sectionsData.forEach((section) => {
+        const sectionDiv = document.createElement("div");
+        sectionDiv.classList.add("section");
+        sectionDiv.style.backgroundColor = section.bgColor;
+
+        sectionDiv.innerHTML = `
+        <div class="card">
+
+                <div class="card-content">
+                    <h2 class="card-title">${section.title}</h2>
+                    <p class="card-subtitle">${section.subtitle}</p>
+                    <p class="card-description">${section.description}</p>
+                    <div class="card-tags">
+                        <div class="tag hot">🔥 Hot</div>
+                        <div class="tag loved">❤️ Loved</div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        container.appendChild(sectionDiv);
+      });
+    }
+    generateSections();
+  };
+</script>

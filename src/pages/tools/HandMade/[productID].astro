@@ -1,0 +1,106 @@
+---
+export const prerender = true;
+
+import {
+  configs,
+  calculateTokenPricingWithUnits,
+} from "../../../coreglobal/products.js";
+import {
+  getAllProducts,
+  getSuitebyToolProductID,
+  makeBundles,
+  extractToolsFromSuite,
+} from "../../../coreglobal/datatransformer.js";
+import ToolPages from "../../../components/handmadeTools.astro";
+import Header from "../../../components/Header.astro";
+import Footer from "../../../components/Footer.astro";
+
+export function getStaticPaths() {
+  const products = getAllProducts(configs);
+  return products.map((product) => ({
+    params: {productID: product.productDetails.productID},
+    props: {product},
+  }));
+}
+
+const {product} = Astro.props;
+const bundles = makeBundles(configs);
+
+let parentSuit = await getSuitebyToolProductID(
+  bundles.categories,
+  product.productDetails.productID
+);
+
+let toolsInSuite = extractToolsFromSuite(parentSuit);
+
+// console.log(toolsInSuite);
+const benefitList = toolsInSuite.map((tool) => ({
+  title: tool.name,
+  subtitle: " ",
+  description: tool.description,
+  link: tool.pageLink,
+  icon: "⭐",
+}));
+
+import BaseHead from "../../../components/BaseHead.astro";
+import {SITE_TITLE, SITE_DESCRIPTION} from "../../../consts";
+const productPageLink = product.productDetails.productLocation;
+
+// console.log("Product Details: ", product.productDetails);
+
+const gpt4oRates = {
+  modelName: "gpt-4o",
+  input: 2.5, // $2.5 per 1M input tokens
+  output: 10, // $10 per 1M output tokens
+};
+
+const gpt4ominiRates = {
+  modelName: "gpt-4o-mini",
+  input: 0.15, // $2.5 per 1M input tokens
+  output: 0.6, // $10 per 1M output tokens
+};
+
+const result = calculateTokenPricingWithUnits({
+  inputTokensPerCall: product.productDetails.inputTokensPerCall,
+  outputTokensPerCall: product.productDetails.outputTokensPerCall,
+  callsPerMonthAllowedForTool:
+    product.productDetails.usageAllowanceSubscription, // 300 calls allowed per month
+  modelRates: gpt4oRates,
+  profitMargin: 2, // 100% profit margin
+  baseTokenDefinition: {input: 1000, output: 2000}, // Your system's "1 token" definition
+});
+
+// console.log("Pricing Breakdown:", result);
+const perCallTokenUsageBase = result.totalBaseTokensUsedPerCall;
+---
+
+<html lang="en" class="hide">
+  <head>
+    <BaseHead
+      title={product.meta.SEO.metaTitle || SITE_TITLE}
+      description={product.meta.SEO.metaDescription || SITE_DESCRIPTION}
+      toolMeta={product.meta}
+      ,
+    />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/toolsLandingPage.css" />
+  </head>
+  <body>
+    <Header title={product.title} />
+    <div class="animateIt">
+      <ToolPages
+        title={product.title}
+        description={product.description}
+        toolMeta={product.meta}
+        toolConfig={product.genCode}
+        toolsInSuite={benefitList}
+        parentSuit={parentSuit.name}
+        productViewController={product.productDetails.pageViewSettings}
+        productPageLink={productPageLink}
+        perCallTokenUsageBase={perCallTokenUsageBase}
+      />
+    </div>
+    <Footer />
+  </body>
+</html>

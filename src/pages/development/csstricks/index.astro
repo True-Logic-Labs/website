@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Impress.js Slideshow</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <style is:inline>
+      body,
+      html {
+        position: relative;
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        font-size: 18px;
+      }
+
+      body * {
+        perspective: 800px;
+        transform-style: preserve-3d;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .nav-buttons {
+        position: relative;
+        /* border: 2px solid black; */
+        height: 100%;
+      }
+      .nav-button {
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        background-color: rgb(190, 38, 0);
+        border: 2px solid black;
+        border-radius: 1em;
+      }
+      #A {
+        top: 0;
+        border: 15px solid white;
+        z-index: 1;
+        transition:
+          height 0.5s,
+          width 1s,
+          font-size 2s,
+          transform 1s;
+      }
+      #A::before {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        content: "SSSSS";
+        position: absolute;
+        font-size: 0;
+        background-color: rgb(255, 255, 255);
+        border-radius: 3rem;
+        height: 0rem;
+        width: 0rem;
+        transition:
+          height 0.5s,
+          width 1s,
+          font-size 0.7s,
+          transform 1s;
+        /* top: -1rem;
+        left: -1rem; */
+      }
+      #A:hover::before {
+        height: 90%;
+        width: 90%;
+        color: rgb(228, 0, 0);
+        font-size: 15rem;
+        /* transform: rotateX(15deg) translateY(100px); */
+      }
+      #A:hover {
+        height: 500px;
+        width: 100%;
+        /* transform: rotateX(15deg) translateY(100px); */
+      }
+      #B {
+        top: 100px;
+        border: 15px solid white;
+      }
+      #C {
+        top: 200px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="nav-buttons">
+      <div class="nav-button" id="B">↻</div>
+      <div class="nav-button" id="A">⬅</div>
+      <!-- <div class="nav-button" id="C">➡</div> -->
+    </div>
+
+    <script>
+      window.onload = () => {};
+    </script>
+  </body>
+</html>

@@ -1,0 +1,205 @@
+/* General Reset */
+#content {
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  line-height: 1.8;
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1rem;
+  display: grid;
+  gap: 1.5rem;
+}
+
+/* Headings as soft gradient boxes */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  padding: 1rem;
+  border-radius: 12px;
+  color: white;
+  margin: 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  background: linear-gradient(135deg, #4b6cb7, #182848);
+  font-size: 2.5rem;
+}
+
+h2 {
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  font-size: 2rem;
+}
+
+h3 {
+  background: linear-gradient(135deg, #00b09b, #96c93d);
+  font-size: 1.75rem;
+}
+
+h4 {
+  background: linear-gradient(135deg, #ff9966, #ff5e62);
+  font-size: 1.5rem;
+}
+
+h5 {
+  background: linear-gradient(135deg, #2193b0, #6dd5ed);
+  font-size: 1.3rem;
+}
+
+h6 {
+  background: linear-gradient(135deg, #cc2b5e, #753a88);
+  font-size: 1.1rem;
+}
+
+/* Paragraphs */
+p {
+  margin: 0;
+  padding: 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+/* Blockquotes as elegant cards */
+blockquote {
+  border-left: 6px solid #6a11cb;
+  padding: 1rem 1.5rem;
+  margin: 0;
+  background: rgba(106, 17, 203, 0.1);
+  border-radius: 8px;
+  font-style: italic;
+  color: #333;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Lists */
+ul,
+ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+li {
+  background: #f0f0f0;
+  padding: 0.75rem 1rem;
+  border-radius: 30px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Inline Code */
+code {
+  background: rgba(0, 0, 0, 0.8);
+  color: #f8f8f2;
+  padding: 3px 6px;
+  border-radius: 6px;
+  font-family: Consolas, monospace;
+  font-size: 0.95rem;
+}
+
+/* Code Blocks */
+pre {
+  background: #1e1e1e;
+  color: #e8e8e8;
+  padding: 1rem;
+  border-radius: 12px;
+  overflow: auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  font-size: 0.95rem;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+th,
+td {
+  padding: 1rem;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+th {
+  background: #333;
+  color: white;
+}
+
+tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+tr:hover {
+  background: #f1f1f1;
+}
+
+/* Images */
+img {
+  max-width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin: 1rem 0;
+}
+
+/* Horizontal Rule */
+hr {
+  border: none;
+  border-top: 3px dashed rgba(0, 0, 0, 0.1);
+  margin: 2rem 0;
+}
+
+/* Links */
+a {
+  color: #007acc;
+  text-decoration: none;
+  font-weight: bold;
+  position: relative;
+}
+
+a:hover {
+  color: #005ea3;
+}
+
+a::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: #007acc;
+  transform: scaleX(0);
+  transition: transform 0.3s;
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+}
+
+a:hover::after {
+  transform: scaleX(1);
+}
+
+/* Grid Layout for Multiple Headings (optional aesthetic) */
+#content > h1,
+#content > h2,
+#content > h3 {
+  display: inline-block;
+  width: calc(50% - 1rem);
+}
+
+@media (max-width: 768px) {
+  #content > h1,
+  #content > h2,
+  #content > h3 {
+    width: 100%;
+  }
+}

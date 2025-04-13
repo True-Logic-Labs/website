@@ -1,0 +1,465 @@
+---
+import Header from "../components/Header.astro";
+import Categories from "./categories.astro";
+import Loader from "../components/loader.astro";
+import {configs} from "../coreglobal/products.js";
+import {makeBundles} from "../coreglobal/datatransformer.js";
+const bundles = makeBundles(configs);
+const inlineScript = `<script>window.productBank = ${JSON.stringify(bundles.categories, null, 2)};</script>`;
+import BaseHead from "../components/BaseHead.astro";
+import {SITE_TITLE, SITE_DESCRIPTION} from "../consts";
+import Footer from "../components/Footer.astro";
+---
+
+<html lang="en">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/openMarket.css" />
+
+    <style>
+      @keyframes gradientMove {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .moving-gradient {
+        background: linear-gradient(45deg, #72cf00, #eeff03);
+        background-size: 200% 200%;
+        animation: gradientMove 6s ease infinite;
+      }
+      .dotted-background {
+        background-color: yellowgreen;
+        background-image: radial-gradient(circle, #5c940d 1%, transparent 10%);
+        background-size: 40px 40px;
+        animation: moveUp 250s linear infinite reverse;
+      }
+
+      #ToolHolder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+      }
+
+      .master-container {
+        perspective: 800px; /* 🔹 Moved perspective here */
+        /* transform-style: preserve-3d; */
+        width: 100vw;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      #welcome {
+        padding: 25em 2em;
+        perspective: 800px;
+        /* transform-style: preserve-3d; */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        /* background-color: greenyellow; */
+        width: 100%;
+        height: 100vh;
+      }
+
+      #message {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transition: transform 0.8s ease-in-out;
+        transform-style: preserve-3d; /* 🔹 Added */
+      }
+      #message-caption {
+        transition: transform 1.1s ease-in-out;
+      }
+      svg {
+        transition: transform 1s ease-in-out;
+      }
+
+      #welcome:hover > #message {
+        transform: rotateX(10deg) rotateY(10deg) scale(1.2); /* 🔹 Reordered */
+      }
+
+      #welcome:hover > #message-caption {
+        transform: rotateX(10deg) rotateY(-10deg) translateY(1em) scale(1.1); /* 🔹 Reordered */
+      }
+
+      #welcome:hover > #explore {
+        transform: translateY(1.6em);
+      }
+
+      #explore {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 1em;
+        transition: 0.7s;
+      }
+      #explore a {
+        padding: 0.2em 0.7em;
+        border-radius: 0.4em;
+        border: 2px dotted black;
+        color: black;
+        font-size: 1.5em;
+        transition: 0.4s;
+        cursor: pointer;
+        /* width: 5em; */
+      }
+      #explore a:hover {
+        border: 2px dotted rgb(0, 75, 16);
+        color: rgb(0, 75, 16);
+        scale: 1.06;
+      }
+      a {
+        all: unset;
+      }
+    </style>
+    <title>Dashboard</title>
+  </head>
+  <body>
+    <div set:html={inlineScript} />
+    <div class="homePage">
+      <Header />
+    </div>
+
+    <div class="master-container">
+      <section id="welcome" class="dotted-background">
+        <div id="message">
+          <svg
+            width="150"
+            height="150"
+            viewBox="-4 -5 128 135"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g transform="translate(0,0)">
+              <polygon
+                points="60,20 10,110 110,110"
+                fill="none"
+                stroke="black"
+                stroke-width="15"></polygon>
+              <circle cx="60" cy="78" r="10" fill="black"></circle>
+            </g>
+          </svg>
+          <h1>True Logic Labs</h1>
+          <h2>Simplicity. Humanity. Innovation.</h2>
+        </div>
+        <div id="message-caption">
+          <h3>🚀 Empowering You with AI, so You Can Focus on Life.</h3>
+          <p>
+            We build AI-powered tools to free your time, reduce stress, and
+            enhance creativity—so you can focus on what truly matters: living,
+            creating, and making the world a better place for all.
+          </p>
+        </div>
+        <div id="explore">
+          <a href="/tools">Explore Tools Now</a>
+          <a href="#core-values">Core Values</a>
+        </div>
+      </section>
+
+      <!-- <Categories categories={categories} /> -->
+      <section id="core-values">
+        <div class="future-vision">
+          <h2>The Future We’re Building</h2>
+          <p>A world where AI works for you, not against you.</p>
+          <p>Where people feel free, not overwhelmed.</p>
+          <p>Where creativity, balance, and human connection thrive.</p>
+          <h3>AI for a better life.</h3>
+        </div>
+        <div id="core-values-wrapper">
+          <div class="core-value">
+            <h3>Simplicity First</h3>
+            <p>
+              Technology should make life easier, not more complicated. We
+              create AI tools that simplify work, so you can focus on what truly
+              matters.
+            </p>
+          </div>
+
+          <div class="core-value">
+            <h3>Humanity Above All</h3>
+            <p>
+              People come first. Work, innovation, and AI should serve
+              humanity—not replace it. We champion well-being, kindness, and
+              inclusivity.
+            </p>
+          </div>
+
+          <div class="core-value">
+            <h3>Brave Innovation</h3>
+            <p>
+              We stand for bold ideas, creative solutions, and using technology
+              for good. AI should empower individuals, businesses, and
+              communities to grow fearlessly.
+            </p>
+          </div>
+
+          <div class="core-value">
+            <h3>Work-Life Balance</h3>
+            <p>
+              Your life is more than your job. Our AI-driven solutions give you
+              more time to live, create, and be present—because life comes
+              first.
+            </p>
+          </div>
+
+          <div class="core-value">
+            <h3>All-Inclusive Mindset</h3>
+            <p>
+              We respect all beliefs, cultures, and perspectives. We believe in
+              unity—that we are one global family, working together for a better
+              world.
+            </p>
+          </div>
+
+          <!-- <div class="core-value">
+            <h3>Harmony with Nature</h3>
+            <p>
+              Technology and nature should coexist. We support innovation that
+              respects the planet and nurtures a healthier world for future
+              generations.
+            </p>
+          </div> -->
+        </div>
+      </section>
+      <section id="message-from-founder">
+        <div class="personal-message">
+          <div class="quote">
+            <p>
+              “It is not that we have a short time to live, but that we waste a
+              lot of it.”
+            </p>
+            <h4>— Seneca</h4>
+          </div>
+          <!-- <h3>Hi I am Manasvi,</h3>
+          <p>
+            We are here to build, innovate, and create a future where simplicity
+            is strength, where balance is normal, and where technology is your
+            partner—not your pressure. Let’s make life better, together.
+          </p> -->
+        </div>
+      </section>
+    </div>
+    <Footer />
+    <!-- <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        function updateWidth() {
+          document.querySelectorAll(".core-value").forEach((element) => {
+            let randomValue = Math.floor(Math.random() * 9) + 40;
+            element.style.width = `${randomValue}rem`;
+          });
+        }
+        setInterval(updateWidth, 800);
+        updateWidth();
+      });
+    </script> -->
+  </body>
+</html>
+
+<style>
+  /* General Styles */
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  h1 {
+    font-size: 36px;
+    color: #222;
+  }
+
+  h2 {
+    font-size: 24px;
+    color: #444;
+    margin-bottom: 20px;
+  }
+
+  h3 {
+    display: flex;
+    align-items: center;
+    font-size: 1.3em;
+    text-align: left;
+    color: #222;
+    margin: 0 0.6em 0 0;
+    padding: 0 0 0 0.5em;
+    min-width: 7em;
+    height: auto;
+    background-color: greenyellow;
+    border-radius: 0.5em;
+  }
+  #welcome p {
+    max-width: 700px;
+    color: #555;
+    margin: 0 auto 15px;
+  }
+
+  p {
+    font-size: 18px;
+    color: #555;
+    /* max-width: 700px; */
+    margin: 0 auto 15px;
+  }
+  #core-values-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    max-width: 60em;
+  }
+  /* Core Values Section */
+  #core-values {
+    padding: 50px;
+    /* background-color: #f9f9f9; */
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    max-width: 80em;
+  }
+
+  @media (max-width: 1250px) {
+    #core-values {
+      flex-direction: column;
+      /* justify-content: center; */
+      align-items: center;
+    }
+    .core-value {
+      flex-direction: column;
+      gap: 1em;
+    }
+    .core-value h3 {
+      margin: 1em 0;
+    }
+    #core-values-wrapper {
+      width: 90vw;
+    }
+  }
+
+  .core-value {
+    margin: 0 1em;
+    /* max-width: 25em; */
+    padding: 20px;
+    /* border-left: 5px solid #333; */
+    background: rgba(255, 255, 255, 0.76);
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    transition: width 1s ease-in-out; /* Smooth animation */
+  }
+
+  .core-value h3 {
+    padding: 0 2em 0 0.5em;
+    min-width: 8em;
+  }
+  .core-value p {
+    /* position: absolute; */
+    /* left: -110px; */
+    margin: 0;
+    /* width: 20em; */
+  }
+
+  /* Future Vision Section */
+  .future-vision {
+    padding: 1em;
+    background: #222;
+    /* color: white; */
+    border-radius: 10px;
+    min-width: 25em;
+    max-width: 25em;
+  }
+
+  .future-vision h2,
+  .future-vision p {
+    color: white;
+  }
+  .future-vision h2 {
+    font-size: 2.5em;
+  }
+
+  /* True Logic Labs Section */
+  #true-logic-labs {
+    padding: 50px;
+    /* background-color: white; */
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+    font-size: 18px;
+    color: #555;
+  }
+
+  ul li {
+    margin: 10px 0;
+  }
+
+  /* Balance Section */
+  .balance {
+    margin-top: 30px;
+    padding: 20px;
+    background: #222;
+    color: white;
+    border-radius: 10px;
+    display: inline-block;
+  }
+</style>
+
+<style>
+  #message-from-founder {
+    text-align: center;
+    padding: 50px;
+  }
+  #message-from-founder p {
+    margin: 0;
+    padding: 0;
+  }
+
+  .quote {
+    font-style: italic;
+    font-size: 20px;
+    color: #444;
+    /* margin-bottom: 30px; */
+    text-align: left;
+  }
+
+  .quote h4 {
+    /* margin-top: 10px; */
+    font-weight: bold;
+    color: #222;
+    text-align: right;
+  }
+
+  .vision,
+  .personal-message {
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    border-left: 5px solid #333;
+  }
+
+  .vision h2,
+  .personal-message h3 {
+    color: #222;
+  }
+
+  .personal-message h4 {
+    /* margin-top: 10px; */
+    color: #555;
+  }
+
+  p {
+    color: #555;
+    font-size: 18px;
+  }
+</style>

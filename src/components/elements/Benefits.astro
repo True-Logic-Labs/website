@@ -1,0 +1,86 @@
+---
+const {chipImage, speedM1, speedIntel, batteryLife} = Astro.props;
+---
+
+<div class="comparison">
+  <img src={chipImage} alt="Apple M3 Chip" class="chip-image" />
+
+  <div class="metrics">
+    <div class="metric">
+      <p class="description">Up to</p>
+      <p class="value">{speedM1}x</p>
+      <p class="description">faster than MacBook Air (M1)</p>
+    </div>
+
+    <div class="metric">
+      <p class="description">Up to</p>
+      <p class="value">{speedIntel}x</p>
+      <p class="description">faster than fastest Intel-based MacBook Air</p>
+    </div>
+
+    <div class="metric">
+      <p class="description">Up to</p>
+      <p class="value">{batteryLife}x</p>
+      <p class="description">battery life</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .comparison {
+    line-height: 0;
+    display: flex;
+    align-items: center;
+    /* gap: 4rem; */
+    /* height: 8rem; */
+    border: 2px solid #e0e0e0; /* Light grey border */
+    padding: 0 2rem;
+    margin: 0.5rem 0;
+    border-radius: 12px; /* Smooth rounded edges */
+    background: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle grey shadow */
+    transition:
+      box-shadow 0.3s ease-in-out,
+      transform 0.2s ease-in-out;
+    animation: fadeIn 0.7s ease-out;
+  }
+
+  /* Optional hover effect for a premium feel */
+  .comparison:hover {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    transform: translateY(-0.5rem); /* Slight lift effect */
+  }
+
+  .chip-image {
+    width: 10rem;
+    height: auto;
+    padding-right: 2rem;
+  }
+
+  .metrics {
+    display: flex;
+    gap: 3rem;
+    border-left: 2px solid rgba(0, 0, 0, 0.1);
+    padding-left: 2rem;
+  }
+
+  .metric {
+    max-width: 15ch; /* Restricts text width to ~20 characters */
+    word-wrap: break-word;
+  }
+
+  .value {
+    font-size: 3rem;
+    font-weight: bold;
+  }
+
+  .description {
+    font-size: 0.9rem;
+    color: gray;
+    line-height: 1rem;
+  }
+  p {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+</style>

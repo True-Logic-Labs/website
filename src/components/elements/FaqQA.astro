@@ -1,0 +1,76 @@
+---
+export interface Props {
+  title: string;
+  content: string;
+}
+
+const {title, content} = Astro.props;
+---
+
+<style>
+  .tooltip-container {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 400;
+    /* border-top: 2px solid rgb(192, 192, 192); */
+    border-bottom: 2px solid rgb(192, 192, 192);
+    margin: 0.3em;
+    padding: 0.4em 0.7em;
+    min-width: 15em;
+    width: 100%;
+  }
+
+  .tooltip {
+    box-shadow:
+      0 0 1em rgba(3, 3, 3, 0.842),
+      0 0 2em rgba(254, 255, 174, 0),
+      0 0 3em rgba(0, 0, 0, 0.192);
+    position: fixed;
+    background: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    border: 0.1em solid white;
+    font-size: 1em;
+    padding: 1em 2em;
+    border-radius: 5px;
+    width: 21em; /* Fixed width */
+    height: auto; /* Adjust height dynamically */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    text-align: center;
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0;
+    transform: scale(0.6);
+    transition:
+      opacity 0.5s ease,
+      transform 0.5s ease;
+  }
+
+  .tooltip.show {
+    opacity: 1;
+    transform: scale(1);
+  }
+</style>
+
+<div
+  class="tooltip-container"
+  x-data="{ show: false, x: 0, y: 0, init() { console.log('Alpine.js is working! ✅'); } }"
+  @mousemove="show = true; x = $event.clientX - 150; y = $event.clientY"
+  @mouseleave="show = false"
+>
+  {title}
+
+  <!-- Tooltip Content -->
+  <div
+    class="tooltip"
+    :class="{ 'show': show }"
+    :style="'top: ' + y + 'px; left: ' + x + 'px; position: fixed;'"
+  >
+    {content}
+  </div>
+</div>

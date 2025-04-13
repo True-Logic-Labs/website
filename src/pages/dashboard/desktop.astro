@@ -1,0 +1,100 @@
+---
+import DesktopBashBoard from "../../components/DesktopDashBoard.astro";
+import {configs} from "../../coreglobal/products.js";
+
+import {parse} from "path";
+
+const genCodes = configs.map((obj) => obj.genCode);
+// const seoCodes = configs.map((obj) => ({toolMeta: obj.toolMeta}));
+
+// // console.log(genCodes);
+
+function getAllProducts(configs) {
+  const toolLinks = Object.entries(configs).map(([a, b]) => {
+    const title = b.toolMeta?.title || "Untitled Tool";
+    const description = b.toolMeta?.description || "No description available";
+    const genCode = b.genCode;
+    return {
+      title,
+      description,
+      genCode: genCode,
+      meta: b.toolMeta,
+    };
+  });
+  return toolLinks;
+}
+
+const toolLinks = getAllProducts(configs);
+
+const bundles = {categories: []};
+toolLinks.forEach((tool) => {
+  if (tool.meta) {
+    const {bundle, subCat, title, description, productID} = tool.meta;
+    let category = bundles.categories.find(
+      (category) => category.name === bundle
+    );
+    if (!category) {
+      category = {name: bundle, subcategories: []};
+      bundles.categories.push(category);
+    }
+
+    let subcategory = category.subcategories.find((sub) => sub.name === subCat);
+    if (!subcategory) {
+      subcategory = {name: subCat, tools: []};
+      category.subcategories.push(subcategory);
+    }
+    // // console.log(toolLinks);
+    subcategory.tools.push({
+      name: title,
+      description,
+      path: tool.genCode,
+      productID: productID,
+    });
+  }
+});
+// // console.log(JSON.stringify(bundles.categories, null, 2));
+import Header from "../../components/Header.astro";
+import BaseHead from "../../components/BaseHead.astro";
+import {SITE_TITLE, SITE_DESCRIPTION} from "../../consts";
+// import "@assets/simpleMDE.css";
+// import "@assets/dashboard.css";
+// import "@assets/global.css";
+---
+
+<html lang="en">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"
+    ></script>
+    <link rel="stylesheet" href="/css/simpleMDE.css" />
+    <link rel="stylesheet" href="/css/dashboard.css" />
+
+    <script>
+      import {UIManger} from "../../coreglobal/mobile_dashboard.js";
+
+      if (UIManger.getOrientation() === "Portrait") {
+        window.location.href = "/dashboard/mobile";
+      }
+    </script>
+    <style>
+      h1 {
+        margin-bottom: 0.3em;
+      }
+      #ToolHolder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+      }
+    </style>
+    <title>Dashboard</title>
+  </head>
+</html><body>
+  <div class="homePage">
+    <Header />
+  </div>
+  <h1>Hi Manasvi!, welcome to ToolLAND</h1>
+  <DesktopBashBoard config={genCodes} bundles={bundles} />
+</body>

@@ -1,0 +1,116 @@
+---
+interface Props {
+  profileImage: string;
+  name: string;
+  headline: string;
+  timeAgo: string;
+  postText: string;
+  postImage?: string;
+  likes: number;
+  comments: number;
+  shares: number;
+}
+
+const {
+  profileImage,
+  name,
+  headline,
+  timeAgo,
+  postText,
+  postImage,
+  likes,
+  comments,
+  shares,
+} = Astro.props;
+---
+
+<style>
+  .post-container {
+    width: 100%;
+    max-width: 600px;
+    background: white;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    margin: 20px auto;
+  }
+
+  .post-header {
+    display: flex;
+    align-items: center;
+  }
+
+  .profile-pic {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    margin-right: 12px;
+  }
+
+  .post-info {
+    all: unset;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .post-info h3 {
+    all: unset;
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: black;
+  }
+
+  .post-info p {
+    all: unset;
+    margin: 0 0;
+    color: #555;
+    font-size: 14px;
+  }
+
+  .post-text {
+    font-size: 15px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+
+  .post-image {
+    width: 100%;
+    border-radius: 8px;
+    margin-top: 10px;
+  }
+
+  .post-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #666;
+    border-top: 1px solid #ddd;
+    padding-top: 8px;
+    margin-top: 8px;
+  }
+  .sub-heading {
+    all: unset;
+    margin: 0;
+  }
+</style>
+
+<div class="post-container">
+  <div class="post-header">
+    <img class="profile-pic" src={profileImage} alt="Profile Picture" />
+    <div class="post-info">
+      <h3>{name}</h3>
+      <p style="margin-top:0;">{headline} • {timeAgo}</p>
+    </div>
+  </div>
+  <p class="post-text">{postText}</p>
+
+  {postImage && <img class="post-image" src={postImage} alt="Post Image" />}
+  <div class="post-footer">
+    <span>👍 {likes} Likes</span>
+    <span>💬 {comments} Comments</span>
+    <span>🔄 {shares} Shares</span>
+  </div>
+</div>

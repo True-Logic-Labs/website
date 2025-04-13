@@ -1,0 +1,102 @@
+---
+import Header from "../../components/Header.astro";
+import Loader from "../../components/loader.astro";
+import {configs} from "../../coreglobal/products.js";
+import {makeBundles} from "../../coreglobal/datatransformer.js";
+const bundles = makeBundles(configs);
+// console.log(JSON.stringify(bundles, null, 2));
+const inlineScript = `<script>window.productBank = ${JSON.stringify(bundles.categories, null, 2)};</script>`;
+import BaseHead from "../../components/BaseHead.astro";
+import {SITE_TITLE, SITE_DESCRIPTION} from "../../consts";
+// import Categories from "../partials/categories.astro";
+import Categories from "../partials/allTools.astro";
+
+import {groupByCategory} from "../../coreglobal/datatransformer.js";
+// import {configs} from "../../coreglobal/products.js";
+import Footer from "../../components/Footer.astro";
+const products = configs;
+
+const categories = {
+  "Tools by Industry": groupByCategory(products, "industry"),
+  "Tools by Job Role": groupByCategory(products, "jobRole"),
+  "Tools by Use Case": groupByCategory(products, "useCase"),
+};
+
+// console.log(groupByCategory(products, "industry"));
+// console.log(groupByCategory(products, "jobRole"));
+// console.log(groupByCategory(products, "useCase"));
+// console.log(groupByCategory(products, "tags"));
+---
+
+<html lang="en">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/openMarket.css" />
+    <script
+      src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"
+      defer></script>
+
+    <title>Dashboard</title>
+  </head>
+  <body>
+    <!-- <Loader /> -->
+    <div set:html={inlineScript} />
+    <div class="homePage">
+      <Header />
+    </div>
+    <section id="explore-tools">
+      <div class="future-vision">
+        <h2>Explore the World’s Best Collection of AI Tools</h2>
+        <h3>AI innovation at its best—built for a smarter future.</h3>
+      </div>
+      <Categories categories={categories} />
+      <!-- <div id="core-values-wrapper"><div id="tools-container"></div></div> -->
+    </section>
+    <!-- <h1>Hi Manasvi!, welcome to ToolLAND</h1> -->
+    <!-- <Loader /> -->
+
+    <div id="tools-container"></div>
+  </body><!-- <script>
+    import {loadDashBoard} from "../../coreglobal/openMarket.js";
+    await loadDashBoard(window.productBank);
+    setTimeout(() => {
+      document.getElementById("loader").style.display = "none";
+      }, 1000);
+      </script> -->
+  <Footer />
+</html>
+
+<style>
+  #explore-tools {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 1em;
+    align-items: center;
+    font-size: 0.7em;
+    width: 1000px;
+    max-width: 90vw;
+  }
+  /* Future Vision Section */
+  .future-vision {
+    padding: 3em;
+    background: #222;
+    border-radius: 10px;
+    width: 100%;
+  }
+
+  .future-vision h2,
+  .future-vision p,
+  h3 {
+    color: white;
+    text-align: center;
+  }
+  .future-vision h2 {
+    font-size: 2.5em;
+  }
+  .future-vision p {
+    margin: 1em 0;
+  }
+</style>

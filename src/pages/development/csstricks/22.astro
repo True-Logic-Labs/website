@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Impress.js Slideshow</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <style is:inline>
+      body,
+      html {
+        position: relative;
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        font-size: 18px;
+      }
+
+      body * {
+        perspective: 800px;
+        transform-style: preserve-3d;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .nav-buttons {
+        position: relative;
+        /* border: 2px solid black; */
+        height: 100%;
+      }
+      .nav-button {
+        /* position: absolute; */
+        width: 400px;
+        height: 400px;
+        background-color: rgb(190, 38, 0);
+        /* border: 2px solid black; */
+        border-radius: 1em;
+      }
+
+      .nav-button:nth-child(1) {
+        /* position: absolute; */
+        /* background-color: blue; */
+        /* border: 2px solid black; */
+      }
+
+      #B > div:nth-child(2) {
+        position: absolute;
+        background: greenyellow;
+        border: 3em solid rgb(255, 255, 255);
+        padding: 2rem;
+        top: -5rem;
+        border-radius: 2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="nav-buttons">
+      <div class="nav-button" id="A">
+        <div>TOP</div>
+        <div>BOTTOM</div>
+      </div>
+      <div class="nav-button" id="B">
+        <div>TOP1</div>
+        <div>BOTTOM1</div>
+      </div>
+    </div>
+
+    <script>
+      window.onload = () => {};
+    </script>
+  </body>
+</html>

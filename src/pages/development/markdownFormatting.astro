@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Markdown Editor & Preview</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer
+    ></script>
+    <link rel="stylesheet" href="/css/markdownAwesome.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body,
+      html {
+        height: 100%;
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        display: flex;
+        height: 100vh; /* Full viewport height */
+        /* width: 100vw; */
+      }
+      textarea {
+        width: 50%;
+        height: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: none;
+        outline: none;
+        resize: none;
+      }
+      .preview {
+        width: 100%;
+        height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+        border-left: 1px solid #ccc;
+        margin: 1rem;
+        padding: 1rem;
+      }
+      #editor {
+        /* display: none; */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <textarea id="editor" placeholder="Write Markdown here..."></textarea>
+      <div class="preview markdown-body" id="preview"></div>
+    </div>
+
+    <!-- Include Marked.js for Markdown parsing -->
+
+    <script>
+      const start = `
+# 8 Must Use JavaScript 3D Libraries (2025)
+
+Are you in search of the best **JavaScript 3D graphics library**? Look no further! Here’s a **hand-picked list of modern and powerful 3D libraries** to elevate your web projects.
+
+> ✅ Modern JavaScript libraries help developers enhance their projects and add advanced functionalities.
+
+## What is JavaScript 3D Library?
+
+A **JavaScript 3D library** is a collection of pre-written code and APIs that allow developers to **add and create 3D graphics and animation** on web pages easily. These libraries abstract the complexity of **WebGL** and enable high-level 3D logic and creative design.
+
+### Advantages:
+- Cross-browser compatibility
+- Abstraction over WebGL complexity
+- Integration with web technologies
+- Feature-rich functionality
+- Faster development
+- Customizability
+- Interactivity and user input
+
+---
+
+## JavaScript 3D Libraries
+
+### Three.js
+
+**Three.js** is one of the most popular JavaScript 3D libraries to create **interactive 3D graphics** in web browsers.
+
+**Features:**
+- WebGL-based rendering
+- Built-in geometries
+- Shaders and effects
+- Camera control
+- Cross-platform and browser compatibility
+- Extensive documentation and community support
+
+---
+
+### React-three-fiber
+
+**React Three Fiber (R3F)** allows building **3D and WebGL-powered apps using React**, acting as a bridge to Three.js.
+
+**Features:**
+- Declarative 3D rendering
+- Dynamic updates
+- React Hooks integration
+- Interactivity and animation
+- Performance optimization
+
+**React Three Fiber (R3F)** allows building **3D and WebGL-powered apps using React**, acting as a bridge to Three.js.
+
+
+---
+
+### Babylon.js
+
+**Babylon.js** is a powerful open-source game and rendering engine.
+
+**Features:**
+- Rendering engine
+- Cross-platform
+- Physically based rendering
+- Animation system
+- Collisions and raycasting
+- Advanced materials
+
+**Babylon.js** is a powerful open-source game and rendering engine.
+
+---
+
+### Aframe
+
+**Aframe** is a web framework built on top of Three.js for **VR experiences** using HTML.
+
+**Features:**
+- Entity-component architecture
+- High performance
+- Visual inspector
+- Speech recognition
+- Cross-platform (WebXR, VR headsets)
+
+---
+
+### Cesium
+
+**Cesium** is an open-source library for **3D globes and 2D maps** with dynamic data visualization.
+
+**Features:**
+- 3D visualization
+- Terrain and imagery layers
+- Vectors and geometry
+- Integration with React, Vue, Angular
+- 3D, 2D, and 2.5D Columbus view
+
+---
+
+### Zdog
+
+**Zdog** is a **pseudo-3D engine** for designing 3D models using and SVG.
+
+**Features:**
+- Lightweight
+- Declarative API
+- Designer-friendly
+- Pseudo-3D engine
+- No polygonal jaggies
+
+---
+
+### Vanta.js
+
+**Vanta.js** is used to create **animated 3D backgrounds** easily.
+
+**Features:**
+- Easy integration
+- Cross-framework compatibility
+- Interactive effects
+- Customizable parameters
+- Lightweight
+
+---
+
+### Vanilla-tilt.js
+
+**Vanilla-tilt.js** adds **tilt effects** for HTML elements.
+
+**Features:**
+- Smooth and lightweight
+- 60FPS
+- VanillaJS
+- Gyroscope support
+
+---
+
+## Conclusion
+
+Using **3D libraries** is one of the best ways to make websites interactive and visually engaging. Choose the right library based on:
+- Documentation
+- Learning curve
+- Features and functionality
+- Package size
+
+> **Happy Coding, Cheers! 🥂**
+
+    `;
+
+      window.onload = () => {
+        const editor = document.getElementById("editor");
+        const preview = document.getElementById("preview");
+
+        // Initial editor content
+        editor.value = start;
+
+        function wrapHeadingsHierarchy(html, wrapperClass = "section-wrapper") {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, "text/html");
+          const body = doc.body;
+
+          const output = document.createElement("div");
+          let stack = [{level: 0, container: output}]; // Stack to manage nesting
+
+          Array.from(body.children).forEach((el) => {
+            const headingMatch = el.tagName.match(/^H([1-6])$/);
+
+            if (headingMatch) {
+              const level = parseInt(headingMatch[1]);
+
+              // Pop stack until we find a lower level
+              while (stack.length && stack[stack.length - 1].level >= level) {
+                stack.pop();
+              }
+
+              // Create new wrapper
+              const section = document.createElement("div");
+              section.classList.add(wrapperClass, `${wrapperClass}-h${level}`);
+              section.appendChild(el); // Add heading
+
+              // Append section
+              stack[stack.length - 1].container.appendChild(section);
+
+              // Add to stack
+              stack.push({level, container: section});
+            } else {
+              // Add other elements inside current section
+              stack[stack.length - 1].container.appendChild(el);
+            }
+          });
+
+          return output.innerHTML;
+        }
+
+        function updatePreview() {
+          const markdownText = editor.value;
+          let rawHTML = marked.parse(markdownText);
+          let wrappedHTML = wrapHeadingsHierarchy(rawHTML, "my-section");
+          preview.innerHTML = wrappedHTML;
+        }
+
+        // Hook
+        editor.addEventListener("input", updatePreview);
+
+        // Initial render
+        updatePreview();
+      };
+    </script>
+  </body>
+</html>

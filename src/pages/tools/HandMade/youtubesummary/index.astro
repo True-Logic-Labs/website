@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Responsive Markdown Playground with Fullscreen</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer
+    ></script>
+    <link rel="stylesheet" href="/css/markdowncustom.css" />
+    <!-- <link rel="stylesheet" href="/css/markdownAwesome.css" /> -->
+
+    <style is:inline>
+      .preview-container.fullscreen {
+        will-change: transform, top, left, width, height;
+      }
+      .controls {
+        will-change: opacity, transform;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        height: 100vh;
+        width: 100vw;
+        font-family: sans-serif;
+        overflow: hidden;
+      }
+
+      #masterContainer {
+        height: 70%;
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        padding: 1rem;
+      }
+
+      #masterContainer > * {
+        border-radius: 0.5rem;
+        overflow: auto;
+        position: relative;
+      }
+
+      #masterContainer.fullscreen-active {
+        padding: 0;
+        gap: 0; /* Optional: Also remove gap between elements when fullscreen */
+      }
+
+      /* Portrait mode - top and bottom */
+      @media (orientation: portrait) {
+        #masterContainer {
+          grid-template-columns: 1fr;
+          grid-template-rows: 1fr 1fr;
+        }
+      }
+
+      textarea {
+        width: 100%;
+        height: 100%;
+        padding: 10px;
+        font-family: monospace;
+        font-size: 14px;
+        border: 3px solid green;
+        resize: none;
+        outline: none;
+      }
+
+      .preview-container {
+        width: 100%;
+        height: 100%;
+        border: 3px solid blue;
+        padding: 1rem;
+        background: #f9f9f9;
+        overflow: auto;
+      }
+
+      /* Fullscreen preview */
+      .preview-container.fullscreen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 999;
+        background: #fff;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      }
+
+      /* Hide textarea when fullscreen */
+      #masterContainer.fullscreen-active textarea {
+        display: none;
+      }
+
+      .controls {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 1000;
+        display: flex;
+        gap: 10px;
+      }
+
+      .controls button {
+        padding: 12px 16px;
+        border: none;
+        border-radius: 6px;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        font-weight: bold;
+        backdrop-filter: blur(4px);
+      }
+
+      .controls button:hover {
+        background: rgba(0, 0, 0, 0.9);
+      }
+
+      .controls button:active {
+        transform: scale(0.95);
+      }
+
+      .preview-container h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        margin-top: 1rem;
+      }
+
+      .preview-container p {
+        margin: 0.5rem 0;
+        line-height: 1.6;
+      }
+
+      .preview-container code {
+        background: #eee;
+        padding: 2px 4px;
+        border-radius: 4px;
+        font-family: monospace;
+      }
+
+      .preview-container pre {
+        background: #333;
+        color: #fff;
+        padding: 10px;
+        border-radius: 6px;
+        overflow-x: auto;
+      }
+
+      #form {
+        display: grid;
+        gap: 12px;
+        padding: 20px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(8px);
+        max-width: 1900px;
+        grid-template-columns: repeat(
+          auto-fit,
+          minmax(250px, 1fr)
+        ); /* Responsive columns */
+        align-items: center;
+      }
+
+      /* Input styling */
+      #form input[type="text"],
+      #form select {
+        padding: 12px 16px;
+        font-size: 16px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        outline: none;
+        transition: all 0.3s ease;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        width: 100%; /* Full width inside the grid cell */
+        min-width: 0; /* Prevent overflow */
+      }
+
+      #form input[type="text"]:focus,
+      #form select:focus {
+        border-color: #0077ff;
+        box-shadow: 0 0 0 4px rgba(0, 119, 255, 0.2);
+      }
+
+      /* Button styling */
+      #form button {
+        padding: 12px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        color: white;
+        background: linear-gradient(135deg, #0077ff, #00bbff);
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        width: 100%; /* Full width */
+      }
+
+      #form button:hover {
+        background: linear-gradient(135deg, #005fcc, #0099cc);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+      }
+
+      #form button:active {
+        transform: scale(0.97);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Portrait mode - stack everything vertically */
+      @media (orientation: portrait), (max-width: 600px) {
+        #form {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="form">
+      <!-- YouTube URL Input -->
+      <input
+        type="text"
+        id="videoUrlInput"
+        placeholder="🎥 Paste YouTube Video URL here..."
+        style="padding: 12px; border: 2px solid #ccc; border-radius: 8px; font-size: 16px;"
+      />
+
+      <!-- Language Selector -->
+      <select
+        id="outLanguage"
+        style="padding: 12px; border: 2px solid #ccc; border-radius: 8px; font-size: 16px;"
+      >
+        <option value="English" selected>🌐 English (Default)</option>
+        <option value="Spanish">🇪🇸 Spanish</option>
+        <option value="French">🇫🇷 French</option>
+        <option value="German">🇩🇪 German</option>
+        <option value="Hindi">🇮🇳 Hindi</option>
+        <option value="Chinese">🇨🇳 Chinese</option>
+        <option value="Japanese">🇯🇵 Japanese</option>
+        <option value="Arabic">🇸🇦 Arabic</option>
+        <!-- Add more languages as needed -->
+      </select>
+
+      <!-- Instruction Input -->
+      <input
+        type="text"
+        id="instruction"
+        placeholder="💡 Any special instructions? (e.g., 'Make it funny', 'Bullet points', 'Short summary')"
+        style="padding: 12px; border: 2px solid #ccc; border-radius: 8px; font-size: 16px;"
+      />
+
+      <!-- Submit Button -->
+      <button
+        id="fetchBtn"
+        style="padding: 14px; background-color: #007bff; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;"
+      >
+        🚀 Get Transcript & Summary
+      </button>
+    </div>
+
+    <div id="masterContainer">
+      <!-- Left / Top -->
+      <textarea id="markdownInput" placeholder="Write your Markdown here..."
+      ></textarea>
+
+      <!-- Right / Bottom -->
+      <div class="preview-container" id="markdownPreview">
+        <!-- Controls -->
+        <div class="controls">
+          <button id="zoomBtn">🔍 Fullscreen</button>
+          <button id="closeBtn" style="display: none;">❌ Close</button>
+        </div>
+        <!-- Rendered Markdown will appear here -->
+        <div id="content" class="markdown-body"></div>
+      </div>
+    </div>
+
+    <script>
+      window.onload = () => {
+        const textarea = document.getElementById("markdownInput");
+        const previewContainer = document.getElementById("markdownPreview");
+        const contentDiv = document.getElementById("content");
+        const zoomBtn = document.getElementById("zoomBtn");
+        const closeBtn = document.getElementById("closeBtn");
+        const masterContainer = document.getElementById("masterContainer");
+
+        function updatePreview() {
+          const markdownText = textarea.value;
+          contentDiv.innerHTML = marked.parse(markdownText);
+        }
+
+        // Live update on input
+        textarea.addEventListener("input", updatePreview);
+
+        // Fullscreen functionality
+        zoomBtn.addEventListener("click", () => {
+          previewContainer.classList.add("fullscreen");
+          masterContainer.classList.add("fullscreen-active"); // Add class to hide textarea
+          zoomBtn.style.display = "none";
+          closeBtn.style.display = "inline-block";
+        });
+
+        closeBtn.addEventListener("click", () => {
+          previewContainer.classList.remove("fullscreen");
+          masterContainer.classList.remove("fullscreen-active"); // Remove class to show textarea
+          zoomBtn.style.display = "inline-block";
+          closeBtn.style.display = "none";
+        });
+
+        // Initial content
+        textarea.value = `
+   # Estudio IQ: Su Selección, Nuestra Misión
+
+¡Hola amigos! Siempre que escuchan o leen sobre un secuestro, estoy seguro de que piensan en un avión. Por ejemplo, el caso del vuelo I-814. Pero en Pakistán, ¡puede ocurrir cualquier cosa! Imaginen que se ha secuestrado un tren de pasajeros completo. Esta noticia ha llegado recientemente: "Tren de pasajeros secuestrado en Pakistán, los militantes separatistas de Baluchistán reclaman la responsabilidad".
+
+Estoy seguro de que todos ustedes conocen a la **Ejército de Liberación de Baluchistán** (BLA). Han estado intentando separarse del establecimiento paquistaní durante mucho tiempo, buscando autonomía y distanciarse de Pakistán. Según informes, la **Jafar Express**, que va de **Quetta** a **Peshawar**, ha sido secuestrada. 
+
+## Mapa de la Situación
+
+Si observan el mapa de Pakistán, el mayor provincia es Baluchistán, que se muestra en color amarillo. Su capital es Quetta. La Jafar Express sale de esta ciudad y va hacia el norte, llegando a Peshawar. Se dice que el tren fue secuestrado cerca de un distrito llamado **Balan**.
+
+La BLA ha llevado a cabo una operación masiva contra Pakistán, secuestrando el tren y, aparentemente, con una gran cantidad de personal militar paquistaní a bordo. Según los informes, más de **100 miembros del ejército paquistaní han sido tomados como rehenes**. 
+
+## Detalles del Secuestro
+
+Se ha informado que los militantes realizaron un fuerte tiroteo para detener el tren, que llevaba más de **400 pasajeros**. El conductor del tren y algunos oficiales resultaron heridos en el ataque. 
+
+La BLA ha emitido un comunicado diciendo que la operación fue bien planificada y que han hecho explotar las vías del tren para detener la Jafar Express. Su advertencia es clara: si se lleva a cabo alguna operación militar contra ellos, las consecuencias serán severas.
+
+## Reacciones del Gobierno
+
+La situación es crítica. El gobierno provincial aún no ha confirmado cuántos rehenes hay exactamente. Se han movilizado fuerzas de seguridad hacia la zona del incidente. Sin embargo, liberar a los rehenes en situaciones como ésta siempre es complicado.
+
+## Contexto en Baluchistán
+
+Baluchistán es la provincia más grande de Pakistán, pero tiene una población escasa y enfrenta altos niveles de pobreza. Es rica en recursos naturales, como petróleo y gas natural, lo que la convierte en un área estratégica para Pakistán. Sin embargo, la población local siente que sus recursos están siendo explotados sin beneficios para ellos.
+
+## Reflexiones Finales
+
+La situación en Baluchistán y el reciente secuestro del tren plantean serias preocupaciones sobre la seguridad y la estabilidad en la región. ¿Qué pasará ahora con los rehenes? ¿Qué acciones tomará el gobierno de Pakistán?
+
+Antes de terminar, les dejo una pregunta interesante: ¿Cuál es la cadena montañosa en Baluchistán? ¡Compartan su respuesta!
+
+---
+
+**Estudio IQ** tiene una nueva oportunidad para los aspirantes a UPSC. Un programa integral con más de 1000 horas de clases en vivo, mentoría personalizada y más. ¡No se lo pierdan!
+      `.trim();
+
+        updatePreview(); // Load initial content
+      };
+    </script>
+  </body>
+</html>
+<script>
+  import {editAll} from "../../../../coreglobal/domcontroller.js";
+  editAll();
+</script>
+<script>
+  async function callOpenAI(query) {
+    try {
+      const response = await fetch("/api/makeOpenAICall", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({question: query}),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log(data.result.kwargs.content);
+      return data.result.kwargs.content;
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+
+  async function extractMarkdownBlock(text) {
+    const match = text.match(/```markdown([\s\S]*?)```/);
+    return match ? match[1].trim() : "No JSON code found.";
+  }
+
+  document.getElementById("fetchBtn").addEventListener("click", async () => {
+    const videoUrl = document.getElementById("videoUrlInput").value.trim();
+    const outLanguage = document.getElementById("outLanguage").value.trim();
+    const instruction = document.getElementById("instruction").value.trim();
+
+    // Collect all inputs in a list (array)
+    const inputList = [videoUrl, outLanguage, instruction];
+
+    const prompt = `Give output in ${inputList[1]} Language please!!!!!. ${inputList[2]}`;
+
+    console.log("Collected Inputs:", prompt); // You can see the list in console
+    if (!videoUrl) {
+      alert("Please enter a YouTube video URL.");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/youtube", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({videoUrl}),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Convert array of text objects to plain text
+        const transcriptText = data.transcript
+          .map((item) => item.text)
+          .join(" ");
+        console.log(transcriptText);
+        const instruction =
+          "Convert to nice markdown content block. Only give markdown, nothing else. Keep it short, engaging and interesting. Respect the flow of information, and add some papers or books to if someone wants to read more, only if valid.";
+        const result = await callOpenAI(
+          prompt + instruction + transcriptText + prompt
+        );
+        let final = await extractMarkdownBlock(result);
+        console.log(final);
+        const textarea = document.getElementById("markdownInput");
+        textarea.value = final;
+        textarea.dispatchEvent(new Event("input", {bubbles: true}));
+      }
+    } catch (error) {
+      console.error(error);
+      document.getElementById("transcriptArea").value =
+        "Fetch failed: " + error.message;
+    }
+  });
+</script>

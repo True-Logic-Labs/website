@@ -1,0 +1,236 @@
+---
+import HeaderLink from "../HeaderLink.astro";
+let bgCol = "#03a9f4";
+let fontCol = "black";
+
+export interface Props {
+  title?: string;
+}
+
+const {title} = Astro.props;
+---
+
+<nav>
+  <!-- Hamburger Icon -->
+  <div class="hamburger" id="menu-toggle">☰</div>
+  <div class="close-icon" id="menu-close">✖</div>
+
+  <!-- Nav Menu -->
+  <div class="navWrap" id="nav-menu">
+    <!-- {
+      title && (
+        <HeaderLink class="HeaderLink" href={Astro.url.pathname}>
+          {title}
+        </HeaderLink>
+      )
+    } -->
+    <HeaderLink class="HeaderLink" href="/" title="Philosophy"
+      >Philosophy</HeaderLink
+    >
+    <HeaderLink class="HeaderLink" href="/tools" title="Solutions"
+      >Solutions</HeaderLink
+    >
+    <!-- <HeaderLink class="HeaderLink loggedIn" href="/dashboard"
+      >Dashboard</HeaderLink
+    > -->
+    <!-- <HeaderLink class="HeaderLink loggedOut" href="/login">Login</HeaderLink>
+    <HeaderLink class="HeaderLink loggedOut" href="/signup">Sign Up</HeaderLink>
+    <div id="logOut" class="HeaderLink loggedIn" onclick="()=> {alert('hi')}">
+      Log Out
+    </div> -->
+  </div>
+</nav>
+
+<!-- JavaScript for Toggle -->
+<script>
+  import {AuthManagement} from "../../coreglobal/supabase";
+  document.addEventListener("DOMContentLoaded", () => {
+    // document.getElementById("logOut").addEventListener("click", async () => {
+    //   try {
+    //     await window.authManager.logoutUser();
+    //     window.location.reload();
+    //     // window.location.href = "/login"; // Redirect to login page
+    //   } catch (error) {
+    //     console.error("Logout failed:", error);
+    //   }
+    // });
+
+    const menuToggle = document.getElementById("menu-toggle");
+    const menuClose = document.getElementById("menu-close");
+    const navMenu = document.getElementById("nav-menu");
+    const body = document.body;
+
+    function openMenu() {
+      navMenu.classList.add("open");
+      body.classList.add("menu-open");
+    }
+
+    function closeMenu() {
+      navMenu.classList.remove("open");
+      body.classList.remove("menu-open");
+    }
+
+    menuToggle.addEventListener("click", openMenu);
+    menuClose.addEventListener("click", closeMenu);
+
+    // ✅ Close when clicking outside menu
+    document.addEventListener("click", (event) => {
+      if (
+        !navMenu.contains(event.target) &&
+        !menuToggle.contains(event.target)
+      ) {
+        closeMenu();
+      }
+    });
+
+    // ✅ Close when clicking a link inside menu
+    navMenu.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", closeMenu);
+    });
+
+    // ✅ Ensure correct visibility on window resize
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 768) {
+        body.classList.remove("menu-open"); // Ensure menu state resets
+      }
+    });
+  });
+</script>
+<style>
+  #logOut {
+    /* background-color: green; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  /* ✅ General Styles */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: rgba(255, 255, 255, 0.8);
+    position: relative;
+    border: 2px solid #222;
+    border-radius: 0.5em;
+  }
+
+  .navWrap {
+    display: flex;
+    /* gap: 1em; */
+    transition:
+      transform 0.3s ease-in-out,
+      opacity 0.3s;
+    /* padding: 0 1em; */
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    height: 3em;
+  }
+
+  .HeaderLink {
+    padding: 0em 1em;
+    text-align: center;
+    /* background-color: rgb(255, 255, 255); */
+    color: black;
+  }
+
+  /* ✅ HAMBURGER MENU STYLES */
+  .hamburger {
+    display: none;
+    cursor: pointer;
+    font-size: 1.5em;
+    color: black;
+    height: 2em;
+    width: 2em;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+  }
+
+  .close-icon {
+    --size-common: 1.5em;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    cursor: pointer;
+    font-size: var(--size-common);
+    color: #ffffff;
+    height: var(--size-common);
+    width: var(--size-common);
+    background: rgb(0, 0, 0);
+    border-radius: 50%;
+    z-index: 20;
+    top: 1em;
+    right: 1em;
+  }
+
+  /* ✅ RESPONSIVE NAVIGATION */
+  @media (max-width: 900px) {
+    nav {
+      border-radius: 10em;
+    }
+
+    .hamburger {
+      display: flex;
+      z-index: 15;
+    }
+
+    .close-icon {
+      display: none;
+    }
+
+    .navWrap {
+      position: fixed;
+      top: -100vh; /* Start hidden above screen */
+      left: 0;
+      width: 100vw;
+      height: auto;
+      background: rgba(255, 255, 255, 0.89);
+      flex-direction: column;
+      padding: 1em;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      opacity: 0;
+      transition:
+        top 0.3s ease-in-out,
+        opacity 0.3s;
+      font-size: 1.5em;
+      /* padding: 2em; */
+    }
+
+    /* ✅ When menu opens, show it */
+    .navWrap.open {
+      top: 0;
+      opacity: 1;
+    }
+  }
+
+  /* ✅ Hide/show elements using class-based approach */
+  body.menu-open .hamburger {
+    display: none; /* Hide ☰ when menu is open */
+  }
+
+  body.menu-open .close-icon {
+    display: flex; /* Show ✖ when menu is open */
+  }
+
+  /* ✅ Ensure burger is always hidden on larger screens */
+  @media (min-width: 900px) {
+    .hamburger,
+    .close-icon {
+      display: none !important;
+    }
+
+    .navWrap {
+      position: relative;
+      top: 0;
+      opacity: 1;
+    }
+  }
+  .hide {
+    display: none;
+    transition: 5s;
+  }
+</style>

@@ -1,0 +1,272 @@
+---
+// const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const {
+  title,
+  description,
+  toolMeta,
+  toolConfig,
+  toolsInSuite,
+  parentSuit,
+  productViewController,
+  productPageLink,
+  perCallTokenUsageBase,
+} = Astro.props;
+
+// console.log(productViewController);
+// console.log(">>>>>>>>>>>>>>>>>>>>>", JSON.stringify(toolMeta, null, 2));
+
+import {globalProductViewController} from "../coreglobal/products.js";
+
+import MarketingAIToolkit from "./elements/ToolPromotion.astro";
+import TitleDiv from "./elements/ImageDiv.astro";
+import ExpandableSection from "./elements/FaqQA.astro";
+import PricingCard from "./elements/PricingCard.astro";
+import TestimonialCard from "./elements/testimonialCard.astro";
+import Tool from "./sections/Tool.astro";
+import Features from "./elements/Features.astro";
+// import BaseHead from "./BaseHead.astro";
+// import {SITE_TITLE, SITE_DESCRIPTION} from "../consts";
+// const inlineScript3 = `<script>window.metaData = ${JSON.stringify(toolMeta, null, 2)};</script>`;
+// // console.log(toolMeta.productID);
+const sectionTitles = {
+  pricing: [
+    "Simple Plans, Big Smiles 🤩",
+    "💰 Fair Pricing, No Surprises! 🚀",
+    "📊 Pick Your Perfect Plan 🎯",
+    "💡 Affordable Excellence for Everyone",
+    "🎁 Value-Packed Plans, Just for You",
+  ],
+  testimonials: [
+    "Happy Customers, Happy Us! 💖",
+    "🎤 Success Stories That Inspire ✨",
+    "💬 What Our Users Say 🗣️",
+    "🎉 Join Thousands of Satisfied Users!",
+    "👥 Real People, Real Results",
+  ],
+  features: [
+    "❤️ Why You'll Love This! 🔥",
+    "🛠️ Smart Features, Seamless Experience 🤩",
+    "Features designed for You, Powered by Innovation 💡",
+    "🎯 Everything You Need, Nothing You Don’t",
+    "⚡ Tools That Work as Hard as You Do",
+  ],
+  tryOut: [
+    "👀 See It in Action! 🚀",
+    "Test Drive 🔬 Before You Decide",
+    "✨ Experience the Magic Yourself!",
+    "🆓 Try Now – It’s Free!",
+    "🎮 Get Hands-On with Our Tool",
+  ],
+  faq: [
+    "🤔 Got Questions? We’ve Got Answers! 😊",
+    "📖 Your Questions, Answered!",
+    "💡 Everything You Need to Know",
+    "⚡ Quick Answers to Common Questions",
+    "🤔 Need Help? Start Here!",
+  ],
+};
+
+import TokenBar from "./elements/TokensBar.astro";
+const tokensUsedByToolForOneRequest = perCallTokenUsageBase.toFixed(4);
+console.log(tokensUsedByToolForOneRequest);
+---
+
+<link rel="stylesheet" href="/css/toolsLandingPage.css" />
+
+<div class="masterContainer">
+  {
+    globalProductViewController.hero && productViewController.hero && (
+      <section class="hero" id="sectionHero">
+        <TitleDiv
+          image="/blog-placeholder-3.jpg"
+          videoBG="/css/output-720p.webm"
+          title={toolMeta.pageDetails.hero.title}
+          subtitle={toolMeta.pageDetails.hero.subtitle}
+          buttonText="Try it Now!"
+          buttonLink="#sectionTool"
+          colors="['green','blue']"
+        />
+      </section>
+    )
+  }
+
+  {
+    globalProductViewController.toolPreview &&
+      productViewController.toolPreview && (
+        <section class="toolSample" id="sectionTool">
+          <h2>{sectionTitles.tryOut[1]}</h2>
+          <TokenBar
+            tokensUsedPerCall={tokensUsedByToolForOneRequest}
+            buyLink="/buy-tokens"
+          />
+          <iframe
+            src={productPageLink}
+            frameborder="0"
+            style="width: 100%; height: 100vh;"
+          />
+        </section>
+      )
+  }
+  <!-- <section class="social-proof">
+        <h2>Why Users Love Us</h2>
+        <div class="stats">
+          {
+            toolMeta.pageDetails.socialProof.stats.map((stat) => (
+              <div class="stat">
+                <h3>{stat.value}</h3>
+                <p>{stat.label}</p>
+              </div>
+            ))
+          }
+        </div>
+        <div class="badges">
+          {
+            toolMeta.pageDetails.socialProof.badges.map((badge) => (
+              <span class="badge">{badge}</span>
+            ))
+          }
+        </div>
+      </section> -->
+  {
+    globalProductViewController.upsell && productViewController.upsell && (
+      <section id="toolsUpsell">
+        <h2>All Tools in {parentSuit}</h2>
+        <div class="toolsUpsell">
+          <div style="display: flex;flex-direction: row;">
+            {toolsInSuite.map((benefit) => (
+              <MarketingAIToolkit {...benefit} />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+  {
+    globalProductViewController.features && productViewController.features && (
+      <section class="features-tools" id="sectionFeatures">
+        <h2>{sectionTitles.features[2]}</h2>
+        <div class="container-features">
+          {toolMeta.pageDetails.features.map((feature) => (
+            <Features
+              title={feature.title}
+              description={feature.footer}
+              icon={feature.icon}
+              footer={feature.description}
+              colorBG="rgba(255,255,255,0.5)"
+            />
+          ))}
+        </div>
+      </section>
+    )
+  }
+  {
+    globalProductViewController.pricing && productViewController.pricing && (
+      <section id="sectionPricing">
+        <h2>{sectionTitles.pricing[0]}</h2>
+        <div class="pricing">
+          <div class="centerAll">
+            <PricingCard
+              title={toolMeta.pageDetails.hero.title}
+              price="$4"
+              billing="month/seat"
+              description={toolMeta.pageDetails.hero.subtitle}
+              buttonText="Subscribe"
+              features={["1 user seat", "Use without limits."]}
+              tag="Most Loved"
+              tagColor="blue"
+              borderColor="black"
+            />
+            <PricingCard
+              title={parentSuit}
+              price="$30"
+              billing="month/seat"
+              description="A suit of most Powerful AI tools in market you need for marketing purposes."
+              buttonText="Subscribe"
+              features={[
+                "1 user seat",
+                `Includes "${toolMeta.pageDetails.hero.title}" in this suit.`,
+                "20+ more tools in this Suit",
+                "Access all future tools included in this suit.",
+                "Save $50+ dollars as opposed to buying individual tools.",
+              ]}
+              tag="Yeah!!"
+              borderColor="green"
+              tagColor="black"
+              scale="1.02"
+            />
+            <PricingCard
+              title="Everything we offer!"
+              price="$99"
+              billing="month/seat"
+              description="Powerful AI features to create & improve your content everywhere you work online."
+              buttonText="Subscribe"
+              features={[
+                "1 user seat",
+                "More than 10 suites included",
+                "100+ tools for all needs.",
+                "Early Access to future tools.",
+                "No Limits on any tool.",
+                "$1000+ worth tools included.",
+              ]}
+              tag="BEST!"
+              borderColor="black"
+              tagColor="red"
+            />
+          </div>
+        </div>
+      </section>
+    )
+  }
+  {
+    globalProductViewController.testimonials &&
+      productViewController.testimonials && (
+        <section class="testimonials" id="sectionTestimonials">
+          <h2>{sectionTitles.testimonials[0]}</h2>
+          <div class="testimonials-list">
+            {toolMeta.pageDetails?.testimonials?.length > 0 &&
+              toolMeta.pageDetails.testimonials.map((testimonial) => (
+                <TestimonialCard
+                  backgroundImage="/blog-placeholder-3.jpg"
+                  profileImage="/blog-placeholder-1.jpg"
+                  username={testimonial.user}
+                  comment={testimonial.feedback}
+                  rating={5}
+                />
+              ))}
+          </div>
+        </section>
+      )
+  }
+  {
+    globalProductViewController.faq && productViewController.faq && (
+      <section class="faq" id="sectionFAQs">
+        <h2>{sectionTitles.faq[4]}</h2>
+        <div class="centerAll" style="flex-direction: column; padding: 0 10vw;">
+          {toolMeta.pageDetails.faq.map((faq) => (
+            <ExpandableSection title={faq.question} content={faq.answer} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+</div>
+
+<script>
+  // import {AuthManagement} from "../coreglobal/supabase";
+  // window.authManager = new AuthManagement();
+  // let xxx = await window.authManager.globalGetSessionServer();
+  // console.log(xxx);
+
+  function showOnlySection(targetId) {
+    const sections = document.querySelectorAll("section");
+    sections.forEach((section) => {
+      if (section.id === targetId) {
+        section.style.display = "block"; // Show target section
+      } else {
+        section.style.display = "none"; // Hide all others
+      }
+    });
+  }
+
+  // showOnlySection("sectionTool");
+</script>

@@ -1,0 +1,843 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script
+      src="https://cdn.jsdelivr.net/npm/dom-to-image-more@3.5.0/dist/dom-to-image-more.min.js"
+      defer></script>
+
+    <style is:inline>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      * {
+        margin: 0;
+      }
+
+      html {
+        background: white;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+        margin: 0;
+        padding: 1em;
+        color: #333;
+        line-height: 1.6;
+        font-size: 8px;
+        /* height: 92vh; */
+      }
+
+      h1,
+      h2,
+      h3,
+      h4 {
+        font-weight: bold;
+      }
+      #container {
+        /* background-color: blue; */
+        /* padding: 1em; */
+        height: 95%;
+      }
+      .grid-container {
+        perspective: 800px;
+        display: grid;
+        gap: 1em;
+        grid-template-columns: repeat(auto-fit, minmax(50em, 1fr));
+        padding: 1em 0;
+      }
+
+      .card {
+        display: flex;
+        flex-direction: column;
+        background: white;
+        border-radius: 2em;
+        padding: 1em;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+        border: 2px solid #f0f0f0;
+        position: relative;
+        overflow: hidden;
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-10px);
+        /* box-shadow:
+          0 16px 32px rgba(0, 0, 0, 0.15),
+          0 16px 32px rgba(163, 165, 73, 0.911); */
+      }
+
+      .category-title {
+        font-size: 1.7em;
+        color: #222;
+        background: #2e8b6c;
+        padding: 0em 1.5em !important;
+        border-radius: 16px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        margin-bottom: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        min-height: 3em;
+        color: white;
+      }
+      .category-title h2 {
+        padding: 10em 1.5em;
+      }
+
+      .card * {
+        margin: 0.2em 0.3em;
+      }
+
+      .card .card {
+        margin: 0;
+        padding: 1em;
+        max-width: 200px;
+      }
+      .card .grid-container {
+        /* background-color: rgb(206, 206, 206); */
+        border-radius: 1em;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        max-width: 100%;
+        height: 100%;
+        /* padding: 2em; */
+      }
+
+      .card .grid-container .card {
+        /* background-color: yellow; */
+        min-width: 45%;
+        /* height: 50%; */
+        /* transform: rotateZ(2deg) rotateY(11deg) rotateX(5deg); */
+      }
+
+      .card .grid-container .card:nth-child(1) {
+        transform: rotateZ(2deg) rotateY(5deg) rotateX(3deg);
+      }
+
+      .card .grid-container .card:nth-child(2) {
+        transform: rotateZ(-3deg) rotateY(-6deg) rotateX(4deg);
+      }
+
+      .card .grid-container .card:nth-child(3) {
+        transform: rotateZ(1deg) rotateY(8deg) rotateX(-2deg);
+      }
+
+      .card .grid-container .card:nth-child(4) {
+        transform: rotateZ(-1deg) rotateY(3deg) rotateX(6deg);
+      }
+
+      .tool-title {
+        display: flex;
+        justify-content: center;
+        font-size: 1.2em;
+        color: #444;
+        /* margin: 0.4em 0; */
+        position: relative;
+        padding: 0.3em 2em;
+        background-color: yellow;
+        border-radius: 2em;
+      }
+
+      /* .tool-title::before {
+        content: "🚀";
+        position: absolute;
+        left: 0;
+        top: 0;
+      } */
+
+      p {
+        margin: 1em 0;
+        color: #555;
+      }
+
+      ul {
+        padding-left: 2.2em;
+        margin: 0.3em 0;
+      }
+
+      li {
+        margin-bottom: 0.3em;
+        list-style: "✅ ";
+        padding-left: 0.3em;
+      }
+
+      h4 {
+        margin-top: 1em;
+        font-size: 1.1em;
+        color: #333;
+      }
+      .footer {
+        /* position: absolute; */
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        padding: 0em 2em;
+        box-sizing: border-box;
+        background: rgb(236, 76, 76);
+        color: black;
+        border-radius: 2em;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        /* margin: 1.5rem 0; */
+        /* height: 2em; */
+      }
+
+      .header {
+        position: relative;
+        font-size: 0.7em;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        padding: 1em 4em;
+        /* margin: 1.5em 0; */
+        box-sizing: border-box;
+        background: rgb(60, 71, 168);
+        color: white;
+        border-radius: 2em;
+        /* box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); */
+      }
+
+      .header-left {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.2rem;
+        font-size: 2em;
+      }
+
+      .author-info {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .author-info img {
+        width: 4em;
+        height: 4em;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid #ccc;
+      }
+
+      .author-name {
+        font-weight: bold;
+        font-size: 1.5em;
+        /* width: 10em; */
+      }
+
+      .social-handles {
+        color: #ffffff;
+        font-size: 1.4em;
+        margin-left: 0.2em;
+      }
+
+      .header-right {
+        text-align: right;
+        font-size: 2em;
+        background-color: rgb(255, 255, 255);
+        padding: 1em;
+        position: absolute;
+        right: 1em;
+        color: rgb(60, 71, 168);
+        border-radius: 1em;
+        /* border-radius: 2em 0 0 2em; */
+      }
+
+      .header-right h1 {
+        margin: 0;
+        font-size: 1.5em;
+      }
+
+      .header-right h2 {
+        margin: 0;
+        font-size: 1em;
+        color: rgb(60, 71, 168);
+      }
+
+      @media (max-width: 768px) {
+        .grid-container {
+          grid-template-columns: 1fr;
+        }
+
+        .header,
+        .footer {
+          flex-direction: column;
+          text-align: center;
+          gap: 1rem;
+        }
+
+        .header-left {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .header-right {
+          text-align: center;
+        }
+      }
+
+      .category-title + * {
+        margin: 0.4em 1em;
+        margin-bottom: 0;
+        font-size: 1.5em;
+      }
+      #masterContainer {
+        background-color: #fdfbfb;
+        padding: 1em;
+      }
+      .nav-buttons {
+        font-size: 12px;
+        display: flex;
+        gap: 1rem;
+        height: 2rem;
+        padding: 1em 0;
+        margin-bottom: 2em;
+      }
+
+      .nav-buttons * {
+        all: unset;
+        width: 15rem;
+        height: 1em;
+        border: 2px solid black;
+        border-radius: 5px;
+        cursor: pointer;
+        text-align: center;
+        padding: 1em 1em;
+        transition: 0.2s;
+      }
+      .nav-buttons button:hover {
+        background-color: rgb(81, 142, 221);
+        color: black;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="nav-buttons">
+      <textarea
+        name="Topic"
+        id="iTopic"
+        placeholder="Give a Topic or content here."></textarea>
+
+      <textarea
+        name="Instructions"
+        id="instructions"
+        placeholder="Anything specific you want to do?"></textarea>
+
+      <button class="nav-button" id="createIt">Create</button>
+      <button id="download-btn">Download as Image</button>
+    </div>
+    <div id="masterContainer">
+      <div id="header" class="header">
+        <div class="header-left">
+          <div class="author-info">
+            <img id="author-image" src="/DP.jpeg" alt="Author Image" />
+            <div id="name_intro">
+              <div class="author-name" id="author-name"></div>
+              <div class="author-about" id="author-about"></div>
+            </div>
+          </div>
+          <div class="social-handles" id="social-handles"></div>
+        </div>
+        <div class="header-right">
+          <h1 id="main-title"></h1>
+          <h2 id="subtitle"></h2>
+        </div>
+      </div>
+      <div id="container" class="grid-container"></div>
+      <div id="footer" class="footer">
+        <h2>Powered by TheAIKing</h2>
+      </div>
+    </div>
+
+    <script>
+      window.onload = () => {
+        document
+          .getElementById("download-btn")
+          .addEventListener("click", function () {
+            var node = document.getElementById("masterContainer");
+
+            domtoimage
+              .toPng(node)
+              .then(function (dataUrl) {
+                var link = document.createElement("a");
+                link.download = "captured-image.png";
+                link.href = dataUrl;
+                link.click(); // Automatically trigger download
+              })
+              .catch(function (error) {
+                console.error("Error capturing image:", error);
+              });
+          });
+
+        const myInfo = {
+          author: "Manasvi Mohan Sharma",
+          aboutAuthor: "AI EXPERT",
+          authorImage: "/DP.jpeg",
+          socialLinks: [
+            {
+              name: "linkedin.com/in/manasvi-m",
+              url: "https://www.linkedin.com/in/janeai",
+            },
+            {name: "@manasvimsharma", url: "https://github.com/janeai"},
+          ],
+        };
+
+        document.getElementById("author-name").innerText = myInfo.author;
+        document.getElementById("author-about").innerText = myInfo.aboutAuthor;
+        document.getElementById("author-image").src = myInfo.authorImage;
+
+        const socialHandlesDiv = document.getElementById("social-handles");
+        const handleNames = myInfo.socialLinks
+          .map((link) => link.name)
+          .join("  |  ");
+        socialHandlesDiv.innerText = handleNames;
+      };
+
+      function renderConfigToDOM(configArray, containerId) {
+        document.getElementById("main-title").innerText = configArray.title;
+        document.getElementById("subtitle").innerText = configArray.subtitle;
+        const container = document.getElementById(containerId);
+        container.innerHTML = "";
+
+        configArray["content"].forEach((topLevel) => {
+          const mainHeading = document.createElement("h1");
+          mainHeading.className = "category-title";
+          mainHeading.textContent = topLevel.headingName;
+          // container.appendChild(mainHeading);
+
+          // Now loop through content under main heading
+          topLevel.content.forEach((category) => {
+            const categoryCard = document.createElement("div");
+            categoryCard.className = "card";
+
+            // Category title
+            const title = document.createElement("h2");
+            title.className = "category-title";
+            title.textContent = category.headingName;
+
+            // Description
+            const desc = document.createElement("p");
+            desc.textContent = category.description;
+
+            categoryCard.appendChild(title);
+            categoryCard.appendChild(desc);
+
+            // Tools (assuming 'content' inside each category holds tools)
+            const toolsGrid = document.createElement("div");
+            toolsGrid.className = "grid-container";
+
+            category.content.forEach((tool) => {
+              const toolCard = document.createElement("div");
+              toolCard.className = "card";
+
+              const toolTitle = document.createElement("h3");
+              toolTitle.className = "tool-title";
+              toolTitle.textContent = tool.name;
+
+              const whatItDoes = document.createElement("p");
+              whatItDoes.innerHTML = tool.what_it_does;
+
+              // Practical Use Cases
+              const useCasesTitle = document.createElement("h4");
+              useCasesTitle.textContent = "Practical Use Cases:";
+              const useCasesList = document.createElement("ul");
+              useCasesList.className = "usecase-list";
+              tool.practical_use_cases.forEach((useCase) => {
+                const li = document.createElement("li");
+                li.textContent = useCase;
+                useCasesList.appendChild(li);
+              });
+
+              // Examples
+              const examplesTitle = document.createElement("h4");
+              examplesTitle.textContent = "Examples:";
+              const examplesList = document.createElement("ul");
+              examplesList.className = "example-list";
+              tool.examples.forEach((example) => {
+                const li = document.createElement("li");
+                li.textContent = example;
+                examplesList.appendChild(li);
+              });
+
+              // Append to tool card
+              toolCard.appendChild(toolTitle);
+              toolCard.appendChild(whatItDoes);
+              toolCard.appendChild(useCasesTitle);
+              toolCard.appendChild(useCasesList);
+              toolCard.appendChild(examplesTitle);
+              toolCard.appendChild(examplesList);
+
+              // Append tool card to tools grid
+              toolsGrid.appendChild(toolCard);
+            });
+
+            // Append tools grid to category card
+            categoryCard.appendChild(toolsGrid);
+
+            // Append category card to container
+            container.appendChild(categoryCard);
+          });
+        });
+      }
+
+      const startupGrowthConfig = {
+        title: "🚀 The Ultimate Startup Growth Stack 2024-2025",
+        subtitle:
+          "Essential Tools, Hacks, and Communities to Build, Scale, and Win",
+        content: [
+          {
+            headingName: "Startup_Hacks_Tools_Tech_2024_2025",
+            content: [
+              {
+                headingName: "1. Growth Hacking Tools",
+                description:
+                  "Tools to drive fast growth, optimize marketing, and boost user acquisition.",
+                content: [
+                  {
+                    name: "PhantomBuster",
+                    what_it_does:
+                      "Automates social media and lead generation tasks.",
+                    practical_use_cases: [
+                      "Lead scraping",
+                      "Automated outreach",
+                    ],
+                    examples: [
+                      "Automated LinkedIn messaging",
+                      "Twitter follower growth",
+                    ],
+                  },
+                  {
+                    name: "Zapier",
+                    what_it_does: "No-code automation between apps.",
+                    practical_use_cases: ["Task automation", "Data sync"],
+                    examples: [
+                      "Auto-update CRM from emails",
+                      "Connect forms to Slack",
+                    ],
+                  },
+                  {
+                    name: "Hotjar",
+                    what_it_does:
+                      "User behavior analytics via heatmaps and recordings.",
+                    practical_use_cases: [
+                      "UX optimization",
+                      "Conversion rate improvement",
+                    ],
+                    examples: [
+                      "Landing page testing",
+                      "Checkout flow analysis",
+                    ],
+                  },
+                ],
+              },
+              {
+                headingName: "2. AI-Powered Product & Marketing",
+                description:
+                  "AI tools to build smarter products and market them better.",
+                content: [
+                  {
+                    name: "OpenAI GPT-4/5 API",
+                    what_it_does:
+                      "Generative AI for product and content creation.",
+                    practical_use_cases: [
+                      "AI chatbots",
+                      "Personalized content",
+                    ],
+                    examples: ["Support chatbots", "Automated newsletters"],
+                  },
+                  {
+                    name: "MidJourney / DALL·E 3",
+                    what_it_does: "AI image generation.",
+                    practical_use_cases: [
+                      "Marketing creatives",
+                      "Product images",
+                    ],
+                    examples: ["Ad graphics", "Landing page assets"],
+                  },
+                  {
+                    name: "Copy.ai",
+                    what_it_does: "AI-powered copywriting.",
+                    practical_use_cases: ["Sales copy", "Email campaigns"],
+                    examples: ["Product descriptions", "SEO blog content"],
+                  },
+                ],
+              },
+              {
+                headingName: "3. Team & Productivity Hacks",
+                description: "Tools to keep teams fast and focused.",
+                content: [
+                  {
+                    name: "Notion AI",
+                    what_it_does:
+                      "Knowledge base with AI-powered search and creation.",
+                    practical_use_cases: ["Internal wiki", "Task management"],
+                    examples: ["Startup knowledge hub", "Project plans"],
+                  },
+                  {
+                    name: "Sunsama",
+                    what_it_does: "Daily planning and focus management.",
+                    practical_use_cases: [
+                      "Time blocking",
+                      "Task prioritization",
+                    ],
+                    examples: ["Founder productivity", "Daily goal setting"],
+                  },
+                  {
+                    name: "Trello+Butler(Automation)",
+                    what_it_does: "Kanban boards with automation.",
+                    practical_use_cases: ["Agile workflow", "Project tracking"],
+                    examples: ["Sprint management", "Product roadmap"],
+                  },
+                ],
+              },
+              {
+                headingName: "4. Fundraising & Growth Metrics",
+                description: "Smart ways to raise capital and track growth.",
+                content: [
+                  {
+                    name: "Visible.vc",
+                    what_it_does: "Investor updates and metrics reporting.",
+                    practical_use_cases: [
+                      "Investor relations",
+                      "KPI dashboards",
+                    ],
+                    examples: [
+                      "Monthly investor emails",
+                      "Fundraising readiness",
+                    ],
+                  },
+                  {
+                    name: "Carta",
+                    what_it_does: "Cap table and equity management.",
+                    practical_use_cases: ["Equity distribution", "Fundraising"],
+                    examples: ["Series A cap table", "Employee stock options"],
+                  },
+                  {
+                    name: "Stripe Atlas",
+                    what_it_does: "Startup incorporation and banking.",
+                    practical_use_cases: ["Company setup", "Global payments"],
+                    examples: [
+                      "Delaware C-Corp",
+                      "Investor-friendly structure",
+                    ],
+                  },
+                ],
+              },
+              {
+                headingName: "5. Competitive Intelligence & SEO",
+                description: "Tools to spy on competitors and dominate search.",
+                content: [
+                  {
+                    name: "SimilarWeb",
+                    what_it_does: "Competitor traffic and strategy analysis.",
+                    practical_use_cases: [
+                      "Market research",
+                      "Traffic sources analysis",
+                    ],
+                    examples: [
+                      "Benchmarking competitors",
+                      "Finding traffic gaps",
+                    ],
+                  },
+                  {
+                    name: "Ahrefs",
+                    what_it_does: "SEO tool for backlink and keyword research.",
+                    practical_use_cases: ["SEO strategy", "Content ideas"],
+                    examples: ["Keyword gaps", "Competitor backlinks"],
+                  },
+                  {
+                    name: "BuiltWith",
+                    what_it_does: "Technology stack detection of competitors.",
+                    practical_use_cases: [
+                      "Tech stack spying",
+                      "Sales prospecting",
+                    ],
+                    examples: [
+                      "Find tools used by competitors",
+                      "Identify tech trends",
+                    ],
+                  },
+                ],
+              },
+              {
+                headingName: "6. Startup Community & Networking",
+                description:
+                  "Best communities to learn, share, and grow faster.",
+                content: [
+                  {
+                    name: "Y Combinator Startup School",
+                    what_it_does:
+                      "Free online startup accelerator and community.",
+                    practical_use_cases: ["Founder education", "Mentorship"],
+                    examples: ["Pitch practice", "Founder connections"],
+                  },
+                  {
+                    name: "Product Hunt",
+                    what_it_does:
+                      "Platform to launch and discover new products.",
+                    practical_use_cases: ["Product launches", "User feedback"],
+                    examples: ["Startup launch", "Beta user acquisition"],
+                  },
+                  {
+                    name: "Indie Hackers",
+                    what_it_does: "Community of bootstrapped entrepreneurs.",
+                    practical_use_cases: ["Peer advice", "Partnerships"],
+                    examples: [
+                      "Revenue-sharing deals",
+                      "Growth hacking stories",
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      };
+
+      renderConfigToDOM(startupGrowthConfig, "container");
+
+      async function extractJS(text) {
+        const match = text.match(/```json([\s\S]*?)```/);
+        return match ? match[1].trim() : "No JSON code found.";
+      }
+      async function callOpenAI(query) {
+        try {
+          const response = await fetch("/api/makeOpenAICall", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({question: query}),
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          return data.result.kwargs.content;
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+
+      document
+        .getElementById("createIt")
+        .addEventListener("click", async () => {
+          let topic = document.getElementById("iTopic").value;
+          let instruction = document.getElementById("instructions").value;
+          let responseStructure = JSON.stringify(startupGrowthConfig);
+          let prompt =
+            "I use the following format to render data: \n" +
+            responseStructure +
+            `\nNote: Now in same format, give me in json code block for this > "${topic}".\n Give only 6 entries. ${instruction}`;
+          document.getElementById("createIt").innerText = "Loading";
+          document.getElementById("createIt").style.background = "red";
+          document.getElementById("createIt").classList.add("zoomAnimation");
+          const result = await callOpenAI(prompt);
+          let final = await extractJS(result);
+          let parsedFinal = JSON.parse(final);
+          document.querySelectorAll(".card").forEach((el) => el.remove());
+          renderConfigToDOM(parsedFinal, "container");
+          document.getElementById("createIt").innerText = "Create";
+          document.getElementById("createIt").style.background =
+            "var(--color-primary)";
+          document.getElementById("createIt").classList.remove("zoomAnimation");
+        });
+    </script>
+  </body>
+</html>
+
+<script>
+  let textarea = null;
+  let targetElement = null;
+
+  // Function to remove the textarea editor
+  function removeEditor() {
+    if (textarea) {
+      textarea.remove();
+      textarea = null;
+      targetElement = null;
+    }
+  }
+
+  // Main listener for right-click
+  document.addEventListener("contextmenu", function (e) {
+    e.preventDefault(); // Stop default context menu
+
+    removeEditor(); // Remove existing editor if any
+
+    targetElement = e.target;
+
+    // Create a real textarea
+    textarea = document.createElement("textarea");
+    textarea.value = targetElement.innerText.trim();
+    textarea.className = "inline-editor";
+    textarea.style.position = "absolute";
+
+    const rect = targetElement.getBoundingClientRect();
+
+    // Match dimensions and font styles
+    textarea.style.left = `${rect.left + window.scrollX}px`;
+    textarea.style.top = `${rect.top + window.scrollY}px`;
+    textarea.style.width = `${rect.width}px`;
+    textarea.style.height = `${rect.height}px`;
+
+    // Get computed styles for font matching
+    const computedStyle = window.getComputedStyle(targetElement);
+    textarea.style.fontSize = computedStyle.fontSize;
+    textarea.style.fontFamily = computedStyle.fontFamily;
+    textarea.style.lineHeight = computedStyle.lineHeight;
+    textarea.style.fontWeight = computedStyle.fontWeight;
+    textarea.style.color = computedStyle.color;
+    textarea.style.textAlign = computedStyle.textAlign;
+
+    // Optional: More nice UI adjustments
+    textarea.style.padding = computedStyle.padding || "4px";
+    textarea.style.margin = "0";
+    textarea.style.border = "2px solid #333";
+    textarea.style.borderRadius = "6px";
+    textarea.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.3)";
+    textarea.style.background = "#fff";
+    textarea.style.zIndex = 9999;
+    textarea.style.resize = "both"; // Optional: allow resizing if you want
+
+    // Insert and focus
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select(); // Auto-select content
+
+    // Save on Ctrl + Enter
+    textarea.addEventListener("keydown", function (event) {
+      if (event.key === "Enter" && event.ctrlKey) {
+        targetElement.innerText = textarea.value;
+        removeEditor();
+      } else if (event.key === "Escape") {
+        removeEditor(); // Cancel on Esc
+      }
+    });
+
+    // Click outside to remove editor
+    setTimeout(() => {
+      document.addEventListener("click", function handler(ev) {
+        if (ev.target !== textarea) {
+          removeEditor();
+          document.removeEventListener("click", handler);
+        }
+      });
+    }, 0);
+  });
+</script>

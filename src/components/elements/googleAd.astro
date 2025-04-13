@@ -1,0 +1,108 @@
+---
+interface Props {
+  advertiser: string;
+  website: string;
+  adTitle: string;
+  adDescription: string;
+  logo?: string;
+}
+
+const {advertiser, website, adTitle, adDescription, logo} = Astro.props;
+---
+
+<style>
+  .ad-container {
+    background: #181818;
+    padding: 12px;
+    border-radius: 8px;
+    color: white;
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+  }
+
+  .sponsored {
+    color: #aaa;
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  .ad-header {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+  }
+
+  .ad-logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: gray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+  }
+
+  .ad-info {
+    flex: 1;
+  }
+
+  .advertiser {
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  .website {
+    color: #ddd;
+    font-size: 12px;
+  }
+
+  .options {
+    font-size: 16px;
+    cursor: pointer;
+    color: #aaa;
+  }
+
+  .ad-title {
+    color: #3ea6ff;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 5px;
+  }
+
+  .ad-description {
+    font-size: 14px;
+    color: #ccc;
+    margin-top: 3px;
+  }
+</style>
+
+<div class="ad-container">
+  <div class="sponsored">Sponsored</div>
+
+  <div class="ad-header">
+    <div class="ad-logo">
+      {
+        logo ? (
+          <img
+            src={logo}
+            alt="Ad Logo"
+            width="32"
+            height="32"
+            style="border-radius: 50%;"
+          />
+        ) : (
+          "🔵"
+        )
+      }
+    </div>
+    <div class="ad-info">
+      <div class="advertiser">{advertiser}</div>
+      <div class="website" style="margin-top:0;">{website}</div>
+    </div>
+    <div class="options">⋮</div>
+  </div>
+
+  <div class="ad-title">{adTitle}</div>
+  <div class="ad-description">{adDescription}</div>
+</div>

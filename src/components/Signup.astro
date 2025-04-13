@@ -1,0 +1,308 @@
+---
+import CompanyLogo from "./elements/Logo.astro";
+import Social from "./elements/Social.astro";
+import BaseHead from "./BaseHead.astro";
+import {SITE_TITLE, SITE_DESCRIPTION, SITE_NAME} from "../consts";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+
+    <style>
+      /* Login Container */
+      .login-container {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        width: 50vw;
+        min-width: 400px;
+      }
+
+      /* Form Title */
+      .login-title {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        text-align: center;
+        color: #333;
+      }
+
+      /* Input Fields */
+      .input-group {
+        margin-bottom: 1.5rem;
+      }
+
+      .input-group label {
+        font-size: 1rem;
+        color: #555;
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+
+      .input-group input {
+        width: 100%;
+        padding: 0.8rem;
+        font-size: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        outline: none;
+      }
+
+      .input-group input:focus {
+        border-color: #007bff;
+      }
+
+      /* Submit Button */
+      .login-button {
+        width: 100%;
+        padding: 1rem;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        font-size: 1rem;
+        cursor: pointer;
+        text-align: center;
+        background-color: yellowgreen;
+      }
+
+      /* Signup Link */
+      .signup-link {
+        text-align: center;
+        font-size: 0.9rem;
+        color: #555;
+      }
+
+      .signup-link a {
+        color: #007bff;
+        text-decoration: none;
+      }
+
+      .signup-link a:hover {
+        text-decoration: underline;
+      }
+
+      /* Password Strength Feedback */
+      .password-requirements {
+        margin-top: 1rem;
+        font-size: 0.9rem;
+        color: #555;
+      }
+
+      .password-requirements ul {
+        list-style-type: none;
+        padding-left: 0;
+      }
+
+      .password-requirements li {
+        display: flex;
+        align-items: center;
+        margin: 0.5rem 0;
+      }
+
+      .password-requirements li span {
+        margin-left: 10px;
+      }
+
+      .valid {
+        color: green;
+      }
+
+      .invalid {
+        color: red;
+      }
+      .grey {
+        background-color: gray;
+      }
+    </style>
+  </head><body>
+    <CompanyLogo companyName={SITE_NAME} logoSrc="/truelogiclabs/1.png" />
+    <Social companyName={SITE_NAME} logoSrc="/blog-placeholder-3.jpg" />
+    <div class="login-container">
+      <form id="login-form" class="login-form" method="POST">
+        <h1 class="login-title">Sign Up</h1>
+
+        <!-- Email input -->
+        <div class="input-group">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Enter your email"
+            required
+          />
+        </div>
+
+        <!-- Password input -->
+        <div class="input-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+            required
+          />
+        </div>
+
+        <!-- Confirm Password input -->
+        <div class="input-group">
+          <label for="confirm-password">Confirm Password</label>
+          <input
+            type="password"
+            id="confirm-password"
+            name="confirm-password"
+            placeholder="Confirm your password"
+            required
+          />
+          <div id="password-match-feedback" class="password-match-feedback">
+          </div>
+        </div>
+
+        <!-- Password Strength Feedback -->
+        <div id="password-requirements" class="password-requirements">
+          <ul>
+            <li id="length" class="invalid">
+              <span><span class="icon">🚫</span> At least 8 characters</span>
+            </li>
+            <li id="uppercase" class="invalid">
+              <span
+                ><span class="icon">🚫</span> At least one uppercase letter</span
+              >
+            </li>
+            <li id="lowercase" class="invalid">
+              <span
+                ><span class="icon">🚫</span> At least one lowercase letter</span
+              >
+            </li>
+            <li id="number" class="invalid">
+              <span><span class="icon">🚫</span> At least one number</span>
+            </li>
+            <li id="special" class="invalid">
+              <span
+                ><span class="icon">🚫</span> At least one special character</span
+              >
+            </li>
+          </ul>
+        </div>
+
+        <!-- Submit Button -->
+        <button id="login-button" type="submit" class="login-button button grey"
+          >SignUp</button
+        >
+
+        <!-- Link to register page -->
+        <p id="signup-link" class="signup-link">
+          Already Have an Account? <a href="/login">Login here</a>
+        </p>
+      </form>
+    </div>
+
+    <script>
+      import {AuthManagement} from "../coreglobal/supabase";
+      const authManager = new AuthManagement();
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const passwordInput = document.getElementById("password");
+        const confirmPasswordInput =
+          document.getElementById("confirm-password");
+        const passwordRequirements = document.getElementById(
+          "password-requirements"
+        );
+        const passwordMatchFeedback = document.getElementById(
+          "password-match-feedback"
+        );
+
+        // Regular expressions for password validation
+        const passwordRules = {
+          length: /.{8,}/,
+          uppercase: /[A-Z]/,
+          lowercase: /[a-z]/,
+          number: /\d/,
+          special: /[@$!%*?&]/,
+        };
+
+        // Function to validate the password strength
+        function validatePassword() {
+          const password = passwordInput.value;
+          window.allValid = true; // Track if all rules are valid
+
+          // Check each requirement and update the UI
+          Object.keys(passwordRules).forEach((rule) => {
+            const isValid = passwordRules[rule].test(password);
+            const listItem = document.getElementById(rule);
+            const icon = listItem.querySelector(".icon");
+
+            if (isValid) {
+              listItem.classList.add("valid");
+              listItem.classList.remove("invalid");
+              icon.textContent = "✅"; // Tick icon when valid
+            } else {
+              listItem.classList.add("invalid");
+              listItem.classList.remove("valid");
+              icon.textContent = "🚫"; // Cross icon when invalid
+              window.allValid = false; // If any rule is invalid, set allValid to false
+            }
+          });
+        }
+
+        // Function to validate the password match
+        function validatePasswordMatch() {
+          const password = passwordInput.value;
+          const confirmPassword = confirmPasswordInput.value;
+
+          if (password !== confirmPassword && confirmPassword !== "") {
+            passwordMatchFeedback.textContent = "Passwords do not match.";
+            passwordMatchFeedback.style.color = "red";
+          } else if (password === confirmPassword && confirmPassword !== "") {
+            passwordMatchFeedback.textContent = "Passwords match.";
+            passwordMatchFeedback.style.color = "green";
+            document.getElementById("login-button")?.classList.remove("grey");
+            if (window.allValid) {
+              document.getElementById("login-button")?.classList.remove("grey");
+            } else {
+              document.getElementById("login-button")?.classList.add("grey");
+            }
+          } else {
+            passwordMatchFeedback.textContent = "";
+          }
+        }
+
+        // Event listeners for password and confirm password inputs
+        passwordInput.addEventListener("input", () => {
+          validatePassword();
+          validatePasswordMatch();
+        });
+        confirmPasswordInput.addEventListener("input", () => {
+          validatePassword();
+          validatePasswordMatch();
+        });
+
+        // Form submit handler
+        document
+          .getElementById("login-form")
+          .addEventListener("submit", (event) => {
+            event.preventDefault();
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const confirmPassword =
+              document.getElementById("confirm-password").value;
+
+            // Validate password match before submitting the form
+            if (password !== confirmPassword) {
+              alert("Passwords do not match.");
+              return;
+            }
+
+            // Proceed with user creation (replace with your actual logic)
+            // // console.log("Email:", email);
+            // // console.log("Password:", password);
+            authManager.createUser(email, password, {name: "HOHOHOHOHO"}); // Uncomment this when using your auth system
+          });
+      });
+    </script>
+  </body>
+</html>

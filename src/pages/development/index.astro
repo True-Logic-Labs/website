@@ -1,0 +1,72 @@
+---
+import "/src/styles/global.css";
+import MyCompo from "./circles.astro";
+// import MyCompo from "./clouds.astro";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      :root {
+        --h: 40em;
+      }
+      #container {
+        height: var(--h);
+      }
+      #child {
+        height: var(--h);
+      }
+    </style></head
+  >
+
+  <body>
+    <MyCompo />
+    <div
+      x-data="{ currentIndex: 0, cards: [0, 1, 2] }"
+      class="relative w-full max-w-md mx-auto overflow-hidden"
+      id="container"
+    >
+      <!-- Wrapper for the cards -->
+      <div
+        class="flex transition-transform duration-300 ease-in-out"
+        :style="'transform: translateX(' + (-currentIndex * 100) + '%)'"
+        id="child"
+      >
+        <!-- Each card -->
+        <div
+          class="w-full min-w-full p-5 bg-blue-500 text-white flex items-center justify-center text-xl font-bold"
+        >
+          Card 1
+        </div>
+        <div
+          class="w-full min-w-full p-5 bg-red-500 text-white flex items-center justify-center text-xl font-bold"
+        >
+          Card 2
+        </div>
+        <div
+          class="w-full min-w-full p-5 bg-green-500 text-white flex items-center justify-center text-xl font-bold"
+        >
+          Card 3
+        </div>
+      </div>
+
+      <!-- Previous Button -->
+      <button
+        @click="currentIndex = (currentIndex > 0) ? currentIndex - 1 : 0"
+        class="absolute left-0 top-1/2 -translate-y-1/2 bg-gray-800 text-white p-2 rounded"
+      >
+        ⬅️
+      </button>
+
+      <!-- Next Button -->
+      <button
+        @click="currentIndex = (currentIndex < cards.length - 1) ? currentIndex + 1 : cards.length - 1"
+        class="absolute right-0 top-1/2 -translate-y-1/2 bg-gray-800 text-white p-2 rounded"
+      >
+        ➡️
+      </button>
+    </div>
+  </body>
+</html>

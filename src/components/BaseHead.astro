@@ -1,0 +1,172 @@
+---
+import {SOCIAL_LINKS_FACEBOOK, SITE_NAME, PUBLISHER, AUTHOR} from "../consts";
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  toolMeta?: object;
+}
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+const LOGO = "/truelogiclabs/1.svg";
+const OG_SEO_PIC = "/OGSEO.png";
+
+const {
+  title,
+  description,
+  image = LOGO,
+  toolMeta = {
+    SEO: {
+      keywords:
+        "professional tools, business tools, software solutions, productivity tools, marketing tools, design tools, industry-specific software, online tools for businesses",
+      metaTitle:
+        "Professional Tools for All Industries | Boost Your Business Efficiency",
+      metaDescription:
+        "Discover a wide range of professional tools designed to help businesses in all industries increase efficiency, improve workflows, and boost productivity. Whether you're in marketing, finance, design, or any other field, we have a solution for you.",
+      schema: {
+        type: "SoftwareApplication",
+        name: "Professional Tools Hub",
+        description:
+          "A comprehensive platform offering a variety of tools to enhance business performance across all industries.",
+        applicationCategory: "BusinessApplication",
+      },
+      og: {
+        title:
+          "Discover Professional Tools to Transform Your Business | Try Now",
+        description:
+          "Explore a vast collection of professional tools for businesses in every industry. Find the perfect tool to improve your processes, from marketing to project management and more.",
+        image: "/assets/images/tools-placeholder.jpg", // Adjust path as needed
+        url: "https://yourwebsite.com/tools",
+      },
+      twitterCard: {
+        title: "Professional Tools to Boost Your Business Efficiency",
+        description:
+          "Find the right tool for your business needs. Streamline your processes and increase productivity with our range of professional solutions.",
+        image: "/assets/images/tools-placeholder.jpg", // Adjust path as needed
+      },
+    },
+  },
+} = Astro.props;
+---
+
+<meta charset="utf-8" />
+<link rel="stylesheet" href="/css/global.css" />
+<link rel="icon" href="/favicon.png" sizes="32x32" />
+<link rel="icon" href="/favicon-192x192.png" sizes="192x192" />
+<link rel="apple-touch-icon" href={LOGO} />
+<!-- <link rel="manifest" href="/site.webmanifest" /> -->
+<meta name="generator" content={Astro.generator} />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+/>
+
+<meta
+  name="robots"
+  content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+/>
+
+<!-- Canonical URL and Additional SEO Tags -->
+<link rel="canonical" href={canonicalURL} />
+<meta name="keywords" content={toolMeta.SEO.keywords} />
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+<meta name="author" content={AUTHOR} />
+<meta name="publisher" content={PUBLISHER} />
+<meta property="article:publisher" content={SOCIAL_LINKS_FACEBOOK} />
+
+<!-- Schema.org Metadata -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "True Logic Labs",
+    "url": "https://truelogiclabs.com/",
+    "publisher": {
+      "@type": "Organization",
+      "name": "True Logic Labs",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://truelogiclabs.com/truelogiclabs/1.png"
+      }
+    }
+  }
+</script>
+
+<meta name="language" content="English" />
+<meta name="rating" content="General" />
+<meta name="distribution" content="Global" />
+<meta name="referrer" content="no-referrer-when-downgrade" />
+
+<!-- Open Graph -->
+
+<!-- Nice link to text open graph > https://www.opengraph.xyz/ -->
+<!-- Chrome Extention to check SEO > https://chromewebstore.google.com/detail/seo-meta-in-1-click/bjogjfinolnhfhkbipphpdlldadpnmhc -->
+
+<meta property="og:title" content={toolMeta.SEO.og.title} />
+<meta property="og:description" content={toolMeta.SEO.og.description} />
+<meta property="og:locale" content="en_US" />
+<meta property="og:image" content={OG_SEO_PIC} />
+<meta
+  property="og:image:alt"
+  content="AI to Simplify Life Amplify Creativity and Empower You. The Ultimate AI Tools Hub. Effortless, Powerful, and Built for Everyone!"
+/>
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="True Logic Labs" />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={toolMeta.SEO.twitterCard.title} />
+<meta property="twitter:url" content={canonicalURL} />
+<meta
+  name="twitter:description"
+  content={toolMeta.SEO.twitterCard.description}
+/>
+<meta name="twitter:image" content={OG_SEO_PIC} />
+<meta
+  name="twitter:image:alt"
+  content="AI to Simplify Life Amplify Creativity and Empower You. The Ultimate AI Tools Hub. Effortless, Powerful, and Built for Everyone!"
+/>
+
+<!-- 
+
+<meta name="msvalidate.01" content="your-bing-verification-code" />
+<meta name="google-site-verification" content="your-google-verification-code" />
+<meta name="p:domain_verify" content="your-pinterest-verification-code" />
+<meta property="fb:app_id" content="your-facebook-app-id" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta
+  name="apple-mobile-web-app-status-bar-style"
+  content="black-translucent"
+/>
+<meta name="format-detection" content="telephone=no" />
+
+-->
+
+<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"
+></script>
+
+<script>
+  // // Define event handler functions
+  // function preventContextMenu(e) {
+  //   e.preventDefault();
+  // }
+
+  // function preventCopy(e) {
+  //   if (e.ctrlKey && e.key === "c") {
+  //     e.preventDefault();
+  //     alert("Copying is disabled on this webpage.");
+  //   }
+  // }
+
+  // // Add event listeners
+  // document.addEventListener("contextmenu", preventContextMenu);
+  // document.addEventListener("keydown", preventCopy);
+</script>

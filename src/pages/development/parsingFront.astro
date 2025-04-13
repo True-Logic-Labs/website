@@ -1,0 +1,45 @@
+<form id="uploadForm">
+  <input type="file" id="fileInput" accept="application/pdf" required />
+  <button type="submit">Upload and Parse</button>
+</form>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("uploadForm");
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const formData = new FormData();
+      const fileInput = document.getElementById("fileInput");
+
+      if (!fileInput.files.length) {
+        alert("Please select a file");
+        return;
+      }
+
+      formData.append("file", fileInput.files[0]);
+      // console.log("FormData Content:", formData);
+
+      try {
+        const response = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await response.json();
+        // console.log("Parsed Data:", data);
+
+        if (data.error) {
+          alert("Error: " + data.error);
+        } else {
+          alert("File uploaded and parsed successfully!");
+          // console.log("Parsed Content:", data.docs);
+        }
+      } catch (error) {
+        console.error("Upload Error:", error);
+        alert("Failed to upload the file.");
+      }
+    });
+  });
+</script>

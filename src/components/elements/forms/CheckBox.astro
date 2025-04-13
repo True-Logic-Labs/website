@@ -1,0 +1,77 @@
+---
+const {label, icon, value, name} = Astro.props;
+---
+
+<button class="card" type="button" data-value={value} aria-pressed="false">
+  <span class="indicator"></span>
+  <span class="icon">{icon}</span>
+  <span class="label">{label}</span>
+</button>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const buttons = document.querySelectorAll(".card");
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        buttons.forEach((btn) => {
+          btn.classList.remove("selected");
+          btn.setAttribute("aria-pressed", "false");
+        });
+
+        button.classList.add("selected");
+        button.setAttribute("aria-pressed", "true");
+
+        const selectedValue = button.getAttribute("data-value");
+        // console.log("Selected Value:", selectedValue);
+      });
+    });
+  });
+</script>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    background: white;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s;
+    color: black;
+  }
+
+  .card.selected {
+    border-color: blue;
+    color: blue;
+    background-color: rgba(0, 0, 255, 0.1);
+  }
+
+  .indicator {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    width: 14px;
+    height: 14px;
+    background-color: transparent;
+    border-radius: 50%;
+  }
+
+  .card.selected .indicator {
+    background-color: blue;
+  }
+
+  .icon {
+    font-size: 32px;
+  }
+
+  .label {
+    font-size: 14px;
+    font-weight: bold;
+  }
+</style>

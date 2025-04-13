@@ -1,0 +1,709 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dynamic Draggable Boxes with Lines</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/leader-line/1.0.7/leader-line.min.js"
+      defer></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/dom-to-image-more@3.5.0/dist/dom-to-image-more.min.js"
+      defer></script>
+
+    <style is:inline>
+      * {
+        padding: 0;
+        margin: 0;
+      }
+      .important {
+        scale: 1.2;
+      }
+
+      body {
+        position: relative;
+        font-family: Arial, sans-serif;
+        height: 90vh;
+        /* margin: 2em; */
+        border: 5px solid white;
+        border-radius: 1em;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        font-size: 12px;
+        background-color: white;
+      }
+
+      .box {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        position: absolute;
+        background: coral;
+        color: black;
+        text-align: center;
+        border-radius: 1rem;
+        cursor: grab;
+        user-select: none;
+        box-sizing: border-box;
+        overflow: auto;
+        padding: 0.5rem;
+        resize: both; /* Makes the box resizable */
+        min-width: 150px;
+        min-height: 150px;
+        box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.2);
+        height: auto;
+        width: auto;
+      }
+
+      .box * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      .box h3 {
+        margin: 0 0 1em 0;
+      }
+      .box p {
+        line-height: 1.2em;
+        border: 2px solid black;
+        padding: 0.5em;
+        margin: 0.5em 0 0 0;
+        border-radius: 2em;
+      }
+
+      .box:active {
+        cursor: grabbing;
+        box-shadow: 0 1em 1em rgba(0, 0, 0, 0.2);
+        /* scale: 1.4; */
+      }
+      .footer {
+        position: absolute;
+        bottom: 4em;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 97%;
+        padding: 1em 2em;
+        box-sizing: border-box;
+        background: rgb(253, 213, 31);
+        color: black;
+        border-radius: 1em;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
+
+      .header {
+        font-size: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 97%;
+        padding: 1em 2em;
+        margin-bottom: 1.5em;
+        box-sizing: border-box;
+        background: rgb(253, 213, 31);
+        color: black;
+        border-radius: 1em;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
+
+      .header-left {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.2em;
+        font-size: 1.2em;
+      }
+
+      .author-info {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .author-info img {
+        width: 4em;
+        height: 4em;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid #ccc;
+      }
+
+      .author-name {
+        font-weight: bold;
+        font-size: 1.5em;
+        width: 10em;
+      }
+
+      .social-handles {
+        color: #555;
+        font-size: 0.9em;
+        margin-left: 0.2em;
+      }
+
+      .header-right {
+        text-align: right;
+        font-size: 1.2em;
+        width: 70%;
+      }
+
+      .header-right h1 {
+        margin: 0;
+        font-size: 1.5em;
+      }
+
+      .header-right h2 {
+        margin: 0;
+        font-size: 1em;
+        color: #666;
+      }
+      .nav-buttons {
+        display: flex;
+        gap: 1rem;
+        height: 2rem;
+        padding: 1em 0;
+        margin-bottom: 2em;
+      }
+
+      .nav-buttons * {
+        all: unset;
+        width: 15rem;
+        height: 1em;
+        border: 2px solid black;
+        border-radius: 5px;
+        cursor: pointer;
+        text-align: center;
+        padding: 1em 1em;
+        transition: 0.2s;
+      }
+      .nav-buttons button:hover {
+        background-color: rgb(81, 142, 221);
+        color: black;
+      }
+    </style>
+  </head>
+  <div class="nav-buttons">
+    <textarea
+      name="Topic"
+      id="iTopic"
+      placeholder="Give a Topic or content here."></textarea>
+
+    <textarea
+      name="Instructions"
+      id="instructions"
+      placeholder="Anything specific you want to do?"></textarea>
+
+    <button class="nav-button" id="createIt">Create</button>
+    <button id="download-btn">Download as Image</button>
+  </div>
+  <body>
+    <div id="header" class="header">
+      <div class="header-left">
+        <div class="author-info">
+          <img id="author-image" src="" alt="Author Image" />
+          <div class="author-name" id="author-name"></div>
+        </div>
+        <div class="social-handles" id="social-handles"></div>
+      </div>
+      <div class="header-right">
+        <h1 id="main-title"></h1>
+        <h2 id="subtitle"></h2>
+      </div>
+    </div>
+    <div id="footer" class="footer">
+      <h2>Powerd by TheAIKing</h2>
+    </div>
+
+    <script>
+      const verticalMargin = 100;
+      function autoPositionBoxes(boxes) {
+        let startX = 50;
+        let startY = 210;
+        const verticalMargin = 50;
+        const horizontalMargin = 60;
+        let currentTop = startY;
+        let currentLeft = startX;
+        let maxHeight = document.body.clientHeight - 50;
+
+        boxes.forEach((box) => {
+          const boxHeight = box.getBoundingClientRect().height;
+          const boxWidth = box.getBoundingClientRect().width;
+
+          if (currentTop + boxHeight > maxHeight) {
+            currentLeft += boxWidth + horizontalMargin;
+            currentTop = startY;
+          }
+
+          box.style.top = `${currentTop}px`;
+          box.style.left = `${currentLeft}px`;
+
+          currentTop += boxHeight + verticalMargin;
+        });
+      }
+
+      function isOverlapping(boxA, boxB) {
+        const rectA = boxA.getBoundingClientRect();
+        const rectB = boxB.getBoundingClientRect();
+
+        return !(
+          rectA.right < rectB.left ||
+          rectA.left > rectB.right ||
+          rectA.bottom < rectB.top ||
+          rectA.top > rectB.bottom
+        );
+      }
+
+      function resolveOverlaps(boxes) {
+        let hasOverlap = true;
+        const maxIterations = 10;
+        let iteration = 0;
+
+        while (hasOverlap && iteration < maxIterations) {
+          hasOverlap = false;
+          iteration++;
+
+          for (let i = 0; i < boxes.length; i++) {
+            for (let j = i + 1; j < boxes.length; j++) {
+              const boxA = boxes[i];
+              const boxB = boxes[j];
+
+              if (isOverlapping(boxA, boxB)) {
+                hasOverlap = true;
+
+                const rectA = boxA.getBoundingClientRect();
+                const rectB = boxB.getBoundingClientRect();
+
+                const moveRight = rectB.left >= rectA.left;
+                const moveDown = rectB.top >= rectA.top;
+
+                const shiftX = moveRight ? 30 : -30;
+                const shiftY = moveDown ? 30 : -30;
+
+                boxB.style.left = `${boxB.offsetLeft + shiftX}px`;
+                boxB.style.top = `${boxB.offsetTop + shiftY}px`;
+              }
+            }
+          }
+        }
+
+        if (iteration >= maxIterations) {
+          console.warn("Max iterations reached while resolving overlaps.");
+        }
+      }
+
+      const myInfo = {
+        author: "Manasvi Mohan Sharma",
+        authorImage: "/DP.jpeg",
+        socialLinks: [
+          {
+            name: "linkedin.com/in/manasvi-m",
+            url: "https://www.linkedin.com/in/janeai",
+          },
+          {name: "@manasvimsharma", url: "https://github.com/janeai"},
+        ],
+      };
+
+      window.onload = () => {
+        document
+          .getElementById("download-btn")
+          .addEventListener("click", function () {
+            var node = document.body;
+
+            domtoimage
+              .toPng(node)
+              .then(function (dataUrl) {
+                var link = document.createElement("a");
+                link.download = "captured-image.png";
+                link.href = dataUrl;
+                link.click(); // Automatically trigger download
+              })
+              .catch(function (error) {
+                console.error("Error capturing image:", error);
+              });
+          });
+
+        const llmContent = {
+          title: "🚀 Modern Marketing Tools to Beat Competition",
+          subtitle: "Next-gen tools and AI tech for marketers in 2024-2025",
+          content: [
+            {
+              id: "tool1",
+              class: "box important",
+              content: `
+        <div>
+          <h3>✍️ AI Copy & Content</h3>
+          <p><strong>Tools:</strong> Jasper, Copy.ai, Writer, SurferSEO</p>
+          <p>Create high-converting content, ads, and blogs fast.</p>
+        </div>
+      `,
+
+              meta: {type: "Content & Copywriting"},
+              data: {purpose: "Accelerate AI-driven content creation"},
+              connectsTo: ["tool2"],
+            },
+            {
+              id: "tool2",
+              class: "box",
+              content: `
+        <div>
+          <h3>🎯 Personalization Engines</h3>
+          <p><strong>Tools:</strong> Mutiny, Dynamic Yield, Optimizely</p>
+          <p>Deliver AI-personalized experiences without code.</p>
+          <a href="https://www.mutinyhq.com/" target="_blank">🌐 Try Mutiny</a>
+        </div>
+      `,
+
+              meta: {type: "Personalization"},
+              data: {purpose: "Boost conversion rates with AI"},
+              connectsTo: ["tool3"],
+            },
+            {
+              id: "tool3",
+              class: "box",
+              content: `
+        <div>
+          <h3>📊 AI Analytics & Attribution</h3>
+          <p><strong>Tools:</strong> GA4, Mixpanel, Dreamdata</p>
+          <p>Track marketing ROI and user behavior smartly.</p>
+          <a href="https://mixpanel.com/" target="_blank">🌐 Analyze Here</a>
+        </div>
+      `,
+
+              meta: {type: "Analytics"},
+              data: {purpose: "Smarter decisions with AI data"},
+              connectsTo: ["tool4"],
+            },
+            {
+              id: "tool4",
+              class: "box",
+              content: `
+        <div>
+          <h3>💌 AI Email & Automation</h3>
+          <p><strong>Tools:</strong> HubSpot, ActiveCampaign, Klaviyo</p>
+          <p>Automate nurture, onboarding, and campaigns easily.</p>
+          <a href="https://www.klaviyo.com/" target="_blank">🌐 Automate Now</a>
+        </div>
+      `,
+              meta: {type: "Email & CRM"},
+              data: {purpose: "Scale personalized marketing on autopilot"},
+              connectsTo: ["tool5"],
+            },
+            {
+              id: "tool5",
+              class: "box",
+              content: `
+        <div>
+          <h3>🤖 AI Chatbots & Sales</h3>
+          <p><strong>Tools:</strong> Drift, Intercom, ManyChat</p>
+          <p>Engage and qualify leads 24/7 with AI.</p>
+          <a href="https://www.drift.com/" target="_blank">🌐 Deploy Chatbots</a>
+        </div>
+      `,
+
+              meta: {type: "Conversational AI"},
+              data: {purpose: "Boost lead generation and service"},
+              connectsTo: ["tool6"],
+            },
+            {
+              id: "tool6",
+              class: "box",
+              content: `
+        <div>
+          <h3>📱 Social & Influencer Marketing</h3>
+          <p><strong>Tools:</strong> Sprout Social, HypeAuditor, Upfluence</p>
+          <p>Find influencers, manage content, and grow social presence.</p>
+          <a href="https://sproutsocial.com/" target="_blank">🌐 Manage Social</a>
+        </div>
+      `,
+              meta: {type: "Social & Influencer"},
+              data: {purpose: "Grow brand reach and trust"},
+              connectsTo: ["tool7"],
+            },
+            {
+              id: "tool7",
+              class: "box",
+              content: `
+        <div>
+          <h3>🎥 AI Video & Creative</h3>
+          <p><strong>Tools:</strong> Synthesia, Pictory, Canva AI</p>
+          <p>AI video, designs, and media for campaigns.</p>
+          <a href="https://www.synthesia.io/" target="_blank">🌐 Create AI Videos</a>
+        </div>
+      `,
+              meta: {type: "Creative & Video"},
+              data: {purpose: "Engage audience with AI visuals"},
+              connectsTo: ["tool8"],
+            },
+            {
+              id: "tool8",
+              class: "box",
+              content: `
+        <div>
+          <h3>🔍 SEO & Competitive Intelligence</h3>
+          <p><strong>Tools:</strong> Semrush, Ahrefs, SimilarWeb</p>
+          <p>Spy on competitors, grow search traffic.</p>
+          <a href="https://www.semrush.com/" target="_blank">🌐 Start SEO</a>
+        </div>
+      `,
+              meta: {type: "SEO & Research"},
+              data: {purpose: "Outrank competition with data"},
+              connectsTo: ["tool9"],
+            },
+            {
+              id: "tool9",
+              class: "box",
+              content: `
+        <div>
+          <h3>⚙️ Automation & Integrations</h3>
+          <p><strong>Tools:</strong> Zapier AI, Make, N8N</p>
+          <p>Automate marketing workflows effortlessly.</p>
+          <a href="https://zapier.com/" target="_blank">🌐 Connect Apps</a>
+        </div>
+      `,
+              meta: {type: "Automation"},
+              data: {purpose: "Connect tools and automate"},
+              connectsTo: [],
+            },
+          ],
+          connections: [
+            ["tool1", "tool2"],
+            ["tool2", "tool3"],
+            ["tool3", "tool4"],
+            ["tool4", "tool5"],
+            ["tool5", "tool6"],
+            ["tool6", "tool7"],
+            ["tool7", "tool8"],
+            ["tool8", "tool9"],
+          ],
+        };
+        renderContent(llmContent, myInfo);
+        function renderContent(llmContent) {
+          try {
+            // 1. Clear previous elements
+            Object.values(elements).forEach((el) => el.remove());
+            lines.forEach((line) => line.remove());
+          } catch (e) {
+            console.log(e);
+          }
+
+          try {
+            // 2. Reset tracking objects
+            Object.keys(elements).forEach((key) => delete elements[key]);
+            lines.length = 0;
+          } catch (e) {
+            console.log(e);
+          }
+
+          document.querySelectorAll(".box").forEach((el) => el.remove());
+          document.querySelectorAll("svg").forEach((el) => el.remove());
+
+          const boxesData = {...llmContent, ...myInfo};
+
+          // Render Header
+          document.getElementById("main-title").innerText = boxesData.title;
+          document.getElementById("subtitle").innerText = boxesData.subtitle;
+          document.getElementById("author-name").innerText = boxesData.author;
+          document.getElementById("author-image").src = boxesData.authorImage;
+
+          const socialHandlesDiv = document.getElementById("social-handles");
+          const handleNames = boxesData.socialLinks
+            .map((link) => link.name)
+            .join("  |  ");
+          socialHandlesDiv.innerText = handleNames;
+
+          const elements = {}; // Store elements for reference
+          const lines = []; // Store lines
+
+          function getRandomHSLA() {
+            const h = Math.floor(Math.random() * 360); // Hue: 0 - 359
+            const s = Math.floor(Math.random() * 50) + 50; // Saturation: 50% - 100% for bright colors
+            const l = Math.floor(Math.random() * 40) + 40; // Lightness: 40% - 80% for vivid colors
+            const a = Math.random().toFixed(2); // Alpha: 0.00 - 1.00 (opacity)
+
+            return `hsla(${h}, ${s}%, ${l}%, 1)`;
+          }
+          // Function to create a box div
+          function createBox(boxConfig) {
+            const div = document.createElement("div");
+            div.id = boxConfig.id;
+            div.className = boxConfig.class;
+            div.innerHTML = boxConfig.content;
+            div.style.background = getRandomHSLA();
+
+            // Apply styles
+            Object.assign(div.style, boxConfig.style);
+
+            // Set meta attributes
+            for (const key in boxConfig.meta) {
+              div.setAttribute(`meta-${key}`, boxConfig.meta[key]);
+            }
+
+            // Set data attributes
+            for (const key in boxConfig.data) {
+              div.dataset[key] = boxConfig.data[key];
+            }
+
+            document.body.appendChild(div);
+            elements[boxConfig.id] = div;
+            makeDraggable(div); // Make draggable
+
+            return div;
+          }
+
+          function makeDraggable(element) {
+            let offsetX,
+              offsetY,
+              isDragging = false,
+              isResizing = false;
+
+            // Check if mouse is near edge (for resizing)
+            function isNearBorder(e, el) {
+              const rect = el.getBoundingClientRect();
+              const borderThreshold = 10; // px from edge
+              return (
+                e.clientX >= rect.right - borderThreshold ||
+                e.clientY >= rect.bottom - borderThreshold
+              );
+            }
+
+            element.addEventListener("mousedown", (e) => {
+              // If near edge, assume resizing and skip dragging
+              if (isNearBorder(e, element)) {
+                isResizing = true;
+                return;
+              }
+
+              // Else start dragging
+              isDragging = true;
+              offsetX = e.clientX - element.getBoundingClientRect().left;
+              offsetY = e.clientY - element.getBoundingClientRect().top;
+              element.style.zIndex = 1000;
+            });
+
+            document.addEventListener("mousemove", (e) => {
+              if (isDragging) {
+                element.style.left = `${e.clientX - offsetX}px`;
+                element.style.top = `${e.clientY - offsetY}px`;
+                updateAllLines(); // Update lines while dragging
+              }
+            });
+
+            document.addEventListener("mouseup", () => {
+              isDragging = false;
+              isResizing = false;
+              element.style.zIndex = 1;
+              updateAllLines(); // Update lines after resizing/moving
+            });
+
+            // // Observe resizing and update lines
+            // const resizeObserver = new ResizeObserver(() => {
+            //   updateAllLines();
+            // });
+            // resizeObserver.observe(element);
+          }
+
+          // Create boxes
+          // Create boxes and collect them
+          const createdBoxes = boxesData.content.map(createBox);
+
+          // Auto-position boxes vertically without collision
+          autoPositionBoxes(createdBoxes); // Step 1: Auto place
+          resolveOverlaps(createdBoxes); // Step 2: Fix any collisions
+
+          // boxesData.content.forEach(createBox);
+
+          // Auto-create connections based on 'connectsTo'
+          if (Array.isArray(boxesData.connections)) {
+            boxesData.connections.forEach(([fromId, toId]) => {
+              if (elements[fromId] && elements[toId]) {
+                const line = new LeaderLine(elements[fromId], elements[toId], {
+                  color: getRandomHSLA(),
+                  endPlug: "arrow",
+                  dash: {animation: true},
+                  dropShadow: {
+                    dx: 6,
+                    dy: 8,
+                    blur: 4,
+                  },
+                });
+                lines.push(line);
+              }
+            });
+          }
+
+          // Update lines on move
+          function updateAllLines() {
+            lines.forEach((line) => line.position());
+          }
+        }
+        async function extractJS(text) {
+          const match = text.match(/```json([\s\S]*?)```/);
+          return match ? match[1].trim() : "No JSON code found.";
+        }
+        async function callOpenAI(query) {
+          try {
+            const response = await fetch("/api/makeOpenAICall", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({question: query}),
+            });
+
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            return data.result.kwargs.content;
+          } catch (error) {
+            console.error("Error:", error);
+          }
+        }
+
+        document
+          .getElementById("createIt")
+          .addEventListener("click", async () => {
+            let topic = document.getElementById("iTopic").value;
+            let instruction = document.getElementById("instructions").value;
+            let responseStructure = JSON.stringify(llmContent);
+            let prompt =
+              "I use the following format to render data: \n" +
+              responseStructure +
+              `\nNote: Now in same format, give me in json code block for this > "${topic}".\n Give only 6 entries. ${instruction}`;
+            document.getElementById("createIt").innerText = "Loading";
+            document.getElementById("createIt").style.background = "red";
+            document.getElementById("createIt").classList.add("zoomAnimation");
+            const result = await callOpenAI(prompt);
+            let final = await extractJS(result);
+            let parsedFinal = JSON.parse(final);
+            renderContent(parsedFinal);
+            document.getElementById("createIt").innerText = "Create";
+            document.getElementById("createIt").style.background =
+              "var(--color-primary)";
+            document
+              .getElementById("createIt")
+              .classList.remove("zoomAnimation");
+          });
+      };
+    </script>
+  </body>
+
+  <style is:inline>
+    @keyframes zoomIn {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(0.95);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .zoomAnimation {
+      animation: zoomIn 1s infinite ease-in-out;
+    }
+  </style>
+
+
+</html>

@@ -1,0 +1,165 @@
+---
+export interface Props {
+  categories: object;
+}
+
+const {categories} = Astro.props;
+export const partial = true;
+---
+
+<section
+  class="tools-class category ca1"
+  x-data=`{ 
+    categories: ${JSON.stringify(categories)},
+    openCategory: null, 
+    openSubcategory: null 
+  }`
+>
+  <!-- Top-Level Title -->
+  <input class="text-xl font-bold text-center mb-4" />
+
+  <!-- Top-Level Collapse -->
+  <div class="mainBody">
+    <p x-show="Object.keys(categories).length === 0">Loading AI tools...</p>
+
+    <template
+      x-for="[mainCategory, subCategories] in Object.entries(categories)"
+      :key="mainCategory"
+    >
+      <!-- Category Wrapper -->
+      <div class="category ca1 border p-4">
+        <!-- Clickable Category Header -->
+
+        <h2
+          x-text="mainCategory"
+          @click="openCategory = (openCategory === mainCategory ? null : mainCategory)"
+          :class="openCategory === mainCategory ? 'AA' : 'BB'"
+        >
+        </h2>
+
+        <!-- Subcategories Collapsible Content -->
+        <div class="ca" x-show="openCategory === mainCategory" x-collapse>
+          <!-- <h2 x-text="mainCategory"></h2> -->
+          <template
+            x-for="[subCategory, items] in Object.entries(subCategories)"
+            :key="subCategory"
+          >
+            <!-- Subcategory Wrapper -->
+            <div class="subcategory border-l-4 border-gray-400 p-3 ml-4">
+              <!-- Clickable Subcategory Header -->
+              <h3
+                x-text="subCategory"
+                @click="openSubcategory = (openSubcategory === subCategory ? null : subCategory)"
+                class="cursor-pointer bg-gray-100 p-2 rounded"
+              >
+              </h3>
+
+              <!-- Subcategory Items -->
+              <div
+                class="ca2 ml-6"
+                x-show="openSubcategory === subCategory"
+                x-collapse
+              >
+                <template x-for="item in items" :key="item">
+                  <a class="tool-item" :href="item.productLocation">
+                    <h4 x-text="item.title"></h4>
+                    <p x-text="item.description"></p>
+                  </a>
+                </template>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </template>
+  </div>
+</section>
+
+<style>
+  a {
+    all: unset;
+  }
+  .ca {
+    display: flex;
+    margin-top: 2em;
+    width: 90vw;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%); /* Centers the element */
+    z-index: 100;
+    background-color: white;
+    border: 2px solid white;
+    border-radius: 1em;
+    box-shadow:
+      0 0 2em #000000,
+      0 0 5em #00000048,
+      0 0 10em #00000036;
+  }
+  .ca2 {
+    display: flex;
+    /* gap: 1em; */
+    overflow-x: scroll;
+    width: 100%;
+  }
+  .ca2 > * {
+    display: flex;
+    flex-direction: column;
+    display: flex;
+    border: 2px solid green;
+    padding: 1em;
+    margin: 1em;
+    min-width: 18em;
+    max-width: 18em;
+    height: 15em;
+    border-radius: 1em;
+  }
+  .tools-class {
+    cursor: pointer;
+    width: 100%;
+    /* border: 2px solid green; */
+  }
+  .ca2 > :first-child {
+    display: none;
+    background-color: black;
+  }
+  .mainBody {
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    width: 100%;
+    height: 100%;
+    margin-top: 2em;
+  }
+  .tools-class h2,
+  h3 {
+    background-color: white;
+    border: 2px solid black;
+    font-size: 1em;
+    padding: 1em 0;
+    color: black;
+    height: 100%;
+    border-radius: 1em;
+  }
+  .tools-class h3 {
+    background-color: yellowgreen;
+    font-size: 1.2em;
+    padding: 1em 1em;
+    margin: 1em;
+  }
+  .category {
+    width: 100%;
+    margin: 0 1em;
+  }
+
+  h2 {
+    transition: 0.3s;
+  }
+  .AA {
+    scale: 1.2;
+    border: 5px solid green;
+  }
+  .BB {
+    color: white;
+    /* scale: 2; */
+  }
+</style>

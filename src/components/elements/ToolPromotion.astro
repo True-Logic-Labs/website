@@ -1,0 +1,115 @@
+---
+// Define props for dynamic content
+export interface Props {
+  title: string;
+  subtitle: string;
+  description: string;
+  link: string;
+  icon?: string; // Optional icon (e.g., star, heart, custom SVG)
+}
+
+const {title, subtitle, description, link, icon = "⭐"} = Astro.props;
+---
+
+<div class="card-holder">
+  <div class="card-content">
+    <!-- Header: Title + Icon -->
+    <div class="card-header">
+      <h2>{title}</h2>
+      <span class="icon">{icon}</span>
+    </div>
+
+    <!-- Subtitle & Description -->
+    <h3>{subtitle}</h3>
+    <!-- <p>{description}</p> -->
+    <p set:html={description} />
+
+    <!-- Bottom-Right Arrow -->
+    <div class="card-footer">
+      <a href=`${link}?from="${Astro.url.pathname}"` class="arrow" title={title}
+        >→</a
+      >
+    </div>
+  </div>
+</div>
+<style is:inline>
+  p span {
+    background-color: yellowgreen;
+    background: yellowgreen;
+    padding: 0 0.3em;
+    font-weight: 500;
+    border-radius: 0.2em;
+    color: black;
+  }
+</style>
+<style>
+  .card-holder {
+    line-height: 1.5em;
+    background: rgba(255, 255, 255, 0.5);
+    padding: 0em 1em;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 20em;
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Pushes elements apart */
+    margin: 1em;
+    border: 2px solid black;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .icon {
+    transform: scale(1.4);
+  }
+
+  .card-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 1em;
+    padding: 1em 0;
+  }
+
+  .card-content h2 {
+    text-align: left;
+    line-height: 1.2em;
+    height: 1.8em;
+    font-size: 1.4em;
+    margin: 0;
+    max-width: 15ch; /* Restricts text width to ~10 characters */
+    word-wrap: break-word;
+    font-weight: 500;
+  }
+
+  .card-content h3 {
+    font-size: 1em;
+    color: #858585;
+    margin: 0;
+    font-weight: 400;
+  }
+
+  .card-content p {
+    line-height: 1.3em;
+    font-size: 1em;
+    color: #444;
+    margin: 0;
+    flex-grow: 1;
+    text-align: left;
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .arrow {
+    font-size: 1.5em;
+    text-decoration: none;
+  }
+</style>

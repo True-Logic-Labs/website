@@ -1,0 +1,55 @@
+---
+
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>PixiJS in Astro (CDN way)</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.6.6/pixi.min.js"
+      defer></script>
+  </head>
+  <body>
+    <h1>PixiJS CDN in Astro</h1>
+    <div
+      id="pixi-container"
+      style="width: 100vw; height: 80vh; border: 2px solid #333;"
+    >
+    </div>
+
+    <script>
+      window.onload = async () => {
+        const container = document.getElementById("pixi-container");
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+
+        const app = new PIXI.Application();
+        await app.init({width: width, height: height});
+
+        container.appendChild(app.view);
+
+        const rectangle = new PIXI.Graphics();
+        rectangle.beginFill(0xde3249);
+        rectangle.drawRect(-50, -50, 100, 100);
+        rectangle.endFill();
+
+        rectangle.x = width / 2;
+        rectangle.y = height / 2;
+        app.stage.addChild(rectangle);
+
+        app.ticker.add(() => {
+          rectangle.rotation += 0.02;
+        });
+
+        window.addEventListener("resize", () => {
+          const newWidth = container.clientWidth;
+          const newHeight = container.clientHeight;
+          app.renderer.resize(newWidth, newHeight);
+          rectangle.x = newWidth / 2;
+          rectangle.y = newHeight / 2;
+        });
+      };
+    </script>
+  </body>
+</html>

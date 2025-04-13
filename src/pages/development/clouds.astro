@@ -1,0 +1,36 @@
+---
+export const partial = true;
+// https://www.vantajs.com/?effect=clouds
+// https://themeselection.com/javascript-3d-library/?srsltid=AfmBOopjTkHpX5s2QdwfdVyEHh6RLkfa7sO2wf1OJzjJwyLTEMaacj5x
+---
+
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"
+  defer></script>
+<script
+  src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.clouds.min.js"
+  defer></script>
+<style>
+  .hello {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+</style>
+
+<div class="hello"></div>
+
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    VANTA.CLOUDS({
+      el: ".hello",
+      mouseControls: true,
+      touchControls: true,
+      gyroControls: false,
+      minHeight: 200.0,
+      minWidth: 200.0,
+    });
+  });
+</script>

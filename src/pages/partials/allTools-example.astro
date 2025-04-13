@@ -1,0 +1,159 @@
+---
+export const partial = true;
+---
+
+<h1>AI Tools Directory ALPINEJS EXAMPLE AUTO JSON</h1>
+
+<div
+  class="mainBody"
+  x-data="{ categories: [] }"
+  x-init="fetch('/contentCategories.json')
+        .then(response => response.json())
+        .then(data => categories = data.categories)"
+>
+  <!-- Show a loading message while fetching -->
+  <p x-show="categories.length === 0">Loading AI tools...</p>
+
+  <!-- Render JSON Data -->
+  <template x-for="category in categories" :key="category.category">
+    <div class="category ca1">
+      <h2 x-text="category.category"></h2>
+      <div class="cat-desc" x-text="category.importance"></div>
+      <div class="ca">
+        <template x-for="item in category.items" :key="item.name">
+          <div class="ca2">
+            <div class="title" x-text="item.name"></div>
+            <div class="ca2">
+              <div x-text="item.description"></div>
+            </div>
+            <template x-for="tag in item.tags" :key="tag">
+              <div class="tags" x-text="tag"></div>
+            </template>
+          </div>
+        </template>
+      </div>
+    </div>
+  </template>
+</div>
+
+<style is:inline>
+  .cat-desc {
+    font-size: 1.4em;
+    font-weight: 100;
+    font-style: italic;
+    padding: 1em;
+  }
+  /* Main Container */
+  .mainBody {
+    width: 95vw;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2em;
+    font-family: "Arial", sans-serif;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Category Section */
+  .ca1 {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+    padding: 1.5em;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    background: #ffffff;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 2em rgba(0, 0, 0, 0.1);
+  }
+
+  .ca1:hover {
+    border-color: #007bff;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+  }
+
+  /* Category Title */
+  .ca1 h2 {
+    font-size: 1.5em;
+    color: #333;
+    font-weight: bold;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 0.5em;
+  }
+
+  /* Items Container */
+  .ca {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5em;
+  }
+
+  /* Individual Item */
+  .ca2 {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8em;
+    width: 27%;
+    padding: 1.5em;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background: #ffffff;
+    transition:
+      transform 0.3s ease-in-out,
+      box-shadow 0.3s ease-in-out;
+  }
+
+  .ca2:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-color: #007bff;
+  }
+
+  /* Item Name */
+  .ca2 div:first-child {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #222;
+  }
+
+  /* Item Description */
+  .ca2 > .ca2 {
+    font-size: 0.8em;
+    color: #555;
+    background: #f4f4f4;
+    padding: 1em;
+    border-radius: 6px;
+    border-left: 4px solid #007bff;
+    width: 85%;
+  }
+
+  /* Tags */
+  .tags {
+    display: inline-block;
+    background: #007bff;
+    color: #ffffff;
+    font-size: 0.85em;
+    font-weight: bold;
+    padding: 1em 1em;
+    border-radius: 15px;
+    margin-top: 0.2em;
+    transition: background 0.3s ease-in-out;
+  }
+
+  .tags:hover {
+    background: #0056b3;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .ca {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .ca2 {
+      width: 90%;
+    }
+  }
+</style>

@@ -1,0 +1,161 @@
+---
+export interface Props {
+  title: string;
+  price: string;
+  billing: string;
+  description: string;
+  buttonText: string;
+  features: string[];
+  tag?: string; // Optional tag like "Popular", "Hot"
+  tagColor?: string;
+  borderColor?: string;
+  scale?: string;
+}
+
+const {
+  title,
+  price,
+  billing,
+  description,
+  buttonText,
+  features,
+  tag,
+  tagColor,
+  borderColor,
+  scale,
+} = Astro.props;
+---
+
+<div
+  class="pricing-card"
+  style={`border: 2px solid ${borderColor}; scale:${scale}`}
+>
+  <!-- Optional Tag (Popular, Hot, etc.) -->
+  {
+    tag && (
+      <div class="tag" style={`background: ${tagColor}`}>
+        {tag}
+      </div>
+    )
+  }
+
+  <h2 class="title">{title}</h2>
+
+  <div class="price-section">
+    <span class="price">{price}</span>
+    <span class="billing">{billing}</span>
+  </div>
+
+  <p class="description">{description}</p>
+
+  <button class="cta-button">{buttonText}</button>
+
+  <div class="features-list">
+    <strong>Plan includes:</strong>
+    <ul>
+      {features.map((feature) => <li>✔ {feature}</li>)}
+    </ul>
+  </div>
+</div>
+
+<style>
+  .pricing-card {
+    all: unset;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 1em;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 18em;
+    min-width: 150px;
+    text-align: left;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin: 1em;
+    transition: 0.5s;
+    min-height: 30em;
+    animation: fadeIn 0.7s ease-out;
+  }
+  .pricing-card:hover {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    transform: translateY(-0.5em); /* Slight lift effect */
+  }
+
+  .tag {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #ff5733; /* Default to Hot tag color */
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.8em;
+    font-weight: bold;
+  }
+
+  .title {
+    text-align: left;
+    line-height: 1em;
+    font-size: 1.4em;
+    padding: 1.4em 0 0 0;
+    width: 10em;
+  }
+
+  .price-section {
+    display: flex;
+    align-items: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-top: 0;
+    padding: 0;
+  }
+
+  .price {
+    font-size: 1.5em;
+    color: black;
+    margin-right: 0.3em;
+  }
+
+  .billing {
+    font-size: 0.7em;
+    color: gray;
+  }
+
+  .description {
+    font-size: 1em;
+    margin: 0 0 1em 0;
+  }
+
+  .pricing-card > button {
+    all: unset;
+    background: black;
+    color: white;
+    padding: 0.4em;
+    border: none;
+    border-radius: 5px;
+    /* width: 100%; */
+    font-size: 1em;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .features-list {
+    padding: 0;
+    margin-top: 20px;
+  }
+
+  ul {
+    padding-left: 20px;
+    list-style: none;
+  }
+
+  li {
+    font-size: 1em;
+    margin: 5px 0;
+  }
+  @media (max-width: 900px) {
+    .pricing-card {
+      width: 16em;
+    }
+  }
+</style>

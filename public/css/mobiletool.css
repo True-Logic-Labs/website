@@ -1,0 +1,406 @@
+@import url("https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Flavors&family=Manrope:wght@200..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Overpass+Mono:wght@300..700&family=Playwrite+CO+Guides&family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Tomorrow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+:root {
+  --color-background: rgb(255, 255, 255);
+  --color-foreground: rgb(0, 0, 0);
+  --color-accent-1: #007bff;
+  --color-accent-2: #004792;
+  --font-family-serif: "Manrope", serif;
+}
+.hideScrolls {
+  overflow: hidden;
+}
+html {
+  font-size: 18px;
+  font-family: "Manrope", serif;
+  background-color: black;
+  overflow: hidden;
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+}
+
+body {
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+  /* width: 50vw; */
+  /* overflow-y: hidden; */
+  margin: 0;
+  padding: 0;
+  height: 92vh;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+}
+/* Button styling */
+button[type="button"] {
+  background-color: var(--color-accent-1);
+  color: var(--color-foreground);
+  padding: 1rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: block;
+  width: 100%;
+  border: 1px solid black;
+  border-radius: 1rem;
+  /* margin: 0.3rem; */
+  margin-top: 1rem;
+}
+
+button[type="button"]:hover {
+  background-color: var(--color-accent-2);
+}
+
+.form-container {
+  flex: 1;
+  overflow: auto;
+  color: var(--color-foreground);
+}
+
+/* Container for the whole tab structure */
+.tab-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* align-items: center; */
+  height: 100%;
+  max-width: 100%;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+/* Tab buttons on the top */
+.tabs {
+  display: flex;
+  background-color: var(--color-accent);
+  text-align: center;
+}
+
+/* #output {
+  width: 95%;
+  height: 95%;
+} */
+
+.tab-btn {
+  all: unset;
+  flex: 1;
+  padding: 1rem;
+  font-size: 1.5rem;
+  color: var(--color-foreground);
+  background-color: var(--color-background);
+  border: none;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.5s;
+  height: 2rem;
+  border: 1px solid black;
+  border-radius: 1rem;
+  margin: 0.3rem;
+}
+
+.tab-btn.active {
+  background-color: var(--color-accent-1);
+  /* border: 5px solid black; */
+  /* scale: 1.1; */
+}
+.tab-btn-bottom {
+  flex: 1;
+  padding: 1rem;
+  font-size: 1.5rem;
+  color: white;
+  background-color: black;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.5s;
+}
+
+.tab-btn-bottom:hover {
+  background-color: rgb(130, 177, 0);
+  color: black;
+  scale: 1.1;
+}
+
+.tab-btn-bottom.active {
+  background-color: rgb(130, 177, 0);
+  color: black;
+  scale: 1.1;
+}
+
+/* Scrollable content block */
+.content-block {
+  display: flex;
+  justify-content: center;
+  overflow-y: hidden;
+  flex: 1;
+  box-sizing: border-box;
+  color: var(--color-foreground);
+}
+
+/* Individual tab content */
+.tab-content {
+  padding: 1rem;
+  display: none;
+  font-size: 1.2rem;
+  line-height: 1.5;
+  background-color: var(--color-background);
+  height: 100%;
+  overflow-y: scroll;
+  min-width: 90%;
+}
+
+.question {
+  font-size: 1.9rem;
+  margin-bottom: 1rem;
+}
+textarea,
+select {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  border-color: none;
+  background: var(--color-background);
+}
+
+input {
+  background: var(--color-background);
+}
+
+.input-options {
+  transform: scale(1.7);
+  margin-left: 0.7rem;
+}
+
+/* Input elements */
+input[type="text"],
+textarea,
+select {
+  padding: 1rem;
+  width: 100%;
+  color: var(--color-foreground);
+  border: 2px solid var(--color-foreground);
+  background-color: var(--color-background);
+  border-radius: 1rem;
+  outline: none;
+  transition: border-color 0.3s;
+  margin-bottom: 1rem;
+  height: 4rem;
+  overflow-x: hidden;
+  font-size: 1.2rem;
+}
+
+input[type="text"]:focus,
+textarea:focus,
+select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.3);
+  font-size: 1.5rem;
+}
+
+select {
+  color: var(--color-foreground);
+}
+
+textarea {
+  height: 15rem;
+}
+
+#output,
+#renderedMarkdown {
+  margin: 1rem;
+  height: 93%;
+  border: 2px solid var(--color-foreground);
+  background-color: var(--color-background);
+  border-radius: 1rem;
+  width: 90%;
+  font-size: 1.5rem;
+}
+
+#subscribedTools {
+  padding-top: 5rem;
+}
+
+.copy {
+  top: 2rem;
+  left: 2rem;
+  width: 10rem;
+  text-align: center;
+  background-color: green;
+  border-radius: 2rem;
+  padding: 1rem;
+}
+
+.tool-title,
+.category-section,
+.subcategory-section {
+  margin: 1rem;
+}
+.category-section {
+  padding: 1rem;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  border: 2px solid green;
+  color: grey;
+  width: 80%;
+  border-radius: 2rem;
+  background-color: rgba(38, 0, 141, 0.404);
+}
+.subcategory-section {
+  font-size: 1.5rem;
+  margin-left: 1.5rem;
+  color: grey;
+}
+
+.tool-title {
+  border-bottom: 2px solid green;
+  margin-left: 3rem;
+  color: white;
+  /* width: 100%; */
+  /* padding: 2rem;
+  margin: 2rem; */
+  /* font-size: 2rem; */
+}
+
+#bottom-button-pages {
+  position: absolute;
+  width: 100vw;
+  height: 0;
+  top: 0;
+  transition: 0.2s;
+}
+.bottom-tab-content {
+  flex-direction: column;
+  display: none;
+  position: absolute;
+  z-index: 100; /* Ensures proper stacking */
+  width: 100%;
+  height: 100%;
+  /* justify-content: center; */
+  align-items: center;
+  /* text-align: center; */
+  background-color: black;
+  color: white;
+  font-size: 2rem;
+}
+
+.close-btn {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* Small screens (Tablets in portrait mode) */
+@media screen and (max-width: 1024px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+/* Mobile devices */
+@media screen and (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+/* Very small smartphones */
+@media screen and (max-width: 480px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+/* Ultra-Wide Monitors (21:9 or higher aspect ratios) */
+@media screen and (min-width: 2560px) and (max-width: 3440px) {
+  html {
+    font-size: 20px;
+  }
+}
+
+/* 2K screens (QHD - 2560x1440) */
+@media screen and (min-width: 2560px) and (max-width: 3200px) {
+  html {
+    font-size: 21px;
+  }
+}
+
+/* 4K screens (UHD - 3840x2160) */
+@media screen and (min-width: 3840px) {
+  html {
+    font-size: 24px;
+  }
+}
+
+/* 8K screens (7680x4320) */
+@media screen and (min-width: 7680px) {
+  html {
+    font-size: 28px;
+  }
+}
+
+#fullscreen {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  border-radius: 1rem;
+  color: white;
+  width: 3rem; /* Full screen width */
+  height: 3rem; /* Full screen height */
+}
+#fullscreen svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Ensures SVG scales proportionally */
+}
+#loader {
+  background-color: rgb(0, 0, 0);
+  height: 100vh;
+  width: 100vw;
+  display: block;
+}
+#tool-title {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  padding: 1rem 0 1rem 0.5rem;
+  color: black;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  margin-right: 1rem;
+  margin-left: 1rem;
+  border-bottom: 0.2rem dotted black;
+}
+
+/* Checkbox and labels */
+.flexH {
+  display: flex;
+  align-items: center;
+  margin: 8px 0;
+}
+
+.flexH div:first-child {
+  margin-right: 10px;
+}
+
+.dot {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(10px);
+}
+
+#dynamicForm {
+  /* display: flex;
+  flex-direction: column;
+  align-items: center; */
+}

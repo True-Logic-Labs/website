@@ -1,0 +1,131 @@
+---
+// import HeaderLink from "./HeaderLink.astro";
+import HeaderElement from "./elements/HeaderElement.astro";
+import CompanyLogo from "./elements/Logo.astro";
+import Social from "./elements/Social.astro";
+import {SITE_NAME} from "../consts";
+
+export interface Props {
+  title?: string;
+}
+
+const {title} = Astro.props;
+// console.log(title);
+---
+
+<!-- <div id="headerButton" class="show">Menu</div> -->
+<CompanyLogo companyName={SITE_NAME} logoSrc="/truelogiclabs/1.svg" />
+<Social companyName={SITE_NAME} logoSrc="/blog-placeholder-3.jpg" />
+<header id="mainHeader" class="hide">
+  <HeaderElement title={title} />
+</header>
+<style>
+  header {
+    /* border-radius: 1em; */
+    position: fixed;
+    /* margin: 1em; */
+    padding: 0;
+    background: none;
+    box-shadow: 0 2px 8px rgba(var(--black), 5%);
+    top: 1em;
+    /* right: 1em; */
+    z-index: 10;
+    /* padding: 10px; */
+    /* box-shadow: 0 1em 2em rgba(0, 0, 0, 0.247); */
+    /* animation: glowingShadow 3s infinite alternate ease-in-out; */
+  }
+</style>
+
+<script>
+  let elementsArray = document.querySelectorAll("#headerButton");
+
+  elementsArray.forEach(function (div) {
+    div.addEventListener("click", function () {
+      let headerViewControl = document.getElementById("mainHeader");
+      headerViewControl.style.display = "block";
+    });
+  });
+</script>
+
+<script>
+  // // Trigger fade-out on navigation
+  // function applyExitAnimation() {
+  //   document.body.classList.add("fade-out");
+  // }
+
+  // // Add event listeners to all internal links for the exit animation
+  // document.querySelectorAll("a").forEach((link) => {
+  //   link.addEventListener("click", (event) => {
+  //     if (link.href.startsWith(window.location.origin)) {
+  //       event.preventDefault();
+  //       applyExitAnimation();
+  //       setTimeout(() => {
+  //         window.location.href = link.href;
+  //       }, 50); // Timeout matches the animation duration
+  //     }
+  //   });
+  // });
+  // Add event listeners to all internal links for the exit animation
+  // document.body.style.display = "flex";
+  document.addEventListener("DOMContentLoaded", function () {
+    // setTimeout(function () {
+    //   document.documentElement.classList.remove("hide");
+    //   document.body.style.display = "flex";
+    // }, 800);
+    // document.body.style.display = "flex";
+  });
+</script>
+
+<script>
+  import {allPageHeaderControl} from "../coreglobal/toolsscript.js";
+
+  import {AuthManagement} from "../coreglobal/supabase";
+  window.authManager = new AuthManagement();
+  await window.authManager.globalGetSession();
+  await allPageHeaderControl();
+
+  // Check if already marked as logged out
+  const isLoggedOut = localStorage.getItem("loggedOut");
+
+  if (!isLoggedOut) {
+    let headerSession = await window.authManager.globalGetSessionServer();
+    console.log("HEADER >>>>>>>>>>>>>>>>>>>", headerSession);
+
+    if (headerSession.status !== 200) {
+      // Set loggedOut flag in localStorage
+      localStorage.setItem("loggedOut", "true");
+      console.warn("User is logged out. Not checking auth again.");
+    } else {
+      // User is logged in, remove the flag (if any)
+      localStorage.removeItem("loggedOut");
+
+      // Run your auth logic again here (e.g., refresh tokens, fetch user info, etc.)
+      console.log("User is logged in. Proceeding with auth flow...");
+    }
+  } else {
+    console.log("User previously logged out. Skipping auth check.");
+  }
+</script>
+
+<script>
+  // import {allPageHeaderControl} from "../coreglobal/toolsscript.js";
+  // import {AuthManagement} from "../coreglobal/supabase";
+  // window.authManager = new AuthManagement();
+  // document.addEventListener("DOMContentLoaded", async function () {
+  //   await window.authManager.globalGetSession();
+  //   await allPageHeaderControl();
+
+  //   document.body.classList.add("fade-in");
+  //   document.querySelectorAll("a").forEach((link) => {
+  //     link.addEventListener("click", (event) => {
+  //       if (link.href.startsWith(window.location.origin) && !link.target) {
+  //         event.preventDefault();
+  //         document.body.classList.add("fade-out");
+  //         setTimeout(() => {
+  //           window.location.href = link.href;
+  //         }, 10); // Match the transition duration
+  //       }
+  //     });
+  //   });
+  // });
+</script>

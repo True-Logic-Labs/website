@@ -1,0 +1,75 @@
+---
+interface Props {
+  companyName: string;
+  logoSrc: string;
+}
+
+const {companyName, logoSrc} = Astro.props;
+---
+
+<style>
+  .company-logo {
+    cursor: pointer;
+    position: fixed;
+    top: 1em;
+    left: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 0 1em;
+    border-radius: 0.5em;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    height: 3em;
+    width: 12em;
+    transition: 0.5s;
+  }
+
+  .company-logo img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+  }
+
+  .company-logo span {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  @media (max-width: 900px) {
+    .company-logo span {
+      display: none;
+    }
+    .company-logo {
+      height: 3em;
+      width: auto;
+      /* background: none; */
+    }
+  }
+  a {
+    transition: 0.5s;
+  }
+  .company-logo:hover {
+    scale: 1.1;
+  }
+</style>
+
+<div class="company-logo">
+  <img src={logoSrc} alt={companyName} title="logo" />
+  <span>{companyName}</span>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const logo = document.querySelector(".company-logo");
+
+    if (logo) {
+      logo.addEventListener("click", () => {
+        window.location.href = "/";
+      });
+    }
+  });
+</script>

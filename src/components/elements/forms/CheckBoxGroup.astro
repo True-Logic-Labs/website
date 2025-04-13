@@ -1,0 +1,18 @@
+---
+const {question, options} = Astro.props;
+import SelectionCard from "./CheckBox.astro";
+---
+
+<h1>{question}</h1>
+<div class="card-container" style="display: flex;">
+  {
+    options.map((option) => (
+      <SelectionCard
+        label={option.label}
+        icon={option.icon}
+        value={option.value}
+        name={question}
+      />
+    ))
+  }
+</div>

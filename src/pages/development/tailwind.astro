@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tailwind CDN Example</title>
+    <script src="https://cdn.tailwindcss.com" defer></script>
+
+    <style type="text/tailwindcss">
+      @layer utilities {
+        .content-auto {
+          content-visibility: auto;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 p-4">
+    <div
+      class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl"
+    >
+      <div class="md:flex">
+        <div class="md:shrink-0">
+          <img
+            class="h-48 w-full object-cover md:h-full md:w-48"
+            src="https://source.unsplash.com/random/400x400"
+            alt="Modern building architecture"
+          />
+        </div>
+        <div class="p-8">
+          <div
+            class="uppercase tracking-wide text-sm text-indigo-500 font-semibold"
+          >
+            Company retreats
+          </div>
+          <a
+            href="#"
+            class="block mt-1 text-lg leading-tight font-medium text-black hover:underline"
+            >Finding amazing places to stay productive</a
+          >
+          <p class="mt-2 text-gray-500">
+            Looking to take your team away on a retreat to a remote location? We
+            cover some important aspects to consider.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4 p-4 bg-blue-200 rounded">
+      <h2 class="text-2xl font-bold text-blue-800 mb-2">Another Section</h2>
+      <p class="text-blue-700">
+        This section demonstrates more Tailwind utility classes. For example,
+        the background color and text colors.
+      </p>
+      <button
+        class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >Click Me</button
+      >
+    </div>
+
+    <div class="mt-4 p-4 bg-green-200 rounded">
+      <h2 class="text-2xl font-bold text-green-800 mb-2">
+        Custom tailwind style
+      </h2>
+      <p class="text-green-700 content-auto">
+        Using the style tag, we can add custom tailwind styles. Here,
+        content-auto is added.
+      </p>
+    </div>
+  </body>
+</html>

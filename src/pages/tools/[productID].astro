@@ -1,0 +1,74 @@
+---
+export const prerender = true;
+
+import {configs} from "../../coreglobal/products.js";
+import {
+  getAllProducts,
+  getSuitebyToolProductID,
+  makeBundles,
+  extractToolsFromSuite,
+} from "../../coreglobal/datatransformer.js";
+import ToolPages from "../../components/toolPages.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+
+export function getStaticPaths() {
+  const products = getAllProducts(configs);
+  return products.map((product) => ({
+    params: {productID: product.meta.productID},
+    props: {product},
+  }));
+}
+
+const {product} = Astro.props;
+const bundles = makeBundles(configs);
+
+let parentSuit = await getSuitebyToolProductID(
+  bundles.categories,
+  product.meta.productID
+);
+
+let toolsInSuite = extractToolsFromSuite(parentSuit);
+
+const benefitList = toolsInSuite.map((tool) => ({
+  title: tool.name,
+  subtitle: " ",
+  description: tool.description,
+  link: `/tools/${tool.productID}`,
+  icon: "⭐",
+}));
+// console.log(benefitList);
+
+import BaseHead from "../../components/BaseHead.astro";
+import {SITE_TITLE, SITE_DESCRIPTION} from "../../consts";
+---
+
+<!doctype html>
+<html lang="en" class="hide">
+  <head>
+    <BaseHead
+      title={product.meta.SEO.metaTitle || SITE_TITLE}
+      description={product.meta.SEO.metaDescription || SITE_DESCRIPTION}
+      toolMeta={product.meta}
+      ,
+    />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/toolsLandingPage.css" />
+  </head>
+  <body>
+    <Header title={product.title} />
+    <div class="animateIt">
+      <ToolPages
+        title={product.title}
+        description={product.description}
+        toolMeta={product.meta}
+        toolConfig={product.genCode}
+        toolsInSuite={benefitList}
+        parentSuit={parentSuit.name}
+        productViewController={product.productDetails.pageViewSettings}
+      />
+    </div>
+    <Footer />
+  </body>
+</html>

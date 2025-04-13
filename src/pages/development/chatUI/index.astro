@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat UI</title>
+    <style is:inline>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      .chat-container {
+        width: 90%;
+        max-width: 1000px;
+        height: 90%;
+        min-height: 500px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .chat-box {
+        flex: 1;
+        padding: 15px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .message-wrapper {
+        display: flex;
+        width: 100%;
+        margin-bottom: 10px;
+      }
+
+      .message {
+        padding: 10px 15px;
+        border-radius: 8px;
+        max-width: 75%;
+      }
+
+      .user-message {
+        background: #007bff;
+        color: white;
+        align-self: flex-end;
+      }
+
+      .ai-message {
+        background: #e0e0e0;
+        color: black;
+        align-self: flex-start;
+      }
+
+      .ai-message::before {
+        content: "🤖";
+      }
+
+      .typing {
+        font-style: italic;
+        color: gray;
+        align-self: flex-start;
+      }
+
+      .chat-input {
+        display: flex;
+        border-top: 1px solid #ddd;
+        padding: 10px;
+        background: white;
+      }
+
+      .chat-input input {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        outline: none;
+      }
+
+      .chat-input button {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        margin-left: 8px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .chat-input button:hover {
+        background: #0056b3;
+      }
+
+      /* Align messages properly */
+      .user-message-wrapper {
+        justify-content: flex-end;
+      }
+
+      .ai-message-wrapper {
+        justify-content: flex-start;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="chat-container">
+      <div id="chat-box" class="chat-box">
+        <!-- Messages will appear here -->
+      </div>
+      <div class="chat-input">
+        <input id="chat-input" type="text" placeholder="Type a message..." />
+        <button id="send-btn">Send</button>
+      </div>
+    </div>
+
+    <script>
+      async function callOpenAI() {
+        try {
+          const response = await fetch("/api/directOpenAICalls", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              question: "A futuristic city skyline at sunset",
+              modelName: "dall-e-3",
+              responseFormat: "image",
+            }),
+          });
+          console.log(">>>>>>>>>>", response);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          console.log(">>>>>>>>>>", data);
+          return data;
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+
+      class ResponseHandler {
+        constructor(chatBox) {
+          this.chatBox = chatBox;
+        }
+
+        appendMessage(content, sender, type = "text") {
+          const messageWrapper = document.createElement("div");
+          messageWrapper.classList.add(
+            "message-wrapper",
+            sender === "user" ? "user-message-wrapper" : "ai-message-wrapper"
+          );
+
+          const message = document.createElement("div");
+          message.classList.add(
+            "message",
+            sender === "user" ? "user-message" : "ai-message"
+          );
+
+          // Handle different response types
+          if (type === "text") {
+            message.textContent = content;
+          } else if (type === "iframe") {
+            const iframe = document.createElement("iframe");
+            iframe.src = this.createBlobURL(
+              `<div class='htmlResponse'>${content}</div>`
+            );
+            iframe.style.width = "100%";
+            iframe.style.height = "300px";
+            iframe.style.border = "none";
+            message.appendChild(iframe);
+          } else if (type === "image") {
+            const img = document.createElement("img");
+            img.src = content;
+            img.style.maxWidth = "100%";
+            img.style.borderRadius = "8px";
+            message.appendChild(img);
+          } else if (type === "embed") {
+            message.innerHTML = content; // Embeds raw HTML (YouTube, Twitter, etc.)
+          }
+
+          messageWrapper.appendChild(message);
+          this.chatBox.appendChild(messageWrapper);
+          this.chatBox.scrollTop = this.chatBox.scrollHeight; // Auto-scroll to latest message
+        }
+
+        createBlobURL(htmlContent) {
+          const blob = new Blob([htmlContent], {type: "text/html"});
+          return URL.createObjectURL(blob);
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", async function () {
+        // let testImage = await callOpenAI();
+        // console.log(testImage);
+        const chatBox = document.getElementById("chat-box");
+        const chatInput = document.getElementById("chat-input");
+        const sendBtn = document.getElementById("send-btn");
+        const responseHandler = new ResponseHandler(chatBox);
+
+        function sendMessage() {
+          const userMessage = chatInput.value.trim();
+          if (!userMessage) return;
+
+          responseHandler.appendMessage(userMessage, "user"); // User message
+          chatInput.value = "";
+
+          // Simulated AI response with different content types
+          setTimeout(() => {
+            if (userMessage.includes("html")) {
+              responseHandler.appendMessage(
+                `<h1>AI Generated Page</h1><p>This page is loaded inside an iframe.</p>`,
+                "ai",
+                "iframe"
+              );
+            } else if (userMessage.includes("image")) {
+              responseHandler.appendMessage(
+                "https://picsum.photos/200/300",
+                "ai",
+                "image"
+              );
+            } else if (userMessage.includes("embed")) {
+              responseHandler.appendMessage(
+                `<iframe width="100%" height="200" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe>`,
+                "ai",
+                "embed"
+              );
+            } else {
+              responseHandler.appendMessage(
+                "This is a normal text response from AI!",
+                "ai",
+                "text"
+              );
+            }
+          }, 1500);
+        }
+
+        sendBtn.addEventListener("click", sendMessage);
+        chatInput.addEventListener("keypress", (e) => {
+          if (e.key === "Enter") sendMessage();
+        });
+      });
+    </script>
+  </body>
+</html>

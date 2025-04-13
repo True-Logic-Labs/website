@@ -1,0 +1,267 @@
+---
+// src/pages/index.astro
+
+// Your content data structure
+---
+
+<div id="grid-container" style="width: 100%; height: 100vh;"></div>
+
+<script is:inline>
+  const myDesign = {
+    masterLayout: `
+      113355
+      444422`,
+    children: [
+      `11222
+      11333`,
+      `1122
+      1133`,
+      `1111
+      2233`,
+      `222222
+      111333
+      111444`,
+      `333222
+      333222
+      111111`,
+    ],
+  };
+
+  const childContent = [
+    {
+      1: `<div class="tool-box"><strong>Copy.ai</strong>: Generate high-converting ad copy & product descriptions in seconds.</div>`,
+      2: `<div class="tool-box"><strong>Midjourney</strong>: Create scroll-stopping visuals using AI-powered image generation.</div>`,
+      3: `<div class="tool-box"><strong>Descript</strong>: Edit video content like a doc. Podcasts, promos, reels — all powered by AI.</div>`,
+    },
+    {
+      1: `<div class="tool-box"><strong>Runway ML</strong>: AI-powered video editing for cinematic content — no studio needed.</div>`,
+      2: `<div class="tool-box"><strong>DALL·E</strong>: Generate creative visuals for campaigns and branding instantly.</div>`,
+      3: `<div class="tool-box"><strong>Jasper</strong>: AI copywriting wizard that crafts emails, landing pages, and blog posts.</div>`,
+    },
+    {
+      1: `<div class="tool-box"><strong>Chainalysis</strong>: Monitor blockchain activity & prevent fraud for crypto-based businesses.</div>`,
+      2: `<div class="tool-box"><strong>Mirror.xyz</strong>: Publish on-chain blogs, NFTs & tokenized newsletters for your brand.</div>`,
+      3: `<div class="tool-box"><strong>MetaMask</strong>: Essential wallet for onboarding users into your Web3 ecosystem.</div>`,
+    },
+    {
+      1: `<div class="tool-box"><strong>Zapier</strong>: Connect all your AI and Web3 tools — automate like a startup ninja.</div>`,
+      2: `<div class="tool-box"><strong>ChatGPT for Slack</strong>: Give your marketing team an in-chat AI assistant.</div>`,
+      3: `<div class="tool-box"><strong>Tokenproof</strong>: Give your users exclusive gated access via NFTs — no passwords required.</div>`,
+      4: `<div class="tool-box"><strong>HubSpot AI</strong>: Smarter CRM, predictive leads, auto-tagging & AI-driven workflows.</div>`,
+    },
+    {
+      1: `<div class="tool-box"><strong>AI Influencer Discovery</strong>: Platforms like Modash or CreatorIQ find perfect creators with AI precision.</div>`,
+      2: `<div class="tool-box"><strong>NeuroPixel.AI</strong>: Hyper-personalized product visuals that adapt in real-time.</div>`,
+      3: `<div class="tool-box"><strong>GM.xyz</strong>: Web3-native community spaces — Discord meets forums, on-chain.</div>`,
+    },
+  ];
+
+  const myContent = {...myDesign, childContent: childContent};
+  const randomPastelHSL = () => {
+    const h = Math.floor(Math.random() * 360); // Hue: full circle
+    const s = 60 + Math.floor(Math.random() * 20); // Saturation: 60–80%
+    const l = 75 + Math.floor(Math.random() * 15); // Lightness: 75–90%
+    return `hsl(${h}, ${s}%, ${l}%)`;
+  };
+  document.addEventListener("DOMContentLoaded", () => {
+    try {
+      // Clean and parse master layout
+      const masterRows = myContent.masterLayout
+        .split("\n")
+        .map((row) => row.trim())
+        .filter((row) => row.length > 0);
+
+      if (masterRows.length === 0) throw new Error("Empty master layout");
+
+      const masterCols = masterRows[0].length;
+      const masterRowCount = masterRows.length;
+
+      // Create container with explicit sizing
+      const container = document.getElementById("grid-container");
+      container.style.display = "grid";
+      container.style.gridTemplateColumns = `repeat(${masterCols}, minmax(0, 1fr))`;
+      container.style.gridTemplateRows = `repeat(${masterRowCount}, minmax(50px, 1fr))`;
+      //   container.style.gap = "10px";
+      container.style.overflow = "hidden";
+
+      // Calculate master grid areas
+      const masterSpans = {};
+
+      masterRows.forEach((row, rowIdx) => {
+        Array.from(row).forEach((char, colIdx) => {
+          const areaId = parseInt(char);
+          if (isNaN(areaId)) return;
+
+          if (!masterSpans[areaId]) {
+            masterSpans[areaId] = {
+              rowStart: rowIdx + 1,
+              rowEnd: rowIdx + 2,
+              colStart: colIdx + 1,
+              colEnd: colIdx + 2,
+              minCol: colIdx,
+              maxCol: colIdx,
+              minRow: rowIdx,
+              maxRow: rowIdx,
+            };
+          } else {
+            // Track boundaries of each area
+            masterSpans[areaId].minCol = Math.min(
+              masterSpans[areaId].minCol,
+              colIdx
+            );
+            masterSpans[areaId].maxCol = Math.max(
+              masterSpans[areaId].maxCol,
+              colIdx
+            );
+            masterSpans[areaId].minRow = Math.min(
+              masterSpans[areaId].minRow,
+              rowIdx
+            );
+            masterSpans[areaId].maxRow = Math.max(
+              masterSpans[areaId].maxRow,
+              rowIdx
+            );
+          }
+        });
+      });
+
+      // Finalize span calculations
+      Object.values(masterSpans).forEach((span) => {
+        span.colStart = span.minCol + 1;
+        span.colEnd = span.maxCol + 2; // +2 because grid lines are 1-based and we want to span to next line
+        span.rowStart = span.minRow + 1;
+        span.rowEnd = span.maxRow + 2;
+      });
+
+      // Create child containers
+      Object.entries(masterSpans).forEach(([areaId, span]) => {
+        const childIdx = parseInt(areaId) - 1;
+        if (childIdx < 0 || childIdx >= myContent.children.length) return;
+
+        const childContainer = document.createElement("div");
+        childContainer.className = "parent";
+        childContainer.style.gridRow = `${span.rowStart} / ${span.rowEnd}`;
+        childContainer.style.gridColumn = `${span.colStart} / ${span.colEnd}`;
+        childContainer.style.display = "grid";
+        childContainer.style.gap = "1em";
+        childContainer.style.padding = "1em";
+        // childContainer.style.backgroundColor = randomPastelHSL();
+        childContainer.style.overflow = "hidden";
+        childContainer.style.minHeight = "0"; // Critical for proper sizing
+        childContainer.style.minWidth = "0"; // Critical for proper sizing
+
+        // Parse child layout
+        const childLayout = myContent.children[childIdx]
+          .split("\n")
+          .map((row) => row.trim())
+          .filter((row) => row.length > 0);
+
+        if (childLayout.length === 0) return;
+
+        const childCols = childLayout[0].length;
+        const childRows = childLayout.length;
+
+        childContainer.style.gridTemplateColumns = `repeat(${childCols}, minmax(0, 1fr))`;
+        childContainer.style.gridTemplateRows = `repeat(${childRows}, minmax(30px, 1fr))`;
+
+        // Calculate child spans
+        const childSpans = {};
+
+        childLayout.forEach((row, rowIdx) => {
+          Array.from(row).forEach((char, colIdx) => {
+            const contentId = parseInt(char);
+            if (isNaN(contentId)) return;
+
+            if (!childSpans[contentId]) {
+              childSpans[contentId] = {
+                minCol: colIdx,
+                maxCol: colIdx,
+                minRow: rowIdx,
+                maxRow: rowIdx,
+              };
+            } else {
+              childSpans[contentId].minCol = Math.min(
+                childSpans[contentId].minCol,
+                colIdx
+              );
+              childSpans[contentId].maxCol = Math.max(
+                childSpans[contentId].maxCol,
+                colIdx
+              );
+              childSpans[contentId].minRow = Math.min(
+                childSpans[contentId].minRow,
+                rowIdx
+              );
+              childSpans[contentId].maxRow = Math.max(
+                childSpans[contentId].maxRow,
+                rowIdx
+              );
+            }
+          });
+        });
+
+        // Create content items
+        Object.entries(childSpans).forEach(([contentId, span]) => {
+          const contentIdx = parseInt(contentId);
+          const content = myContent.childContent[childIdx][contentIdx];
+          if (!content) return;
+
+          const contentItem = document.createElement("div");
+          contentItem.className = "contentBox";
+          contentItem.style.gridRow = `${span.minRow + 1} / ${span.maxRow + 2}`;
+          contentItem.style.gridColumn = `${span.minCol + 1} / ${span.maxCol + 2}`;
+          contentItem.style.display = "flex";
+          contentItem.style.alignItems = "center";
+          contentItem.style.justifyContent = "center";
+          contentItem.style.padding = "1em";
+          contentItem.style.backgroundColor = randomPastelHSL();
+          contentItem.style.borderRadius = "0.5em";
+          contentItem.style.overflow = "hidden";
+          contentItem.style.minHeight = "0";
+          contentItem.innerHTML = content;
+
+          childContainer.appendChild(contentItem);
+        });
+
+        container.appendChild(childContainer);
+      });
+    } catch (error) {
+      console.error("Error:", error);
+      const container =
+        document.getElementById("grid-container") || document.body;
+      container.innerHTML = `<div style="color: red; padding: 20px;">Error: ${error.message}</div>`;
+    }
+  });
+</script>
+
+<style is:inline>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    overflow: hidden;
+  }
+
+  #grid-container {
+    border: 2px solid #333;
+    border-radius: 8px;
+    box-sizing: border-box;
+  }
+  .tool-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+  }
+  .parent {
+    /* border: 2px solid black; */
+    /* margin: 1em; */
+  }
+  .contentBox {
+    transition: 0.3s;
+  }
+  .contentBox:hover {
+    scale: 1.05;
+  }
+</style>

@@ -1,0 +1,34 @@
+Create a fully responsive, professional, and creative HTML5 infographic using HTML, CSS, and JavaScript. Follow these instructions strictly for variety, depth, and visual appeal:
+
+1. Title and subtitle at the top of the infographic:
+
+Title: Rewrite "[TOPIC]" in a catchy, engaging way that appeals directly to [AUDIENCE] (must be professional yet modern).
+Subtitle: Based on topic and audience, write a smart, concise subtitle that makes them want to read more.
+
+Modern card-based layout:
+
+Grid of boxes (tips, insights, etc.) with rounded corners, soft shadows.
+Directional arrows between boxes to show logical flow or sequence.
+
+Icons or emojis inside each box, aligned top-right (subtle, semi-transparent).
+
+Hover effect on each box (slight lift, shadow increase).
+
+Interactive click effect on each box (toggle highlight: e.g., blue background, white text).
+
+Print button (labeled "Download as PDF") fixed on the top-left corner. Clicking triggers browser's print (window.print()).
+
+Print-optimized CSS (media query for print):
+
+Preserve all design elements: shadows, arrows, icons.
+Arrange boxes in two columns for compact PDF.
+Add clean margins/padding.
+Hide the print button when printing.
+Small footer at the bottom: "Made for [AUDIENCE]".
+
+The code should be a single block of HTML with embedded CSS and JS, fully self-contained — ready for web and PDF export.
+
+Do not include any explanations, only return the code.
+
+TOPIC: Startup and new ways of business in LLM AI age
+AUDIENCE: CEO CXO CFO above age 50 in India
