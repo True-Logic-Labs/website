@@ -1140,7 +1140,7 @@ export const configs = [
         "useCase": [ "AI for Text & Content Generation" ],
         "tags": [ "marketing", "advertisement", "seo" ]
        },
-      "releaseStatus": "released",
+      "releaseStatus": "draft",
       "pageViewSettings": {
         "hero": true,
         "toolPreview": true,
